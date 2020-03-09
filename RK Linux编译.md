@@ -228,6 +228,18 @@ cw@SYS3:~/sdk/3126i/device/rockchip$ vim .BoardConfig.mk
 ```
 make menuconfig    //# 进入图形化配置界面，选择所需模块，保存退出。斜杆搜索，空格或者y选上
 make savedeconfig   //保存到配置文件 'buildroot/configs/rockchip_rk3128_defconfig'
+
+举个例子，你看到如下改变
+cw@SYS3:~/sdk/3126i/buildroot$ git diff
+diff --git a/configs/rockchip_rk3128_defconfig b/configs/rockchip_rk3128_defconfig
+index 4232fac868..06a4728bc3 100644
+--- a/configs/rockchip_rk3128_defconfig
++++ b/configs/rockchip_rk3128_defconfig
+@@ -16,8 +16,13 @@
+ #include "qt_app.config"
++#include "video_gst_rtsp.config"
+
+
 make rkwifibt-dirclean //清除掉之前的
 make rkwifibt-rebuild //重新编译
 再make 即可（实际就是等价于与./build.sh rootfs）//#编译 Buildroot 根文件系统
@@ -281,7 +293,7 @@ make rk3308-evb-dmic-i2s-v10.img
 
 - 打包固件
 
-将 `rockdev` 目录的各部分镜像打包成固件 `update.img`：
+将 `rockdev` 目录的**各部分镜像打包成一个固件** `update.img`：
 
 ```
 ./build.sh updateimg
@@ -904,6 +916,38 @@ for option in ${OPTIONS:-allsave}; do
 	esac
 done
 
+```
+
+device/rockchip/common/mk-buildroot.sh
+
+```shell
+  1 #!/bin/bash
+  2 
+  3 COMMON_DIR=$(cd `dirname $0`; pwd)
+  4 if [ -h $0 ]
+  5 then
+  6         CMD=$(readlink $0)
+  7         COMMON_DIR=$(dirname $CMD)
+  8 fi
+  9 cd $COMMON_DIR
+ 10 cd ../../..    #回到SDK根目录
+ 11 TOP_DIR=$(pwd)  #回到SDK根目录
+ 12 BOARD_CONFIG=$1 
+ 13 source $BOARD_CONFIG
+ 14 if [ -z $RK_CFG_BUILDROOT ]
+ 15 then
+ 16         echo "RK_CFG_BUILDROOT is empty, skip building buildroot rootfs!"
+ 17         exit 0
+ 18 fi
+ 19 source $TOP_DIR/buildroot/build/envsetup.sh $RK_CFG_BUILDROOT
+ 20 $TOP_DIR/buildroot/utils/brmake
+ 21 if [ $? -ne 0 ]; then
+ 22     echo "log saved on $TOP_DIR/br.log"
+ 23     tail -n 100 $TOP_DIR/br.log
+ 24     exit 1
+ 25 fi
+ 26 echo "log saved on $TOP_DIR/br.log. pack buildroot image at: $TOP_DIR/buildroot/output/$RK_CFG_BUILDROOT/images/rootfs.$RK_ROOTFS_TYPE"                           
+~                                    
 ```
 
 
