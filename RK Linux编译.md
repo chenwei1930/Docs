@@ -1,7 +1,8 @@
 # RK Linux编译
 
-## 0 下载SDK并编译Buildroot ，烧录
+## 1、 下载SDK并编译，生成固件
 
+## 1.1 固件
 ```
 1、同步代码
 $.repo/repo/repo sync --no-tags
@@ -36,93 +37,204 @@ rockdev
 ├── trust.img
 └── uboot.img
 ```
+## 1.2 烧写工具
+请用SDK里面AndroidTool.exe ，不建议复制出来，SDK里面已经配置好了各子项名称路径，你可以直接选用。如
 
-烧写工具
-
-```
-AndroidTool.exe 
-
-请用SDK里面的那个，不建议复制出来，应为SDK里面已经配置好了路径，你可以直接选上。
-```
-
-
-
-
-
-烧录与makerom
+Windows工具：[AndroidTool](http://www.t-firefly.com/doc/download/page/id/4.html#windows_22)
 
 ```
-reboot 重启
-ctrl+c进入uboot命令界面
+    提示：AndroidTool_v2.35版本：升级MBR分区的Ubuntu固件    
+         AndroidTool_v2.58版本：升级GPT分区的Ubuntu固件
+```
+
+![image-20200309223410774](RK Linux编译.assets/image-20200309223410774.png)
+
+### 1.2.1 启动模式
+
+烧录有两种模式maskrom和loader, 对于模式的检测是在bootloader/uboot里面进行的。 
+
+Firefly-RK3128 有三种启动模式：Normal 模式、Loader 模式、MaskRom 模式
+
+- Normal 模式
+
+Normal 模式就是正常的启动过程，各个组件依次加载，正常进入系统。
+
+- maskrom（不推荐，第一次烧录时候）
+
+```
+如果芯片没烧写过，上电就是maskrom模式。这种模式用于拯救砖头机器。比如bootloader无法启动。无法进入loader正常下载。需要通过在板子上找对应的T13 C155 焊点，短接后通电，进入MASKROM模式，这些点需要问板子的生产商。
+MaskRom 模式是设备变砖的最后一条防线。强行进入 MaskRom 涉及硬件操作，有一定风险， 因此仅在设备进入不了 Loader 模式情况下，方可尝试 MaskRom 模式。
+```
+
+- loder模式（推荐）
+
+  ```
+  是刷固件模式。这个模式可以刷各种镜像image，。按住recover按键再通电，通过uboot的检测进入这个模式
+  ```
+
+### 1.2.2 烧写方法
+
+- 烧写方式-Maskrom模式
+
+```
+1、 进入Maskrom
+如果没有烧录过系统的芯片，上电就是maskrom模式
+reboot #重启
+开机马上按'Ctrl+C'进入uboot命令选择界面
 help查看帮助
-rbrom进入maskrom
+rbrom进入Maskrom
+
+2、按上图图片，直接烧写
 ```
 
-烧录与loader与单模块烧写
-
-（手册没有）怎么进入loader模式，单模块烧写。应命令reboot  loader
+- 烧写方式-Loader模式：
 
 ```
-rebootloader就会进入loader模式
+采用loader烧写，说明芯片已经烧写过固件有loader和parameter在上面，所以可以单模块烧写，比如值烧写rootfs
 
-loader模式和maskrom的区别
-没烧过就士maskro就会有loader模，那么会有分区信息，这时候就可以单模块烧写。
-
-你烧写过paramenter，那么会有分区信息，这时候就可以单模块烧写。
-在loader模式下，你只编译了buildroot生成的rootfs，那么只需要烧写 勾选上rootfs，其他不用选，烧写。
-
-
-在maskrom下单模块烧写，并且你烧写过paramenter，那么这时候，单模块烧写，你就要选上loader+单模块，比如说，你编译了builroot这时候生成的是rootfs，这时候loader+rootfs。这两项选上再烧写。
-
-檵 17:42:32
- make之后，不需要./build.sh rootfs对吧。我一旦./build.sh rootfs会问你是否覆盖。config
-
-杨汉兴   18:02:54
- make之后，要./build.sh rootfs
-
-杨汉兴   18:02:57
-要打包rootfs啊
-
-杨汉兴   18:03:02
-还要./mkfirmware.sh
-
-
-
+1、 进入loader
+方法一
+reboot loader就会进入loader模式
+方法二
+reboot重启
+Ctrl+C进入uboot命令行
+输入  rockusb 0 mmc 0就会进入loder模式
+2、烧写
+采用loader烧写，说明芯片已经烧写过固件有loader和parameter在机器，所以可以单模块烧写，比如值烧写rootfs
 ```
 
-=>se the rockusb Protocol
-Unknown command 'se' - try 'help'
-=> rockusb
-rockusb - Use the rockusb Protocol
-
-Usage:
-rockusb <USB_controller> <devtype> <dev[:part]>  e.g. rockusb 0 mmc 0
-
-=>  rockusb 0 mmc 0
-RKUSB: LUN 0, dev 0, hwpart 0, sector 0x0, count 0xe90000
-\
-
-
-
-
-
-
-
-
-
-
+单模块烧写
 
 ```
+ 
+在Maskrom下单模块烧写，并且你烧写过paramenter，那么这时候，单模块烧写，你就要选上loader+单模块，比如说，你编译了builroot这时候生成的是rootfs，这时候loader+rootfs。这两项选上再烧写。
+
+在loader模式下单模块烧写,你烧写过paramenter，那么会有分区信息，这时候就可以单模块烧写。在loader模式下，你只编译了buildroot生成的rootfs，那么只需要烧写 勾选上rootfs，其他不用选，烧写。
+```
+
+### 1.2.3 固件文件
+
+固件文件一般有两种：
+
+- 单个统一固件 update.img, 将启动加载器、参数和所有分区镜像都打包到一起，用于固件发布。
+- 多个分区镜像,如 kernel.img, boot.img, recovery.img 等，在开发阶段生成。
+
+#### 1.2.3.1 烧写统一固件 update.img
+
+烧写统一固件 update.img 的步骤如下:
+
+- 切换至”升级固件”页。
+- 按”固件”按钮，打开要升级的固件文件。升级工具会显示详细的固件信息。
+- 按”升级”按钮开始升级。
+- 如果升级失败，可以尝试先按”擦除Flash”按钮来擦除 Flash，然后再升级。
+
+***注意：如果你烧写的固件laoder版本与原来的机器的不一致，请在升级固件前先执行”擦除Flash”。***
+
+![img](RK Linux编译.assets/win_tool_upgrade_v2.58.png) 
+
+
+
+#### 1.2.3.2 烧写分区映像
+
+烧写分区映像的步骤如下：
+
+- 切换至”下载镜像”页。
+- 勾选需要烧录的分区，可以多选。
+- 确保映像文件的路径正确，需要的话，点路径右边的空白表格单元格来重新选择。
+- 点击”执行”按钮开始升级，升级结束后设备会自动重启。
+
+ ![img](RK Linux编译.assets/win_3128_tool_download.png) 
+
+## 2 编译
+
+### 2.1 编译Buildroot
+
+#### 2.1.1 source
+
+```
+source envsetup.sh  #选择开发板，如rk3128
+```
+
+生成连接指向配置
+
+cw@SYS3:~/sdk/3126i/device/rockchip$ ls -al
+lrwxrwxrwx  1 cw cw   21 Mar  5 15:41 .BoardConfig.mk -> rk3128/BoardConfig.mk
+
+执行编译命令时，将会根据 `.mk` 文件进行编译。 对 Buildroot 相关配置进行说明 ：
+
+```shell
+cw@SYS3:~/sdk/3126i/device/rockchip$ vim .BoardConfig.mk
+  
+1 #!/bin/bash                                                                                                             
+2 
+3 # Target arch
+4 export RK_ARCH=arm
+5 # Uboot defconfig
+6 export RK_UBOOT_DEFCONFIG=rk3128
+7 # Kernel defconfig
+8 export RK_KERNEL_DEFCONFIG=rockchip_linux_defconfig
+9 # Kernel dts
+10 export RK_KERNEL_DTS=rk3128-fireprime
+11 # boot image type
+12 export RK_BOOT_IMG=zboot.img
+13 # kernel image path
+14 export RK_KERNEL_IMG=kernel/arch/arm/boot/zImage
+15 # parameter for GPT table
+16 export RK_PARAMETER=parameter-buildroot.txt
+17 # Buildroot config
+18 export RK_CFG_BUILDROOT=rockchip_rk3128
+
+# Buildroot 根文件系统配置文件
+# 文件路径在 `buildroot/configs/rockchip_rk3128_defconfig`
+
+19 # Recovery config
+20 export RK_CFG_RECOVERY=rockchip_rk3128_recovery
+
+# recovery 模式下根文件系统配置文件（可省略）
+# 文件路径在 `buildroot/configs/rockchip_rk3288_recovery_defconfig`
+
+21 # Pcba config
+22 export RK_CFG_PCBA=rockchip_rk3128_pcba
+23 # Build jobs
+24 export RK_JOBS=12
+25 # target chip
+26 export RK_TARGET_PRODUCT=rk3128
+27 # Set rootfs type, including ext2 ext4 squashfs
+28 export RK_ROOTFS_TYPE=ext4
+29 # rootfs image path
+30 export RK_ROOTFS_IMG=rockdev/rootfs.${RK_ROOTFS_TYPE}
+
+# Buildroot 根文件系统镜像路径
+# 本例中，文件路径在 `buildroot/output/rockchip_rk3128/images/rootfs.ext4`
+# 注：该文件路径将在首次编译根文件系统后生成
+
+31 # Set oem partition type, including ext2 squashfs
+32 export RK_OEM_FS_TYPE=ext2
+33 # Set userdata partition type, including ext2, fat
+34 export RK_USERDATA_FS_TYPE=ext2
+35 #OEM config
+36 export RK_OEM_DIR=oem_normal
+37 #userdata config
+38 export RK_USERDATA_DIR=userdata_normal
+39 #misc image
+40 export RK_MISC=wipe_all-misc.img
+ 
+```
+
+#### 2.1.2  make
+
 怎么编译buildroot修改的模块
-make menuconfig    //斜杆搜索，空格或者y选上
-make savedeconfig
+
+```
+make menuconfig    //# 进入图形化配置界面，选择所需模块，保存退出。斜杆搜索，空格或者y选上
+make savedeconfig   //保存到配置文件 'buildroot/configs/rockchip_rk3128_defconfig'
 make rkwifibt-dirclean //清除掉之前的
 make rkwifibt-rebuild //重新编译
-先make 模块rebuild
-再make 即可（实际就是等价于与./build.sh rootfs）
+再make 即可（实际就是等价于与./build.sh rootfs）//#编译 Buildroot 根文件系统
+make之后，要./build.sh rootfs要打包rootfs，还要./mkfirmware.sh
 ```
 
-## 2 编译Linux
+### 2.2 编译Linux
 
 ```
 cd kernel
@@ -139,16 +251,45 @@ cp defconfig kernel/arch/arm/configs/rockchip_xxxx_defconfig
 
 4、保存为镜像
 make rk3308-evb-dmic-i2s-v10.img
-
 ```
 
+### 2.3 自动编译
 
+#### 2.3.1 全自动编译
+
+./build.sh   全自动编译会编译并打包固件 `update.img`，生成固件目录 `rockdev/`：
+
+#### 2.3.2 部分编译
+
+- 编译 kernel:      ./build.sh kernel
+
+- 编译 u-boot:      ./build.sh uboot
+
+- 编译 rootfs:        编译 Buildroot 根文件系统，将会在 `buildroot/output` 生成编译输出目录：
+
+  ./build.sh buildroot 注：确保作为普通用户编译 Buildroot 根文件系统，避免不必要的错误。编译过程中会自动下载所需软件包，请保持联网状态
+
+#### 2.3.3 固件打包
+
+- 更新链接
+
+为确保 `rockdev/` 目录下文件链接正确，**更新各部分镜像链接**：
+
+```
+./mkfirmware.sh
+```
+
+- 打包固件
+
+将 `rockdev` 目录的各部分镜像打包成固件 `update.img`：
+
+```
+./build.sh updateimg
+```
 
 ## 3 自动编译脚本build.sh
 
- 全自动编译脚本
-为了提高编译的效率，降低人工编译可能出现的误操作，该 SDK 中集成了全自动化编译脚本，
-方便固件编译、备份。
+ 全自动编译脚本，降低人工编译可能出现的误操作，该 SDK 中集成了全自动化编译脚本，方便固件编译、备份。
 
 ```
 
@@ -203,6 +344,8 @@ save -save images, patches, commands used to debug
 default -build all modules
 如单独编译 kernel，只需要执行以下命令：
 ./build.sh kernel
+如单独编译 kernel，只需要执行以下命令：
+./build.sh rootfs
 ```
 
 ###  3.1 source 的作用
