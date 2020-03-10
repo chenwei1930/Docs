@@ -59,7 +59,7 @@ Firefly-RK3128 有三种启动模式：Normal 模式、Loader 模式、MaskRom �
 
 Normal 模式就是正常的启动过程，各个组件依次加载，正常进入系统。
 
-- maskrom（不推荐，第一次烧录时候）
+- maskrom（不推荐）
 
 ```
 如果芯片没烧写过，上电就是maskrom模式。这种模式用于拯救砖头机器。比如bootloader无法启动。无法进入loader正常下载。需要通过在板子上找对应的T13 C155 焊点，短接后通电，进入MASKROM模式，这些点需要问板子的生产商。
@@ -74,20 +74,19 @@ MaskRom 模式是设备变砖的最后一条防线。强行进入 MaskRom 涉及
 
 ### 1.2.2 烧写方法
 
-- 烧写方式-Maskrom模式
+- Maskrom模式下烧写
 
 ```
 1、 进入Maskrom
 如果没有烧录过系统的芯片，上电就是maskrom模式
-reboot #重启
-开机马上按'Ctrl+C'进入uboot命令选择界面
+reboot 命令重启，开机马上按'Ctrl+C'进入uboot命令选择界面
 help查看帮助
 rbrom进入Maskrom
 
 2、按上图图片，直接烧写
 ```
 
-- 烧写方式-Loader模式：
+- Loader模式下烧写
 
 ```
 采用loader烧写，说明芯片已经烧写过固件有loader和parameter在上面，所以可以单模块烧写，比如值烧写rootfs
@@ -107,7 +106,7 @@ Ctrl+C进入uboot命令行
 
 ```
  
-在Maskrom下单模块烧写，并且你烧写过paramenter，那么这时候，单模块烧写，你就要选上loader+单模块，比如说，你编译了builroot这时候生成的是rootfs，这时候loader+rootfs。这两项选上再烧写。
+在Maskrom下单模块烧写，并且你烧写过paramenter，那么这时候，单模块烧写，你就要选上（loader+单模块），比如说，你编译了builroot这时候生成的是rootfs，这时候loader+rootfs。这两项选上再烧写。
 
 在loader模式下单模块烧写,你烧写过paramenter，那么会有分区信息，这时候就可以单模块烧写。在loader模式下，你只编译了buildroot生成的rootfs，那么只需要烧写 勾选上rootfs，其他不用选，烧写。
 ```
@@ -128,7 +127,7 @@ Ctrl+C进入uboot命令行
 - 按”升级”按钮开始升级。
 - 如果升级失败，可以尝试先按”擦除Flash”按钮来擦除 Flash，然后再升级。
 
-***注意：如果你烧写的固件laoder版本与原来的机器的不一致，请在升级固件前先执行”擦除Flash”。***
+注意：***如果你烧写的固件laoder版本与原来的机器的不一致，请在升级固件前先执行”擦除Flash”。***
 
 ![img](RK Linux编译.assets/win_tool_upgrade_v2.58.png) 
 
@@ -144,6 +143,17 @@ Ctrl+C进入uboot命令行
 - 点击”执行”按钮开始升级，升级结束后设备会自动重启。
 
  ![img](RK Linux编译.assets/win_3128_tool_download.png) 
+
+### 1.2.4 各分区镜像
+
+uboot：对应的是uboot.img。  uboot 属于bootloader的一种，是用来引导启动内核的，它的最终目的就是，从flash中读出内核，放到内存中，启动内核 
+trust：对应的是trust.img， 其中含有ATF以及休眠唤醒相关的文件。安全保护使用。
+misc: misc 分区映像，对应misc.img，负责启动模式切换和急救模式的参数传递。
+resource: 资源映像，对应的是resource.img，内含开机图片和内核的设备树信息。
+kernel: 内核映像，对应的是kernel.img
+boot: Android 的初始文件映像，即ramdisk，负责初始化并加载 system 分区，对应的是boot.img
+recovery:急救模式映像，对应的是recovery.img
+system: Android 的 system 分区映像，ext4 文件系统格式，对应的是system.img
 
 ## 2 编译
 
@@ -263,6 +273,13 @@ cp defconfig kernel/arch/arm/configs/rockchip_xxxx_defconfig
 
 4、保存为镜像
 make rk3308-evb-dmic-i2s-v10.img
+
+要修改在arch/arm/configs下的文件xxx_defconfig
+make xxx_defconfig 会生成.config文件。
+make menuconfig 修改配置后保存
+make savedefconfig 生成defconfgi文件
+cp defconfig arch/arm/configs/xxx_defconfig 保存 
+这样保存的defconfig文件，配置最小化。
 ```
 
 ### 2.3 自动编译
@@ -281,7 +298,7 @@ make rk3308-evb-dmic-i2s-v10.img
 
   ./build.sh buildroot 注：确保作为普通用户编译 Buildroot 根文件系统，避免不必要的错误。编译过程中会自动下载所需软件包，请保持联网状态
 
-#### 2.3.3 固件打包
+#### 2.3.3 更新链接&打包固件
 
 - 更新链接
 
@@ -984,26 +1001,174 @@ export RK_ROOTFS_IMG=buildroot/output/$RK_CFG_BUILDROOT/images/rootfs.$RK_ROOTFS
 
 执行编译命令时，将会根据 `.mk` 文件进行编译。
 
-
 ##  5 Buildroot 介绍
 
-Buildroot 编译输出结果保存在 `output` 目录，具体目录由配置文件决定，本例保存在 `buildroot/output/rockchip_rk3288` 目录，后续可以在该目录执行 `make` 编译根文件系统。
+### 5.1 为什么要使用buildroot？
 
-采用全自动编译方式时，默认会生成 `buildroot/output/rockchip_rk3288_recovery` 目录，这是 `recovery` 的编译输出目录。
+  （文件系统搭建，强烈建议直接用buildroot，官网[http://buildroot.uclibc.org/]上有使用教程非常详细）文件系统通常要包含很多第三方软件，比如busybox，udhcpc,tftp，apache，sqlite，PHP，iptable,DNS等，为了避免繁杂的移植工作。buildroot应运而生。通过menuconfig配置我们需要的功能，不需要的功能去掉，再执行make指令编译，buildroot就会自动从指定的服务器上下载源码包,自动编译,自动搭建成我们所需要的嵌入式根文件系统。让我们的工作效率成百倍的提升。
 
-子目录说明：
+- buildroot/package/：下面放着应用软件的配置文件，每个应用软件的配置文件有Config.in和soft_name.mk，其中soft_name.mk(这种其实就Makefile脚本的自动构建脚本)文件可以去下载应用软件的包。
 
-- `build/` 包含所有的源文件，包括 Buildroot 所需主机工具和选择的包，这个目录包含所有 模块源码。
-- `host/` 主机端编译需要的工具包括交叉编译工具。
-- `images/` 包含压缩好的根文件系统镜像文件。
+- buildroot/output/：是编译出来的输出文件夹，里面的build/目录存放着解压后的各种软件包编译完后的现场。
+
+  - host：是由各类源码编译后在你主机上运行的工具(build for host)的安装目录,如arm-linux-gcc就是安装在这里.
+
+    
+
+    - 编译出来的主机工具在host/usr下
+    - 根目录所需要的库及一些基本目录就在host/< tuple >/sysroot/或host/usr/< tuple >/sysroot/里 (< tuple >:arm-buildroot-linux-gnueabi),如果是外部toolchain,比如lirano的就在libc里,名字不一样而已　　
+
+  - build：所有源码包解压出来的文件存放地和编译的发生地
+
+  - staging：软链接到host/< tuple >/sysroot/ 就是上面说到的文件系统需要的库等目录,方便查看
+
+  - target： 目录是用来制作rootfs的，里面放着Linux系统基本的目录结构，以及各种编译好的应用库和bin可执行文件。不能用来nfs mount到开发板,因为buildroot不是root权权运行的,所以现dev/,etc/等一些文件无法创建,所以目录还不完整,要用images/里的rootfs.tar解压出来的根文件目录才能mount.使用如下命令：sudo tar -C /destination/of/extraction -xf images/rootfs.tar
+
+  - Images：目录下就是最终生成的可烧写到板子上的各种image。 
+
+- buildroot/dl：存放下载的源码包及应用软件的压缩包
+
+- buildroot/fs：放各种文件系统的源代码
+
+- buildroot/fs/skeleton：放生成文件系统镜像的地方，及板子里面的系统
+
+- buildroot/linux： 存放着Linux kernel的自动构建脚本。
+
+- buildroot/configs：放置开发板的一些配置参数
+
+- buildroot/dl：目录存放从官网上下载的开源软件包，第一次下载后，下次就不会再去从官网下载了，而是从dl/目录下拿开源包，以节约时间。**本身下载通常都是很慢的,你可以手动找到相关包下载后放到这里就OK了,make时会自动检测这个目录.** 
+
+- buildroot/docs： 存放相关的参考文档。
+
+- buildroot/arch： 目录存放CPU架构相关的配置脚本，如arm/mips/x86 ，这些CPU相关的配置，在制作工具链，编译boot和内核时很关键。
+
+- buildroot/board：存放了一些默认开发板的配置补丁之类的
+
+- buildroot/boot：
+
+- buildroot/build：
+
+- buildroot/support：
+
+- buildroot/system：这里就是根目录的主要骨架了和相关的启动初始化配置,当制作根目录时就是将此处的文件cp到output里去.然后再安装toolchain的动态库和你勾选的package的可执行文件之类的.
+
+- buildroot/toolchain：
+
+### buildroot目录介绍
+
+  解压之后，我们可以看到以下的目录情况：
+
+```
+├── arch:   存放CPU架构相关的配置脚本，如arm/mips/x86,这些CPU相关的配置，在制作工具链时，编译uboot和kernel时很关键.
+├── board   存放了一些默认开发板的配置补丁之类的
+├── boot
+├── CHANGES
+├── Config.in
+├── Config.in.legacy
+├── configs:  放置开发板的一些配置参数. 
+├── COPYING
+├── DEVELOPERS
+├── dl:       存放下载的源代码及应用软件的压缩包. 
+├── docs:     存放相关的参考文档. 
+├── fs:       放各种文件系统的源代码. 
+├── linux:    存放着Linux kernel的自动构建脚本. 
+├── Makefile
+├── Makefile.legacy
+├── output: 是编译出来的输出文件夹. 
+│   ├── build: 存放解压后的各种软件包编译完成后的现场.
+│   ├── host: 存放着制作好的编译工具链，如gcc、arm-linux-gcc等工具.
+│   ├── images: 存放着编译好的uboot.bin, zImage, rootfs等镜像文件，可烧写到板子里, 让linux系统跑起来.
+│   ├── staging
+│   └── target: 用来制作rootfs文件系统，里面放着Linux系统基本的目录结构，以及编译好的应用库和bin可执行文件. (buildroot根据用户配置把.ko .so .bin文件安装到对应的目录下去，根据用户的配置安装指定位置)
+├── package：下面放着应用软件的配置文件，每个应用软件的配置文件有Config.in和soft_name.mk，其中soft_name.mk(这种其实就Makefile脚本的自动构建脚本)文件可以去下载应用软件的包。
+├── README
+├── support
+├── system
+└── toolchain
+```
+
+
+
+### make命令解析
+
+  通过make help可以看到buildroot下make的使用细节，包括对package、uclibc、busybox、linux以及文档生成等配置：
+
+```
+Cleaning:
+  clean                  - delete all files created by build------------------清理
+  distclean              - delete all non-source files (including .config)
+
+Build:
+  all                         - make world----------------------------编译整个系统
+  toolchain              - build toolchain------------------------------------------编译工具链
+
+Configuration:
+  menuconfig             - interactive curses-based configurator-------------对整个buildroot进行配置
+  savedefconfig          - Save current config to BR2_DEFCONFIG (minimal config)--------保存menuconfig的配置
+
+Package-specific:---------------------------------------------------------对package配置
+  <pkg>                  - Build and install <pkg> and all its dependencies---------单独编译对应APP
+  <pkg>-source           - Only download the source files for <pkg>
+  <pkg>-extract          - Extract <pkg> sources
+  <pkg>-patch            - Apply patches to <pkg>
+  <pkg>-depends          - Build <pkg>'s dependencies
+  <pkg>-configure        - Build <pkg> up to the configure step
+  <pkg>-build            - Build <pkg> up to the build step
+  <pkg>-show-depends     - List packages on which <pkg> depends
+  <pkg>-show-rdepends    - List packages which have <pkg> as a dependency
+  <pkg>-graph-depends    - Generate a graph of <pkg>'s dependencies
+  <pkg>-graph-rdepends   - Generate a graph of <pkg>'s reverse dependencies
+  <pkg>-dirclean         - Remove <pkg> build directory--------------------清除对应APP的编译目录
+  <pkg>-reconfigure      - Restart the build from the configure step
+  <pkg>-rebuild          - Restart the build from the build step------------单独重新编译对应APP
+
+busybox:
+  busybox-menuconfig     - Run BusyBox menuconfig
+
+uclibc:
+  uclibc-menuconfig      - Run uClibc menuconfig
+
+linux:
+  linux-menuconfig       - Run Linux kernel menuconfig--------------------配置Linux并保存设置
+  linux-savedefconfig    - Run Linux kernel savedefconfig
+  linux-update-defconfig - Save the Linux configuration to the path specified
+                             by BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE
+
+Documentation:
+  manual                 - build manual in all formats
+  manual-pdf             - build manual in PDF
+  graph-build            - generate graphs of the build times-----------对编译时间、编译依赖、文件系统大小生成图标
+  graph-depends          - generate graph of the dependency tree
+  graph-size             - generate stats of the filesystem size
+
+```
+
+
+
+### 5.2 rockchp buildroot
+
+Buildroot 编译输出结果保存在 `output` 目录，具体目录由配置文件决定，本例保存在 `buildroot/output/rockchip_rk3288` 目录，后续可以在该目录执行 `make` 编译根文件系统。采用全自动编译方式时，默认会生成 `buildroot/output/rockchip_rk3288_recovery` 目录，这是 `recovery` 的编译输出目录。
+
+###  5.3 Buildroot编译输出
+
+**buildroot的编译流程是先从dl/xxx.tar下解压出源码到output/build/xxx,然后它利用本身的配置文件(如果有的话)覆盖output/build/xxx下的配置文件,在开始编译连接完成后安装到output/相应文件夹下。**
+
+###  Buildroo的编译输出存放在output/.下面
+
+cw@SYS3:~/sdk/3126i/buildroot/output/rockchip_rk3128$ du -h --max-depth=1
+13G   ./build
+830M  ./images
+211M  ./target
+893M  ./host
+15G   .
+
+- `build/` 包含所有的源文件，包括 Buildroot 所需主机工具和选择的包，这个目录包含所有 模块源码。 存放除交叉编译器之外的所有组件，每个组件自己有一个文件夹 
+- `host/`   包含host所需要的各种安装包（为运行buildroot所需要的各组件，及交叉编译器） 
+- `images/` 包含压缩好的根文件系统镜像文件，kernel image, bootloader and root filesystem等images 
 - `staging/` 这个目录类似根文件系统的目录结构，包含编译生成的所有头文件和库，以及其他开发文件，不过他们没有裁剪，比较庞大，不适用于目标文件系统。
-- `target/` 包含完整的根文件系统，对比 `staging/`，它没有开发文件，不包含头文件，二进制文件也经过 `strip` 处理。
+- `target/` 包含完整的根文件系统，对比 `staging/`，它没有开发文件，不包含头文件，二进制文件也经过 `strip` 处理。 **包含几乎与目标根文件系统一样的目录，尚缺少的是设备文件/dev**（Buildroot不是运行在也不想运行在root权限下），因而这个目录也不能作为目标系统的根文件系统，你应该使用images/下的其中一个作为目标系统的根文件系统 
 
-### 自定义 Buildroot
-
-下文将介绍一些自定义 Buildroot 的方法。
-
-#### 模块配置
+###  5.4  模块配置
 
 默认编译好的根文件系统不一定满足我们的需求，我们可能需要增加一些第三方包，或者修改包的配置选项，Buildroot 支持图形化方式去做选择配置：
 
@@ -1026,9 +1191,7 @@ make
 - 软件包会解压在 `output/build/` 目录下，然后进行编译。
 - 如果要修改软件包的源码，可以通过打补丁的方式进行修改，补丁集中放在 `package/` 目录，Buildroot 会在解压软件包时为其打上相应的补丁。
 
-
-
-#### 文件系统覆盖
+###  5.6 Buildroot Overlay
 
 文件系统覆盖是指在目标文件系统编译完成后将文件覆盖到文件系统目录。通过这种方式，我们可以简单的添加或修改一些文件：
 
@@ -1037,29 +1200,12 @@ make
 
 例：`buildroot/board/rockchip/rk3288/fs-overlay/etc/firmware` 将覆盖文件系统的 `/etc/firmware` 文件。
 
-### Buildroot 官网
 
-更加详细具体的开发技巧可到 Buildroot 官网学习。
-
-
-
-## 7  什么是rootfs
-
-```
-Linux系统中的根文件系统，Root FileSystem，简称为rootfs；
- ，其实就是，针对特定的操作系统的架构，一种实现的形式具体表现为，特定的文件夹，文件夹之间的关系，即组织架构，以及特定的各种文件；
+###  5.7 什么是rootfs
 
 Linux中的rootfs，就是那些文件夹和文件，包括什么根文件目录’/’系统相关的配置文件目录/etc存放系统启动相关配置的/etc/init存放系统相关的工具 /sbin存在用户的工具/usr/bin
 
- 
-
-所以，从这方面来说，所谓的rootfs，根文件系统，就是那些，能让操作系统正常运行的，文件夹和文件的大集合。
-如此，才算对rootfs，有个相对感性和容易理解的解释；
-转载请注明：在路上 » 【整理】什么是根文件系统（rootfs=Root Fils System）
-根文件系统首先是一种文件系统，该文件系统不仅具有普通文件系统的存储数据文件的功能，但是相对于普通的文件系统，它的特殊之处在于，它是内核启动时所挂载（mount）的第一个文件系统，内核代码的映像文件保存在根文件系统中，系统引导启动程序会在根文件系统挂载之后从中把一些初始化脚本（如rcS,inittab）和服务加载到内存中去运行。我们要明白文件系统和内核是完全独立的两个部分。在嵌入式中移植的内核下载到开发板上，是没有办法真正的启动Linux操作系统的，会出现无法加载文件系统的错误。
-```
-
-如下target下就是开发板的根文件系统：
+如下target下就是开发板的根文件系统主要（不包含dev）：
 
 ```
 cw@SYS3:~/sdk/3126i/buildroot/output/rockchip_rk3128/target$ ls
@@ -1067,6 +1213,16 @@ bin             dev   lib      media  oem   rockchip_test  sbin    system       
 busybox.config  etc   lib32    misc   opt   root           sdcard  THIS_IS_NOT_YOUR_ROOT_FILESYSTEM  udisk     var
 data            init  linuxrc  mnt    proc  run            sys     timestamp                         userdata
 ```
+
+
+
+| `dirclean`  | 删除整个包构建目录                                           |
+| ----------- | ------------------------------------------------------------ |
+| `reinstall` | 重新运行安装命令                                             |
+| `rebuild`   | 重新运行编译命令 - 这只有在使用该`OVERRIDE_SRCDIR`功能（重新指定源码包位置）时才有意义，或者直接在编译目录中修改文件时才有意义 |
+
+make graph-depends    生成已编译完整系统的依赖关系图   output/graphs/graph-depends.pdf
+make <pkg>-graph-depends 给定的包生成依赖关系图      output/graph/<pkg>-graph-depends.pdf
 
 ## 8 trust和loader
 
@@ -1081,148 +1237,6 @@ U-Boot 工程执行编译的时候，编译脚本会从 rkbin 仓库里索引相
 在 U-Boot 根目录下生成 trust.img、uboot.img、loader 等相关固件
 ```
 
-uboot：对应的是uboot.img。  uboot 属于bootloader的一种，是用来引导启动内核的，它的最终目的就是，从flash中读出内核，放到内存中，启动内核 
-
-trust：对应的是trust.img， 其中含有ATF以及休眠唤醒相关的文件。安全保护使用
-
-misc: misc 分区映像，对应misc.img，负责启动模式切换和急救模式的参数传递。
-
-resource: 资源映像，对应的是resource.img，内含开机图片和内核的设备树信息。
-
-kernel: 内核映像，对应的是kernel.img
-
-boot: Android 的初始文件映像，即ramdisk，负责初始化并加载 system 分区，对应的是boot.img
-
-recovery:急救模式映像，对应的是recovery.img
-
-system: Android 的 system 分区映像，ext4 文件系统格式，对应的是system.img
 
 
-
-update.img
-
-统一固件打包工具.固件打包工具可将各零散镜像文件，打包成一个完成的 update.img 形式，方便量产烧写及升
-级.. Windows 下打包update.img
-
-```
-
-Windows 系统下，打包工具存放在 tools\windows\AndroidTool\rockdev，打包步骤如下：
-1）打开 rockdev 目录，编辑 package-file。
-按照 package-file 进行配置，package-file 里面配置 img 镜像放在 Image 目录底下的，将
-需要放到 Image 目录的镜像拷贝进去即可。且注意配置时，镜像名字的准确。其中注意 bootloader
-选项，应该根据自己生成的 loader 名称进行修改。
-2）编辑 mkupdate.bat
-```
-
-
-
-
-
-uboot
-
-```
-  pclk_peri 74250 KHz
-Net:   Net Initialization Skipped
-No ethernet found.
-Hit key to stop autoboot('CTRL+C'):  0 
-=> <INTERRUPT>
-=> <INTERRUPT>
-=> <INTERRUPT>
-=> <INTERRUPT>
-=> <INTERRUPT>
-=> <INTERRUPT>
-=> <INTERRUPT>
-=> <INTERRUPT>
-=> help
-?       - alias for 'help'
-android_print_hdr- print android image header
-base    - print or set address offset
-bdinfo  - print Board Info structure
-bidram_dump- Dump bidram layout
-bmp     - manipulate BMP image data
-boot    - boot default, i.e., run 'bootcmd'
-boot_android- Execute the Android Bootloader flow.
-bootavb - Execute the Android avb a/b boot flow.
-bootd   - boot default, i.e., run 'bootcmd'
-bootm   - boot application image from memory
-bootp   - boot image via network using BOOTP/TFTP protocol
-bootrkp - Boot Linux Image from rockchip image type
-bootz   - boot Linux zImage image from memory
-charge  - Charge display
-cmp     - memory compare
-coninfo - print console devices and information
-cp      - memory copy
-crc32   - checksum calculation
-dhcp    - boot image via network using DHCP/TFTP protocol
-dm      - Driver model low level access
-download- enter rockusb/bootrom download mode
-dtimg   - manipulate dtb/dtbo Android image
-dump_atags- Dump the content of the atags
-dump_irqs- Dump IRQs
-echo    - echo args to console
-editenv - edit environment variable
-env     - environment handling commands
-exit    - exit script
-ext2load- load binary file from a Ext2 filesystem
-ext2ls  - list files in a directory (default /)
-ext4load- load binary file from a Ext4 filesystem
-ext4ls  - list files in a directory (default /)
-ext4size- determine a file's size
-false   - do nothing, unsuccessfully
-fastboot- use USB or UDP Fastboot protocol
-fatinfo - print information about filesystem
-fatload - load binary file from a dos filesystem
-fatls   - list files in a directory (default /)
-fatsize - determine a file's size
-fatwrite- write file into a dos filesystem
-fdt     - flattened device tree utility commands
-fstype  - Look up a filesystem type
-go      - start application at address 'addr'
-gpt     - GUID Partition Table
-help    - print command description/usage
-iomem   - Show iomem data by device compatible(high priority) or node name
-lcdputs - print string on video framebuffer
-load    - load binary file from a filesystem
-loop    - infinite loop on address range
-ls      - list files in a directory (default /)
-md      - memory display
-mii     - MII utility commands
-mm      - memory modify (auto-incrementing address)
-mmc     - MMC sub system
-mmcinfo - display MMC info
-mw      - memory write (fill)
-nfs     - boot image via network using NFS protocol
-nm      - memory modify (constant address)
-part    - disk partition related commands
-ping    - send ICMP ECHO_REQUEST to network host
-printenv- print environment variables
-pxe     - commands to get and boot from pxe files
-rbrom   - Perform RESET of the CPU
-reboot  - Perform RESET of the CPU, alias of 'reset'
-reset   - Perform RESET of the CPU
-rkimgtest- Test if storage media have rockchip image
-rknand  - rockchip nand flash sub-system
-rktest  - Rockchip board modules test
-rockchip_show_bmp- load and display bmp from resource partition
-rockchip_show_logo- load and display log from resource partition
-rockusb - Use the rockusb Protocol
-run     - run commands in an environment variable
-save    - save file to a filesystem
-setcurs - set cursor position within screen
-setenv  - set environment variables
-showvar - print local hushshell variables
-size    - determine a file's size
-source  - run script from memory
-sysboot - command to get and boot from syslinux files
-sysmem_dump- Dump sysmem layout
-sysmem_search- Search a available sysmem region
-test    - minimal test like /bin/sh
-tftpboot- boot image via network using TFTP protocol
-true    - do nothing, successfully
-ums     - Use the UMS [USB Mass Storage]
-usb     - USB sub-system
-usbboot - boot from USB device
-version - print monitor, compiler and linker version
-=> 
-```
 
