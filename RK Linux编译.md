@@ -261,18 +261,29 @@ make之后，要./build.sh rootfs要打包rootfs，还要./mkfirmware.sh
 ```
 cd kernel
 
-1、使用默认配置
-make rk3126_linux_defconfig
+一共kernel下执行四条命令
+cw@SYS3:~/sdk/3126i/kernel$ make  ARCH=arm rockchip_linux_defconfig    
 
-2、自定义配置
-make menuconfig
+cw@SYS3:~/sdk/3126i/kernel$ make  ARCH=arm menuconfig
+这条命令生成了.config文件
 
-3、保存配置
-make savedefconfig 保存为defconfig
-cp defconfig kernel/arch/arm/configs/rockchip_xxxx_defconfig
+cw@SYS3:~/sdk/3126i/kernel$ make ARCH=arm savedefconfig      
+scripts/kconfig/conf  --savedefconfig=defconfig Kconfig
+这条命令下生产了defconfig文件
 
-4、保存为镜像
-make rk3308-evb-dmic-i2s-v10.img
+cw@SYS3:~/sdk/3126i/kernel$ cp defconfig arch/arm/configs/rockchip_linux_defconfig
+这条命令下生产了defconfig文件arch/arm/configs/rockchip_linux_defconfig
+
+注意（为什么指定arch，不加的话影响是啥）：
+arch是说明用的是32位的机器，如RK3126、RK2128
+cw@SYS3:~/sdk/3328/kernel$make menuconfig ARCH=arm
+注意kernel对于32位，make menuconfig和make savedefconfig都必须加上ARCH=arm， menuconfig配置后save在拷贝到arch/arm/configs/rockchip_linux_defconfig。 
+如果不加 ARCH=arm的话，默认是64位，这时候，这时候你git diff下发现rockchip_linux_defconfig会有很大的改动。
+加 ARCH=arm的话，就是32位机器，你git diff下发现rockchip_linux_defconfig就是刚才菜单的那些修改。
+你看下下面文件搜索就会明白
+cw@SYS3:~/sdk/3126i/kernel$ ag -g "rockchip_linux_defconfig"
+arch/arm/configs/rockchip_linux_defconfig
+arch/arm64/configs/rockchip_linux_defconfig
 ```
 
 ### 2.3 自动编译
@@ -311,11 +322,78 @@ make rk3308-evb-dmic-i2s-v10.img
 
 ## 3 自动编译脚本build.sh
 
+【注意】：
+
+source envsetup.sh 执行的文件会生成Makefile等文件，比如你发下你填错数字了，千万不要ctrl+c，这时候比如他正在生成makefile后，可是你强制停止了，文件还没有写入任何内容，这时候你ctrl就终止了，可是make执行的就是这个空白的makefile。
+
+```
+2020-03-12T20:06:26 >>>   Generating root filesystem image rootfs.tar
+2020-03-12T20:06:26 rm -rf /home/cw/sdk/3126i/buildroot/output/rockchip_rk3128_recovery/build/buildroot-fs
+2020-03-12T20:06:26 mkdir -p /home/cw/sdk/3126i/buildroot/output/rockchip_rk3128_recovery/build/buildroot-fs
+2020-03-12T20:06:26 echo '#!/bin/sh' > /home/cw/sdk/3126i/buildroot/output/rockchip_rk3128_recovery/build/buildroot-fs/fakeroot.fs
+2020-03-12T20:06:26 echo "set -e" >> /home/cw/sdk/3126i/buildroot/output/rockchip_rk3128_recovery/build/buildroot-fs/fakeroot.fs
+2020-03-12T20:06:26 echo "chown -h -R 0:0 /home/cw/sdk/3126i/buildroot/output/rockchip_rk3128_recovery/target" >> /home/cw/sdk/3126i/buildroot/output/rockchip_rk3128_recovery/build/buildroot-fs/fakeroot.fs
+2020-03-12T20:06:26 printf '    - - input -1 * - - - Input device groupnn' >> /home/cw/sdk/3126i/buildroot/output/rockchip_rk3128_recovery/build/buildroot-fs/users_table.txt
+2020-03-12T20:06:26 PATH="/home/cw/sdk/3126i/buildroot/output/rockchip_rk3128_recovery/host/bin:/home/cw/sdk/3126i/buildroot/output/rockchip_rk3128_recovery/host/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin" /home/cw/sdk/3126i/buildroot/support/scripts/mkusers /home/cw/sdk/3126i/buildroot/output/rockchip_rk3128_recovery/build/buildroot-fs/users_table.txt /home/cw/sdk/3126i/buildroot/output/rockchip_rk3128_recovery/target >> /home/cw/sdk/3126i/buildroot/output/rockchip_rk3128_recovery/build/buildroot-fs/fakeroot.fs
+2020-03-12T20:06:26 cat system/device_table.txt > /home/cw/sdk/3126i/buildroot/output/rockchip_rk3128_recovery/build/buildroot-fs/device_table.txt
+2020-03-12T20:06:26 printf '    /bin/busybox                     f 4755 0  0 - - - - -n /dev/console c 622 0 0 5 1 - - -nn' >> /home/cw/sdk/3126i/buildroot/output/rockchip_rk3128_recovery/build/buildroot-fs/device_table.txt
+2020-03-12T20:06:26 echo "/home/cw/sdk/3126i/buildroot/output/rockchip_rk3128_recovery/host/bin/makedevs -d /home/cw/sdk/3126i/buildroot/output/rockchip_rk3128_recovery/build/buildroot-fs/device_table.txt /home/cw/sdk/3126i/buildroot/output/rockchip_rk3128_recovery/target" >> /home/cw/sdk/3126i/buildroot/output/rockchip_rk3128_recovery/build/buildroot-fs/fakeroot.fs
+2020-03-12T20:06:26 printf '    (cd /home/cw/sdk/3126i/buildroot/output/rockchip_rk3128_recovery/target; find -print0 | LC_ALL=C sort -z | tar  -cf /home/cw/sdk/3126i/buildroot/output/rockchip_rk3128_recovery/images/rootfs.tar --null --no-recursion -T - --numeric-owner)n' >> /home/cw/sdk/3126i/buildroot/output/rockchip_rk3128_recovery/build/buildroot-fs/fakeroot.fs
+2020-03-12T20:06:26 chmod a+x /home/cw/sdk/3126i/buildroot/output/rockchip_rk3128_recovery/build/buildroot-fs/fakeroot.fs
+2020-03-12T20:06:26 rm -f /home/cw/sdk/3126i/buildroot/output/rockchip_rk3128_recovery/target/THIS_IS_NOT_YOUR_ROOT_FILESYSTEM
+2020-03-12T20:06:26 PATH="/home/cw/sdk/3126i/buildroot/output/rockchip_rk3128_recovery/host/bin:/home/cw/sdk/3126i/buildroot/output/rockchip_rk3128_recovery/host/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin" /home/cw/sdk/3126i/buildroot/output/rockchip_rk3128_recovery/host/bin/fakeroot -- /home/cw/sdk/3126i/buildroot/output/rockchip_rk3128_recovery/build/buildroot-fs/fakeroot.fs
+2020-03-12T20:06:26 rootdir=/home/cw/sdk/3126i/buildroot/output/rockchip_rk3128_recovery/target
+2020-03-12T20:06:26 table='/home/cw/sdk/3126i/buildroot/output/rockchip_rk3128_recovery/build/buildroot-fs/device_table.txt'
+2020-03-12T20:06:26 /usr/bin/install -m 0644 support/misc/target-dir-warning.txt /home/cw/sdk/3126i/buildroot/output/rockchip_rk3128_recovery/target/THIS_IS_NOT_YOUR_ROOT_FILESYSTEM
+2020-03-13T08:23:50 make: *** No targets.  Stop.
+2020-03-13T09:15:54 make: *** No targets.  Stop.
+2020-03-13T09:16:16 make: *** No targets.  Stop.
+2020-03-13T09:16:36 make: *** No targets.  Stop.
+2020-03-13T09:17:15 make: *** No targets.  Stop.
+2020-03-13T09:17:59 make: *** No targets.  Stop.
+2020-03-13T09:20:18 make: *** No targets.  Stop.
+2020-03-13T09:22:32 make: *** No targets.  Stop.
+2020-03-13T09:24:20 make: *** No targets.  Stop.
+2020-03-13T09:30:17 make: *** No targets.  Stop.
+2020-03-13T09:31:59 make: *** No targets.  Stop.
+2020-03-13T09:35:16 make: *** No targets.  Stop.
+2020-03-13T09:36:21 make: *** No targets.  Stop.
+2020-03-13T09:41:56 make: *** No targets.  Stop.
+2020-03-13T09:46:55 make: *** No targets.  Stop.
+2020-03-13T09:50:22 make: *** No targets.  Stop.
+2020-03-13T09:53:46 make: *** No targets.  Stop.
+2020-03-13T09:55:47 make: *** No targets.  Stop.
+2020-03-13T10:04:06 make: *** No targets.  Stop.
+```
+
+原因
+
+```
+cw@SYS3:~/sdk/3126i$ vi Makefile 
+  1 ### DO NOT EDIT THIS FILE ###
+  2 ifeq ($(TARGET_OUTPUT_DIR),)                                                                                                                                                                    
+  3 $(error "Please use "source buildroot/build/envsetup.sh" to select a buildroot config")
+  4 endif
+  5 
+  6 O=$(TARGET_OUTPUT_DIR)
+  7 include $(O)/Makefile   //原因就是这个makefile由于ctrl+c，里面是空白的，还没有写入，把这个文件删除了就好
+  //1696  cd buildroot/output/rockchip_rk3128/  rm Makefile 
+  8 ### DO NOT EDIT THIS FILE ###
+```
+
+
+
+【./build.sh rootfs】
+
+```
+执行的就是删除相关文件，执行source命令和make命令
+```
+
  全自动编译脚本，降低人工编译可能出现的误操作，该 SDK 中集成了全自动化编译脚本，方便固件编译、备份。
 
 ```
 
-1）该全自动化编译脚本原始文件存放于：
+1）脚本原始文件存放于：
 device/rockchip/common/build.sh
 2）在 repo sync 的时候，通过 manifest 中的 copy 选项拷贝至工程根目录下：
 3）修改 device/rockchip/rkxx(芯片平台)/BoardConfig.mk 脚本中的特定变量以编出对应
