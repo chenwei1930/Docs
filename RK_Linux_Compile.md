@@ -1482,6 +1482,28 @@ make <package> -dirclean //删除output/build/package 这个文件夹
  make 或 make <package>
 ```
 
+### 7.4 补丁
+
+ 如果要修改软件包的源码，你可以通过打补丁的方式进行修改，补丁生成后集中放在package/目录，buildroot会在解压软件包时自动打上相应补丁。 
+
+```
+以rkwifibt 为例
+1. cd buildroot/output/rockchip_rk3308_release/build/rkwifibt-1.0.0
+2. 初始化仓库
+git init
+3. 添加将要修改的文件到 git 仓库
+git add wifi_start.sh
+git commit -s
+4. 修改文件
+5. 提交修改文件
+git add wifi_start.sh
+git commit -s
+6. 生成补丁
+git format-patch
+```
+
+
+
 ## 8 UBOOT
 
 ### 8.1 Rockchip U-Boot 简介
