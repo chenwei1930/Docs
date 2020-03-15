@@ -1,4 +1,4 @@
-# RK Linux编译
+RK Linux编译
 
 ## 1.1 下载SDK并编译，生成固件
 ```
@@ -49,9 +49,24 @@ Windows工具：[AndroidTool](http://www.t-firefly.com/doc/download/page/id/4.ht
 
 ### 1.2.1 启动模式
 
-烧录有两种模式maskrom和loader, 对于模式的检测是在bootloader/uboot里面进行的。 
+Rockchip 平台硬件运行的几种模式如表所示，只有当设备处于 Maskrom，及 Loader
+模式下，才能够烧写固件，或对板上固件进行更新操作。
 
-Firefly-RK3128 有三种启动模式：Normal 模式、Loader 模式、MaskRom 模式
+| 模式            | 工具烧录 | 介绍                                                         |
+| --------------- | -------- | ------------------------------------------------------------ |
+| Maskrom         | 支持     | Flash 在未烧录固件时，芯片会引导进入 Maskrom 模式，可以<br/>进行初次固件的烧写；开发调试过程中若遇到 Loader 无法正常<br/>启动的情况，也可进入 Maskrom 模式烧写固件。 |
+| Loader          | 支持     | Loader 模式下，可以进行固件的烧写、升级。可以通过工具单<br/>独烧写某一个分区镜像文件，方便调试。 |
+| Recovery        | 不支持   | 系统引导 recovery 启动，主要作用是升级、恢复出厂设置类操<br/>作 |
+| Normal<br/>Boot | 不支持   | 系统引导 rootfs 启动，加载 rootfs，大多数的开发都是在这个<br/>模式在调试的 |
+
+进入烧写模式方式以下几种方法：
+1. 未烧录过固件，上电，进入 Maskrom 模式。
+2. 烧录过固件，按住 recovery 按键上电或复位，系统将进入 Loader 固件烧写模式。
+3. 烧录过固件，按住 Maskrom 按键上电或复位，系统将进入 MaskRom 固件烧写模式。
+4. 烧录过固件，上电或复位后开发板正常进入系统后，瑞芯微开发工具上显示“发现一个 **ADB**
+**设备”或“发现一个 MSC 设备”**，然后点击工具上的按钮**“切换”，进入 Loader 模式。**
+5. 烧录过固件，可在串口或 adb 命令行模式下，输入 reboot loader 命令，进入 Loader 模
+式。
 
 - Normal 模式
 
@@ -261,13 +276,12 @@ cd kernel
 
 一共kernel下执行四条命令
 cw@SYS3:~/sdk/3126i/kernel$ make  ARCH=arm rockchip_linux_defconfig    
-
 cw@SYS3:~/sdk/3126i/kernel$ make  ARCH=arm menuconfig
 这条命令生成了.config文件
 
 cw@SYS3:~/sdk/3126i/kernel$ make ARCH=arm savedefconfig      
 scripts/kconfig/conf  --savedefconfig=defconfig Kconfig
-这条命令下生产了defconfig文件
+这条命令下生成上defconfig文件
 
 cw@SYS3:~/sdk/3126i/kernel$ cp defconfig arch/arm/configs/rockchip_linux_defconfig
 这条命令下生产了defconfig文件arch/arm/configs/rockchip_linux_defconfig
@@ -318,9 +332,32 @@ arch/arm64/configs/rockchip_linux_defconfig
 ./build.sh updateimg
 ```
 
-## 3 自动编译脚本build.sh
+## 3  buildroot 与source envsetup.sh
 
-【注意】：
+### 3.1 编译buildroot 
+
+客户按实际编译环境配置好编译依赖后，按照以下步骤配置完后，执行 make 即可。
+$ source buildroot/build/envsetup.sh
+You're building on Linux
+Lunch menu...pick a combo:
+
+1. rockchip_rk3308_release
+2. rockchip_rk3308_debug
+3. rockchip_rk3308_robot_release
+4. rockchip_rk3308_robot_debug
+5. rockchip_rk3308_mini_release
+Which would you like? [1]
+如选择 rockchip_rk3308_release，输入对应序号 1。
+$ make
+完成编译后执行 SDK 根目录下的 mkfirmware.sh 脚本生成固件
+$ ./mkfirmware.sh
+所有烧写所需的镜像将都会拷贝于 rockdev 目录。
+
+### 3.1 注意 1 source envsetup.sh禁止ctrl+c
+
+envsetup.sh只是将某个单板的相关配置source进当前shell的环境变量
+
+【注意 1】：build.sh不能强制ctrl+c，如果你输入错误的数字才发现错了，就再随便输入几个字母，回车
 
 source envsetup.sh 执行的文件会生成Makefile等文件，比如你发下你填错数字了，千万不要ctrl+c，这时候比如他正在生成makefile后，可是你强制停止了，文件还没有写入任何内容，这时候你ctrl就终止了，可是make执行的就是这个空白的makefile。可能错误如下：
 
@@ -347,37 +384,107 @@ source envsetup.sh 执行的文件会生成Makefile等文件，比如你发下�
 2020-03-13T09:15:54 make: *** No targets.  Stop.
 2020-03-13T09:16:16 make: *** No targets.  Stop.
 2020-03-13T09:16:36 make: *** No targets.  Stop.
-2020-03-13T09:17:15 make: *** No targets.  Stop.
-2020-03-13T09:17:59 make: *** No targets.  Stop.
-2020-03-13T09:20:18 make: *** No targets.  Stop.
-2020-03-13T09:22:32 make: *** No targets.  Stop.
-2020-03-13T09:24:20 make: *** No targets.  Stop.
-2020-03-13T09:30:17 make: *** No targets.  Stop.
-2020-03-13T09:31:59 make: *** No targets.  Stop.
-2020-03-13T09:35:16 make: *** No targets.  Stop.
-2020-03-13T09:36:21 make: *** No targets.  Stop.
-2020-03-13T09:41:56 make: *** No targets.  Stop.
-2020-03-13T09:46:55 make: *** No targets.  Stop.
-2020-03-13T09:50:22 make: *** No targets.  Stop.
-2020-03-13T09:53:46 make: *** No targets.  Stop.
+
+cw@SYS3:~/sdk/3126i$ vi Makefile 
 2020-03-13T09:55:47 make: *** No targets.  Stop.
 2020-03-13T10:04:06 make: *** No targets.  Stop.
 ```
 
-原因
+
 
 ```
 cw@SYS3:~/sdk/3126i$ vi Makefile 
   1 ### DO NOT EDIT THIS FILE ###
-  2 ifeq ($(TARGET_OUTPUT_DIR),)                                                                                                                                                                    
+  2 ifeq ($(TARGET_OUTPUT_DIR),)
   3 $(error "Please use "source buildroot/build/envsetup.sh" to select a buildroot config")
   4 endif
   5 
-  6 O=$(TARGET_OUTPUT_DIR)
-  7 include $(O)/Makefile   //原因就是这个输出在out/rk3128/下的makefile由于ctrl+c，里面是空白的，还没有写入，把这个文件删除了就好
+  6 O=$(TARGET_OUTPUT_DIR)//原因就是这个输出在output/rk3128/下的makefile由于ctrl+c，里面是空白的，还没有写入，把这个文件删除了就好
+  7 include $(O)/Makefile   
   //1696  cd buildroot/output/rockchip_rk3128/  rm Makefile 
   8 ### DO NOT EDIT THIS FILE ###
 ```
+
+解决
+
+```
+原因就是这个输出在output/rk3128/下的makefile由于ctrl+c强制停止脚本，里面是空白的，还没有写入，把这个文件删除了就好
+                                                                                                                                          
+ ~/sdk/3126i_study/buildroot/output/rockchip_rk3128/Makefile 这个makefile是自动生成的。所以强制停止
+  # Automatically generated by /home/cw/sdk/3126i_study/buildroot/support/scripts/mkmakefile: don't edit
+```
+
+### 3.2 注意 2复制工程要删除重编译
+ 【注意 2】：你复制了A工程为B，在B工程下执行.build.sh会报错，因为用的还是A工程的路径。
+
+解决：删除output/单板下
+
+```
+
+2020-03-13T10:26:28 /home/cw/sdk/3126i/buildroot/output/rockchip_rk3128/images/rootfs.ext2: ***** FILE SYSTEM WAS MODIFIED *****
+2020-03-13T10:26:28 /home/cw/sdk/3126i/buildroot/output/rockchip_rk3128/images/rootfs.ext2: 5929/32768 files (0.1% non-contiguous), 72692/113478 blocks
+2020-03-13T10:26:28 /home/cw/sdk/3126i/buildroot/output/rockchip_rk3128/host/sbin/tune2fs -m 5 /home/cw/sdk/3126i/buildroot/output/rockchip_rk3128/images/rootfs.ext2
+2020-03-13T10:26:28 tune2fs 1.43.9 (8-Feb-2018)
+2020-03-13T10:26:28 Setting reserved blocks percentage to 5% (5673 blocks)
+2020-03-13T10:26:28 /home/cw/sdk/3126i/buildroot/output/rockchip_rk3128/host/sbin/resize2fs -M /home/cw/sdk/3126i/buildroot/output/rockchip_rk3128/images/rootfs.ext2
+2020-03-13T10:26:28 resize2fs 1.43.9 (8-Feb-2018)
+2020-03-13T10:26:28 Resizing the filesystem on /home/cw/sdk/3126i/buildroot/output/rockchip_rk3128/images/rootfs.ext2 to 106117 (4k) blocks.
+2020-03-13T10:26:28 The filesystem on /home/cw/sdk/3126i/buildroot/output/rockchip_rk3128/images/rootfs.ext2 is now 106117 (4k) blocks long.
+2020-03-13T10:26:28 
+```
+
+### 3.3 切换单板与脚本的关系
+
+根目录脚本envsetup.sh 下面有下面这句话，使用的是软连接 根目录/device/rockchip/.BoardConfig.mk
+
+````
+#注意一下，这个软件链，应该是手动在device/rockchip下面配置的
+	source ${TOP_DIR}/device/rockchip/.BoardConfig.mk
+	echo “source 文件里面的变量${TOP_DIR}/device/rockchip/.BoardConfig.mk 这里指定了每个的设备树，板载配置等”
+
+````
+
+看下这个软连接指向啥，这个软连接是是一个特定单板的芯片
+
+```
+root@c:/home/c/linux/v2/device/rockchip# ls -al
+总用量 108
+drwxr-xr-x 26 c    c    4096 3月  15 14:43 .
+drwxr-xr-x  3 c    c    4096 1月  30 22:06 ..
+lrwxrwxrwx  1 root root   21 3月  15 14:43 .BoardConfig.mk -> rk3128/BoardConfig.mk
+drwxr-xr-x  2 c    c    4096 3月  15 01:41 common
+drwxr-xr-x  2 c    c    4096 3月  15 00:01 .git
+```
+
+所以切换单板的操作：
+
+```
+root@c:/home/c/linux/v2/device/rockchip# ln -sf rk3128/BoardConfig.mk .BoardConfig.mk
+root@c:/home/c/linux/v2# source envsetup.sh   #envsetup.sh 会source .BoardConfig.mk 里面的环境变量
+root@c:/home/c/linux/v2# ./build.sh 
+
+
+如下可以看到，编译的时候，就单板已切换
+processing option: allsave
+============================================
+TARGET_ARCH=arm
+TARGET_PLATFORM=rk3128
+TARGET_UBOOT_CONFIG=evb-rk3128
+TARGET_KERNEL_CONFIG=rockchip_linux_defconfig
+TARGET_KERNEL_DTS=rk3128-fireprime
+TARGET_TOOLCHAIN_CONFIG=
+TARGET_BUILDROOT_CONFIG=rockchip_rk3128
+TARGET_RECOVERY_CONFIG=rockchip_rk3128_recovery
+TARGET_PCBA_CONFIG=rockchip_rk3128_pcba
+TARGET_RAMBOOT_CONFIG=
+=============================
+```
+
+【错误实例】
+
+如果3128切换为3308。你没有重新生成软链接指向3308的配置，哪怕你重新source之后，./build.sh还是使用的是3128的配置。
+
+
 
 【./build.sh rootfs】
 
@@ -444,7 +551,7 @@ default -build all modules
 ./build.sh rootfs
 ```
 
-###  3.1 source 的作用
+###  3.3 source 的作用
 
 如果你没有 source envsetup.sh 的话会怎么样:	会说你没有指定目标
 
@@ -502,49 +609,70 @@ BR2_DEFCONFIG='' KCONFIG_AUTOCONFIG=/home/c/linux/v1/buildroot/output/rockchip_r
 make: 离开目录“/home/c/linux/v1/buildroot”
 ```
 
-### 3.2 envsetup.sh编译的各个模块
+## 4 build.sh
 
-如单独编译 kernel，只需要执行以下命令：./build.sh kernel  
+为了提高编译的效率，降低人工编译可能出现的误操作，该 SDK 中集成了全自动化编译脚本，
+方便固件编译、备份。
 
- buildroot是一个开源项目，类似于busybox的一种集成包，其主要功能是提供了交叉编译工具链和rootfs的制作 。 Buildroot可以用来，制作自己的交叉编译器，制作自己的根文件系统，把uboot，Linux kernel集成到Buildroot中一起编译。 
+### 4.1原理
 
-$./build.sh -h
-====USAGE: build.sh modules====
+1. 该全自动化编译脚本原始文件存放于：
+   device/rockchip/common/build.sh
+
+2. 在 repo sync 的时候，通过 manifest 中的 copy 选项拷贝至工程根目录下：
+
+3. **修改 device/rockchip/rkxx(芯片平台)/.BoardConfig.mk 脚本中的特定变量以编出对应**
+   
+   (换芯片要重新修改这个软连接)
+   
+4. 产品固件。
+   如 RK3308 平台，可修改 device/rockchip/rk3308/BoardConfig.mk 文件：
+
+   ```
+   #buildroot defconfig
+   LUNCH=rockchip_rk3308_release
+   #uboot defconfig
+   UBOOT_DEFCONFIG=evb-rk3308
+   #kernel defconfig
+   KERNEL_DEFCONFIG=rk3308_linux_defconfig
+   #kernel dts
+   KERNEL_DTS= rk3308-evb-dmic-pdm-v11
+   以下变量请按实际项目情况，对应修改：
+   LUNCH 变量指定 Buildroot 编译 defconfig。
+   KERNEL_DTS 变量指定编译 kernel 的产品板极配置。
+   ```
+
+5. 执行自动编译脚本：
+   ./build.sh
+   该脚本会自动配置环境变量，编译 U-Boot，编译 Kernel，编译 Buildroot，编译 Recovery
+   继而生成固件。
+
+6. 脚本生成内容:
+   脚本会将编译生成的固件拷贝至：
+   IMAGE/RK3308-EVB-DMIC-PDM-V11__RELEASE_TEST/IMAGES 目录下，具体
+   路径以实际生成为准。**每次编译都会新建目录保存，(如果你硬盘空间不够大，可以删除掉)自动备份调试开发过程的固件版本**，并存放固件版本的各类信息
+
+### 4.2单模块编译
+
+$./build.sh -h  //帮助文档
 
 - uboot             编译uboot
-
 - kernel            编译内核
-
 - rootfs             编译default rootfs, currently build buildroot as default
-
 - buildroot        编译buildroot rootfs
-
 - yocto              编译yocto rootfs, currently build ros as default
-
 - ros                  编译 ros rootfs  
-
 - debian             编译 debian rootfs  
-
 - pcba                编译pcba
-
 - recovery          编译 recovery
-
 - all -build uboot, kernel, rootfs, recovery image
-
 - cleanall -clean uboot, kernel, rootfs, recovery  
-
 - firmware -pack all the image we need to boot up system
-
 - updateimg -pack update image   打包update镜像
-
 - save -save images, patches, commands used to debug
-
 - default -build all modules  默认编译所有的模块
 
-### 3.3envsetup.sh脚本
-
- envsetup.sh
-
+  
 ```shell
 #!/bin/bash
 
@@ -1036,7 +1164,7 @@ device/rockchip/common/mk-buildroot.sh
 
 
 
-## 4 firfly参考
+## 5 firfly参考
 
 ### 配置编译文件
 
@@ -1068,11 +1196,11 @@ export RK_ROOTFS_IMG=buildroot/output/$RK_CFG_BUILDROOT/images/rootfs.$RK_ROOTFS
 
 执行编译命令时，将会根据 `.mk` 文件进行编译。
 
-##  5 Buildroot 介绍
+##  6 Buildroot 介绍
 
-### 5.1 为什么要使用buildroot？
+### 6.1 为什么要使用buildroot？
 
-  （文件系统搭建，强烈建议直接用buildroot，官网[http://buildroot.uclibc.org/]上有使用教程非常详细）文件系统通常要包含很多第三方软件，比如busybox，udhcpc,tftp，apache，sqlite，PHP，iptable,DNS等，为了避免繁杂的移植工作。buildroot应运而生。通过menuconfig配置我们需要的功能，不需要的功能去掉，再执行make指令编译，buildroot就会自动从指定的服务器上下载源码包,自动编译,自动搭建成我们所需要的嵌入式根文件系统。让我们的工作效率成百倍的提升。
+  （文件系统搭建，强烈建议直接用buildroot，官网[http://buildroot.uclibc.org/]上有使用教程非常详细）文件系统通常要包含很多第三方软件，比如busybox，udhcpc,tftp，apache，sqlite，PHP，iptable,DNS等，为了避免繁杂的移植工作。buildroot应运而生。通过menuconfig配置我们需要的功能，不需要的功能去掉，再执行make指令编译，buildroot就会自动从指定的服务器上下载源码包,自动编译,自动搭建成我们所需要的嵌入式根文件系统。 
 
 - buildroot/package/：下面放着应用软件的配置文件，每个应用软件的配置文件有Config.in和soft_name.mk，其中soft_name.mk(这种其实就Makefile脚本的自动构建脚本)文件可以去下载应用软件的包。
 
@@ -1080,11 +1208,9 @@ export RK_ROOTFS_IMG=buildroot/output/$RK_CFG_BUILDROOT/images/rootfs.$RK_ROOTFS
 
   - host：是由各类源码编译后在你主机上运行的工具(build for host)的安装目录,如arm-linux-gcc就是安装在这里.
 
-    
-
     - 编译出来的主机工具在host/usr下
-    - 根目录所需要的库及一些基本目录就在host/< tuple >/sysroot/或host/usr/< tuple >/sysroot/里 (< tuple >:arm-buildroot-linux-gnueabi),如果是外部toolchain,比如lirano的就在libc里,名字不一样而已　　
-
+- 根目录所需要的库及一些基本目录就在host/< tuple >/sysroot/或host/usr/< tuple >/sysroot/里 (< tuple >:arm-buildroot-linux-gnueabi),如果是外部toolchain,比如lirano的就在libc里,名字不一样而已　　
+  
   - build：所有源码包解压出来的文件存放地和编译的发生地
 
   - staging：软链接到host/< tuple >/sysroot/ 就是上面说到的文件系统需要的库等目录,方便查看
@@ -1291,19 +1417,229 @@ data            init  linuxrc  mnt    proc  run            sys     timestamp    
 make graph-depends    生成已编译完整系统的依赖关系图   output/graphs/graph-depends.pdf
 make <pkg>-graph-depends 给定的包生成依赖关系图      output/graph/<pkg>-graph-depends.pdf
 
-## 8 trust和loader
+## 7 buildroot使用入门
+
+### 7.1 编译
+
+```
+$source envsetup.sh
+$make menuconfig
+$ make savedefconfig
+$ make  
+$ ./build.sh rootfs //据说实际就是make
+$ ./mkfirmware.sh   完成编译后执行 SDK 根目录下的 mkfirmware.sh 脚本生成固件所有烧写所需的镜像将都会
+```
+
+### 7.2 切换单板
+
+```
+root@c:/home/c/linux/v2/device/rockchip# ln -sf rk3128/BoardConfig.mk .BoardConfig.mk
+root@c:/home/c/linux/v2# source envsetup.sh  
+root@c:/home/c/linux/v2# ./build.sh 
+```
+
+### 7.3 重新编译包
+
+ 针对output/**build**/某个包进行了修改，需要单独重新编译该软件包，直接编译Buildroot是不起效果的。
+
+output/包/包含以下文件追踪编译过程。
+
+```
+.stamp_configured 配置 .stamp_downloaded 下载.stamp_extracted 解压.stamp_patched 打上补丁
+ .stamp_staging_installed 编译 .stamp_target_installe 安装
+```
+
+#### 7.3.1 完全重建buildroot
+
+目标架构改变、二进制格式、浮点、
+工具链或其版本改变
+你加入的包对其他包邮依赖、
+删除一个包、文件系统架构
+
+```
+$make clean all
+$make
+```
+
+#### 7.3.2 不完全重建buildroot
+
+新增一个包无需全部重新编译，但是如果新增的是一个库，且别其他文件所引用，则需一起重新编
+译，或者全部重编。
+
+BuildRoot 如何单独编译某个一包？
+
+1. 如果修改了源码，在编译前运行 make < package >-dirclean
+
+
+```
+make <package> -dirclean //删除output/build/package 这个文件夹   
+```
+
+2. 如果只是修改output 目录下的东西，编译前运行 make < package >-rebuild
+
+```
+ make <package> -rebuild
+ make 或 make <package>
+```
+
+## 8 UBOOT
+
+### 8.1 Rockchip U-Boot 简介
+
+Rockchip U-Boot 简介
+Rockchip U-Boot next-dev 分支是 Rockchip 从 U-Boot 官方的 v2017.09 正式版本中切出
+来进行开发的版本。目前在该平台上已经支持 RK 所有主流在售芯片。
+  支持芯片：rk3288、rk3036、rk312x、rk3288、rk3308、rk3326、rk3399、px30
+等；
+  支持 RK Android 平台的固件启动；
+  支持最新 Android AOSP(如 GVA)固件启动；
+  支持 Linux Distro 固件启动；
+  支持 Rockchip miniloader 和 SPL/TPL 两种 pre-loader 引导；
+  支持 LVDS、EDP、MIPI、HDMI 等显示设备；
+  支持 Emmc、Nand Flash、SPI NOR flash、SD 卡、U 盘等存储设备启动；
+  支持 FAT, EXT2, EXT4 文件系统；
+  支持 GPT, RK parameter 分区格式；
+  支持开机 logo 显示、充电动画显示，低电管理、电源管理；
+  支持 I2C、PMIC、CHARGE、GUAGE、USB、GPIO、PWM、GMAC、EMMC、NAND、
+中断等驱动；
+  支持 RockUSB 和 Google Fastboot 两种 USB gadget 烧写 EMMC；
+  支持 Mass storage, ethernet, HID 等 USB 设备；
+  支持使用 Kernel 的 dtb；
+  支持 dtbo 功能
+
+### 8.2 rkbin
 
 U-Boot 根目录下生成 trust.img、uboot.img、loader 等相关固件
 
-```
-8.2.1 rkbin
 rkbin 工程主要存放了 Rockchip 不开源的 bin 文件（trust、loader 等）、脚本、打包工具等，
 所以 rkbin 只是一个“工具包”工程 。
 rkbin 工程需要和 U-Boot 工程保持同级目录关系，否则编译时会报找不到 rkbin 仓库。当在
 U-Boot 工程执行编译的时候，编译脚本会从 rkbin 仓库里索引相关的 bin 文件和打包工具，最后
 在 U-Boot 根目录下生成 trust.img、uboot.img、loader 等相关固件
+
+### 8.3 gcc 工具链
+默认使用的编译器是 gcc-linaro-6.3.1 版本：
+32 位编译器：gcc‐linaro‐6.3.1‐2017.05‐x86_64_arm‐linux‐gnueabihf
+64 位编译器：gcc‐linaro‐6.3.1‐2017.05‐x86_64_aarch64‐linux‐gnu
+默认使用 Rockchip 提供的工具包：prebuilts，请保证它和 U-Boot 工程保持同级目录关系。
+
+如果需要更改编译器路径，可以修改编译脚本./make.sh 里的内容：
+
+````
+GCC_ARM32=arm‐linux‐gnueabihf‐
+GCC_ARM64=aarch64‐linux‐gnu‐
+TOOLCHAIN_ARM32=../prebuilts/gcc/linux‐x86/arm/gcc‐linaro‐6.3.1‐
+2017.05‐x86_64_arm‐linuxgnueabihf/
+bin
+TOOLCHAIN_ARM64=../prebuilts/gcc/linux‐x86/aarch64/gcc‐linaro‐6.3.1‐
+2017.05‐x86_64_aarch64‐
+linux‐gnu/bin
+````
+
+### 8.4 编译
+
+编译命令：
+./make.sh [board] ‐ ‐ ‐ ‐                         [board]的名字来源是：configs/[board]_defconfig 文件。
+命令范例：
+
+```
+./make.sh evb‐ rk3308 ‐ ‐ ‐ ‐ build for evb‐ rk3308_defconfig
+./make.sh firefly‐ rk3288 ‐ ‐ ‐ ‐ build for firefly‐ rk3288_defconfig
 ```
 
 
 
+## 9 编译
 
+### 9.1 U-Boot  编译步骤
+RK3128H EVB 开发板：
+cd u-boot;
+make rk3128x_box_defconfig
+make;
+编译完成后，U-Boot 根目录，生成以下三个镜像文件：
+$:~/u-boot$ tree
+├── rk3128x_loader_v1.06.238.bin
+├── trust_with_ta.img
+└── uboot.img
+
+### 9.2 Kernel  编译步骤
+RK3308 EVB 开发板配置与编译如下 RK3128H EVB board：
+cd kernel;
+make ARCH=arm rockchip_linux_defconfig;
+make ARCH=arm rk3128h-box.img CROSS_COMPILE=arm-linux-gnueabihf- -j16
+编译完成后，kernel 根目录，生成以下二个镜像文件.
+kernel/
+├── kernel.img
+├── resource.img
+
+
+### 9.3 Buildroot  编译步骤
+
+1. 客户按实际编译环境配置好 JDK 环境变量后，按照以下步骤配置完后，执行 make 即可。
+   cd buildroot
+   make rockchip_rk3128H_defconfig
+   make
+2. Create the ext4 image(rootfs.img)
+    ./mk-image.sh
+    完成编译后，执行 SDK 根目录下的 mkfirmware.sh 脚本生成固件，所有烧写所需的镜像将
+    都会拷贝于 rockdev/目录。
+    rockdev/
+    ├── kernel.img
+    ├── parameter.txt
+    ├── resource.img
+    ├── MiniLoaderAll.bin
+    ├── data.img
+    ├── cfg.img
+    ├── rootfs.img
+    ├── trust.img
+    └── uboot.img
+    得到了所有镜像文件后，为了方便烧写及量产，通常可手动将这些单独的镜像通过脚本打包
+    成为 update.img。 
+
+  ## 11分区说明
+
+   http://opensource.rock-chips.com/wiki_Boot_option 
+
+  ## 启动流程
+
+  This chapter introduce the generic boot flow for Rockchip Application Processors, including the detail about what image we may use in Rockchip platform for kind of boot path:
+
+  \- use U-Boot TPL/SPL from upsream or rockchip U-Boot, fully source code;
+
+  \- use Rockchp idbLoader which is combinded by Rockchip ddr init bin and miniloader bin from Rockchip [rkbin project](https://github.com/rockchip-linux/rkbin);
+
+  ```
+  +--------+----------------+----------+-------------+---------+
+  | Boot   | Terminology #1 | Actual   | Rockchip    | Image   |
+  | stage  |                | program  |  Image      | Location|
+  | number |                | name     |   Name      | (sector)|
+  +--------+----------------+----------+-------------+---------+
+  | 1      |  Primary       | ROM code | BootRom     |         |
+  |        |  Program       |          |             |         |
+  |        |  Loader        |          |             |         |
+  |        |                |          |             |         |
+  | 2      |  Secondary     | U-Boot   |idbloader.img| 0x40    | pre-loader
+  |        |  Program       | TPL/SPL  |             |         |
+  |        |  Loader (SPL)  |          |             |         |
+  |        |                |          |             |         |
+  | 3      |  -             | U-Boot   | u-boot.itb  | 0x4000  | including u-boot and atf
+  |        |                |          | uboot.img   |         | only used with miniloader
+  |        |                |          |             |         |
+  |        |                | ATF/TEE  | trust.img   | 0x6000  | only used with miniloader
+  |        |                |          |             |         |
+  | 4      |  -             | kernel   | boot.img    | 0x8000  |
+  |        |                |          |             |         |
+  | 5      |  -             | rootfs   | rootfs.img  | 0x40000 |
+  +--------+----------------+----------+-------------+---------+
+  ```
+
+  Then when we talking about boot from eMMC/SD/U-Disk/net, they are in different concept:
+
+  - Stage 1 is always in boot rom, it loads stage 2 and may load stage 3(when SPL_BACK_TO_BROM option enabled).
+  - Boot from SPI flash means firmware for stage 2 and 3(SPL and U-Boot only) in SPI flash and stage 4/5 in other place;
+  - Boot from eMMC means all the firmware(including stage 2, 3, 4, 5) in eMMC;
+  - Boot from SD card means all the firmware(including stage 2, 3, 4, 5) in SD card;
+  - Boot from U-Disk means firmware for stage 4 and 5(not including SPL and U-Boot) in Disk, optionally only including stage 5;
+  - Boot from net/tftp means firmeware for stage 4 and 5(not including SPL and U-Boot) on the network;
+
+ ![img](RK_Linux_Compile.assets/894px-Rockchip_bootflow20181122.jpg) 
