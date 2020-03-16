@@ -1498,7 +1498,7 @@ cw@SYS3:~/sdk/3126i$  make
 cw@SYS3:~/sdk/3126i$  ./mkfirmware.sh
 ```
 
-- 方法一：在包的配置mk文件，设置istall阶段自动拷贝
+- 方法二：在包的配置mk文件，设置istall阶段自动拷贝
 
 intel-wds编译后，想把它在output/包/下生成的某个可执行文件复制到开发板根文件系统（根文件系统则存放在output/target，也就是target目录，注意target目录就是开发板下面的除了dev目录的所有文件）
 package/intel-wds/intel-wds.mk 在配置文件里面修改，编译后install把某个文件一起拷贝到开发板目录
@@ -1536,6 +1536,155 @@ git format-patch
 cw@SYS3:~/sdk/3126i/buildroot/package/connman ls
 0001-tethering-Reorder-header-includes.patch  0002-nat-build-failure.patch  Config.in  connman.hash  connman.mk  S45connman
 ```
+
+## 8 buildroot命令
+
+### make graph-size
+
+分析文件系统大小组成，文件大小，包大小
+
+make graph-size produces:
+▶ file-size-stats.csv, CSV               每个原始文件的大小
+▶ package-size-stats.csv, CSV        每个包的大小
+▶ graph-size.pdf,                             生成每个包消耗size的饼图
+
+```
+cw@SYS3:~/sdk/3126i$ make graph-depends
+umask 0022 && make -C /home/cw/sdk/3126i/buildroot O=/home/cw/sdk/3126i/buildroot/output/rockchip_rk3128 graph-depends
+Getting targets
+Getting dependencies for ['QLauncher', 'alsa-config', 'alsa-lib', 'alsa-plugins', 'alsa-utils', 'android-tools', 'bash', 'busybox', 'cairo', 'camera_engine_rkisp', 'connman',  -libzlib', 'host-xlib_libX11', 'host-xlib_libxkbfile', 'host-mpfr', 'host-xorgproto', 'host-libopenssl', 'host-xlib_libXdmcp', 'host-xlib_libXau', 'host-xlib_xtrans', 'host-libxcb', 'host-libxslt', 'host-xcb-proto', 'host-libpthread-stubs']
+dot  -Tpdf \
+        -o /home/cw/sdk/3126i/buildroot/output/rockchip_rk3128/graphs/graph-depends.pdf \
+        /home/cw/sdk/3126i/buildroot/output/rockchip_rk3128/graphs/graph-depends.dot
+
+```
+
+![](RK_Linux_Compile.assets/make_graph-size.png)
+
+
+
+
+
+file-size-stats.csv 文件大小，举例：
+
+|           File name           | Package name | File size | Package size | File size in package (%) | File size in system (%) |      |      |
+| :---------------------------: | ------------ | --------- | ------------ | ------------------------ | ----------------------- | ---- | ---- |
+| usr/share/zoneinfo/posix/GMT0 | tzdata       | 127       | 1173112      | 0                        | 0                       |      |      |
+|       usr/bin/sink-test       | intel-wds    | 153692    | 372916       | 41.2                     | 0.1                     |      |      |
+
+package-size-stats.csv 包大小，举例：
+
+| Package name | Package size | Package size in system (%) |      |      |
+| ------------ | ------------ | -------------------------- | ---- | ---- |
+| intel-wds    | 372916       | 0.2                        |      |      |
+
+
+
+### make graph-depends
+
+生成全部软件依赖图
+
+buildroot的库会根据依赖关系被自动下载，通过此图也可以了解某些某块被谁依赖。
+
+```
+cw@SYS3:~/sdk/3126i$ make graph-depends
+umask 0022 && make -C /home/cw/sdk/3126i/buildroot O=/home/cw/sdk/3126i/buildroot/output/rockchip_rk3128 graph-depends
+Getting targets
+Getting dependencies for ['QLauncher', 'alsa-config', 'alsa-lib', 'alsa-plugins', 'alsa-utils', 'android-tools', 'bash', 'busybox', 'cairo', 'camera_engine_rkisp', 'connman', 'coreutils', 'dbus', 'deviceio_release', 'dhrystone', 'dnsmasq', 'dosfstools', 'dropbear', 'e2fsprogs', 'eudev', 'evtest', 'expat', 'faad2', 'fontconfig', 'freetype', 'glibc',  -flex', 'host-libglib2', 'host-cmake', 'host-gawk', 'host-pixman', 'udev', 'host-gettext', 'host-lzo',  -gcc-final', 'host-pcre', 'host-gmp', 'host-binutils', 'host-attr', 'host-libxml-parser-perl', 'host-openssl', 'host-mpc', 'host-expat', 'host-kmod', 'host-bzip2', 'host-zic', 'host-libffi', 'host-m4', 'host-libxml2', 'host-libzlib', 'host-xlib_libX11', 'host-xlib_libxkbfile', 'host-mpfr', 'host-xorgproto', 'host-libopenssl', 'host-xlib_libXdmcp', 'host-xlib_libXau', 'host-xlib_xtrans', 'host-libxcb', 'host-libxslt', 'host-xcb-proto', 'host-libpthread-stubs']
+dot  -Tpdf \
+        -o /home/cw/sdk/3126i/buildroot/output/rockchip_rk3128/graphs/graph-depends.pdf \
+        /home/cw/sdk/3126i/buildroot/output/rockchip_rk3128/graphs/graph-depends.dot
+```
+
+
+
+![](RK_Linux_Compile.assets/make_graph-depends.png)
+
+### make <包名>-graph-depends
+
+生成指定包的依赖图
+
+```
+cw@SYS3:~/sdk/3126i$ make intel-wds-graph-depends 
+umask 0022 && make -C /home/cw/sdk/3126i/buildroot O=/home/cw/sdk/3126i/buildroot/output/rockchip_rk3128 intel-wds-graph-depends
+Getting dependencies for ['intel-wds']
+Getting dependencies for ['toolchain', 'skeleton', 'host-cmake', 'libglib2', 'host--zlib', 'skeleton-init-common', 'readline', 'host-pcre', 'host-gmp', 'host-libxml2', 'glibc', 'host-binutils', 'host-ncurses', 'host-mpfr', 'host-mpc', 'host-libzlib', 'host-qemu', 'linux-headers', 'host-gcc-initial', 'host-gawk', 'host-python', 'host-pixman', 'host-expat', 'host-openssl', 'host-libopenssl']
+dot  -Tpdf -o /home/cw/sdk/3126i/buildroot/output/rockchip_rk3128/graphs/intel-wds-graph-depends.pdf /home/cw/sdk/3126i/buildroot/output/rockchip_rk3128/graphs/intel-wds-graph-depends.dot
+```
+
+![image-20200316193828443](RK_Linux_Compile.assets/image-20200316193828443.png)
+
+
+
+
+
+
+
+
+
+### make graph-build 
+
+可以明白整个编译流程时间都耗在哪里，针对性进行分析优化，有利于提高编译效率。
+
+执行make graph-build会生成如下文件：
+
+▶ make graph-build generates several graphs in $(O)/graphs/:
+▶ build.hist-build.pdf, build time in build order   编译顺序下的逐个编译时间
+▶ build.hist-duration.pdf, build time by duration                              按照耗时从大到小排列。
+▶ build.hist-name.pdf, build time by package name                         按照字母排序
+▶ build.pie-packages.pdf, pie chart of the per-package build time    每个包的编译时间饼图
+▶ build.pie-steps.pdf, pie chart of the per-step build time                 编译顺序下，每一步的编译时间
+
+
+
+![img](RK_Linux_Compile.assets/1083701-20190614102518315-1402017455.png)
+
+其中比较有参考意义的文件是build.hist-duration.pdf文件，按照耗时从大到小排列。
+
+
+
+```
+cw@SYS3:~/sdk/3126i/buildroot$ cd ..
+cw@SYS3:~/sdk/3126i$ make graph-build 
+umask 0022 && make -C /home/cw/sdk/3126i/buildroot O=/home/cw/sdk/3126i/buildroot/output/rockchip_rk3128 graph-build
+./support/scripts/graph-build-time --type=histogram --order=name --input=/home/cw/sdk/3126i/buildroot/output/rockchip_rk3128/build/build-time.log --.pie-packages.pdf 
+./support/scripts/graph-build-time --type=pie-steps --input=/home/cw/sdk/3126i/buildroot/output/rockchip_rk3128/build/build-time.log --output=/home/cw/sdk/3126i/buildroot/output/rockchip_rk3128/graphs/build.pie-steps.pdf 
+```
+
+```
+cw@SYS3:~/sdk/3126i/buildroot/output/rockchip_rk3128/graphs$ ls -al
+-rw-r--r-- 1 cw cw 55482 Mar 16 19:15 build.hist-build.pdf
+-rw-r--r-- 1 cw cw 55209 Mar 16 19:15 build.hist-duration.pdf
+-rw-r--r-- 1 cw cw 55291 Mar 16 19:15 build.hist-name.pdf
+-rw-r--r-- 1 cw cw 20547 Mar 16 19:15 build.pie-packages.pdf
+-rw-r--r-- 1 cw cw 15303 Mar 16 19:15 build.pie-steps.pdf
+```
+
+![image-20200316192054362](RK_Linux_Compile.assets/image-20200316192054362.png)
+
+
+
+###  RK SDK不支持的几个命令
+
+```
+
+Buildroot自带文档
+▶ 网站文档 https://buildroot.org/docs.html (PDF,
+HTML, text)
+▶ 目录树下文档 docs/manual in the Buildroot sources
+▶ 是 Asciidoc 格式
+▶ The manual can be built with:
+▶ make manual or just make manual-html, make manual-pdf, make manual-epub,
+make manual-text, make manual-split-html
+▶ A number of tools need to be installed on your machine, see the manual itself.
+  
+make manual //生成所有格式的手册 主机需要安装acsiidos软件还有需要w3m等
+make manual-pdf //生成pdf的手册
+make manual-split-html
+make manual-text
+```
+
+
 
 ## 8 UBOOT
 
