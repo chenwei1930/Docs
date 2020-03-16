@@ -13,7 +13,7 @@ Lunch menu...pick a combo:
 2. rockchip_rk3308_debug
 3. rockchip_rk3308_robot_release
 Which would you like? [1]
-如选择 rockchip_rk3308_release，输入对应序号 （你的单板序号）。  
+如选择 rockchip_rk3308_release，输入对应序号 （你的单板序号）。
 
 3、编译
 $ make
@@ -41,7 +41,7 @@ rockdev
 Windows工具：[AndroidTool](http://www.t-firefly.com/doc/download/page/id/4.html#windows_22)
 
 ```
-    提示：AndroidTool_v2.35版本：升级MBR分区的Ubuntu固件    
+    提示：AndroidTool_v2.35版本：升级MBR分区的Ubuntu固件
          AndroidTool_v2.58版本：升级GPT分区的Ubuntu固件
 ```
 
@@ -118,7 +118,7 @@ Ctrl+C进入uboot命令行
 单模块烧写
 
 ```
- 
+
 在Maskrom下单模块烧写，并且你烧写过paramenter，那么这时候，单模块烧写，你就要选上（loader+单模块），比如说，你编译了builroot这时候生成的是rootfs，这时候loader+rootfs。这两项选上再烧写。
 
 在loader模式下单模块烧写,你烧写过paramenter，那么会有分区信息，这时候就可以单模块烧写。在loader模式下，你只编译了buildroot生成的rootfs，那么只需要烧写 勾选上rootfs，其他不用选，烧写。
@@ -142,7 +142,7 @@ Ctrl+C进入uboot命令行
 
 注意：***如果你烧写的固件laoder版本与原来的机器的不一致，请在升级固件前先执行”擦除Flash”。***
 
-![img](RK_Linux_Compile/win_tool_upgrade_v2.58.png) 
+![img](RK_Linux_Compile/win_tool_upgrade_v2.58.png)
 
 
 
@@ -155,11 +155,11 @@ Ctrl+C进入uboot命令行
 - 确保映像文件的路径正确，需要的话，点路径右边的空白表格单元格来重新选择。
 - 点击”执行”按钮开始升级，升级结束后设备会自动重启。
 
- ![img](RK_Linux_Compile/win_3128_tool_download.png) 
+ ![img](RK_Linux_Compile/win_3128_tool_download.png)
 
 ### 1.2.4 各分区镜像
 
-uboot：对应的是uboot.img。  uboot 属于bootloader的一种，是用来引导启动内核的，它的最终目的就是，从flash中读出内核，放到内存中，启动内核 
+uboot：对应的是uboot.img。  uboot 属于bootloader的一种，是用来引导启动内核的，它的最终目的就是，从flash中读出内核，放到内存中，启动内核
 trust：对应的是trust.img， 其中含有ATF以及休眠唤醒相关的文件。安全保护使用。
 misc: misc 分区映像，对应misc.img，负责启动模式切换和急救模式的参数传递。
 resource: 资源映像，对应的是resource.img，内含开机图片和内核的设备树信息。
@@ -187,9 +187,9 @@ lrwxrwxrwx  1 cw cw   21 Mar  5 15:41 .BoardConfig.mk -> rk3128/BoardConfig.mk
 
 ```shell
 cw@SYS3:~/sdk/3126i/device/rockchip$ vim .BoardConfig.mk
-  
-1 #!/bin/bash                                                                                                             
-2 
+
+1 #!/bin/bash
+2
 3 # Target arch
 4 export RK_ARCH=arm
 5 # Uboot defconfig
@@ -241,7 +241,7 @@ cw@SYS3:~/sdk/3126i/device/rockchip$ vim .BoardConfig.mk
 38 export RK_USERDATA_DIR=userdata_normal
 39 #misc image
 40 export RK_MISC=wipe_all-misc.img
- 
+
 ```
 
 #### 2.1.2  make
@@ -275,11 +275,11 @@ make之后，要./build.sh rootfs要打包rootfs，还要./mkfirmware.sh
 cd kernel
 
 一共kernel下执行四条命令
-cw@SYS3:~/sdk/3126i/kernel$ make  ARCH=arm rockchip_linux_defconfig    
+cw@SYS3:~/sdk/3126i/kernel$ make  ARCH=arm rockchip_linux_defconfig
 cw@SYS3:~/sdk/3126i/kernel$ make  ARCH=arm menuconfig
 这条命令生成了.config文件
 
-cw@SYS3:~/sdk/3126i/kernel$ make ARCH=arm savedefconfig      
+cw@SYS3:~/sdk/3126i/kernel$ make ARCH=arm savedefconfig
 scripts/kconfig/conf  --savedefconfig=defconfig Kconfig
 这条命令下生成上defconfig文件
 
@@ -289,7 +289,7 @@ cw@SYS3:~/sdk/3126i/kernel$ cp defconfig arch/arm/configs/rockchip_linux_defconf
 注意（为什么指定arch，不加的话影响是啥）：
 arch是说明用的是32位的机器，如RK3126、RK2128
 cw@SYS3:~/sdk/3328/kernel$make menuconfig ARCH=arm
-注意kernel对于32位，make menuconfig和make savedefconfig都必须加上ARCH=arm， menuconfig配置后save在拷贝到arch/arm/configs/rockchip_linux_defconfig。 
+注意kernel对于32位，make menuconfig和make savedefconfig都必须加上ARCH=arm， menuconfig配置后save在拷贝到arch/arm/configs/rockchip_linux_defconfig。
 如果不加 ARCH=arm的话，默认是64位，这时候，这时候你git diff下发现rockchip_linux_defconfig会有很大的改动。
 加 ARCH=arm的话，就是32位机器，你git diff下发现rockchip_linux_defconfig就是刚才菜单的那些修改。
 你看下下面文件搜索就会明白
@@ -334,7 +334,7 @@ arch/arm64/configs/rockchip_linux_defconfig
 
 ## 3  buildroot 与source envsetup.sh
 
-### 3.1 编译buildroot 
+### 3.1 编译buildroot
 
 客户按实际编译环境配置好编译依赖后，按照以下步骤配置完后，执行 make 即可。
 $ source buildroot/build/envsetup.sh
@@ -385,7 +385,7 @@ source envsetup.sh 执行的文件会生成Makefile等文件，比如你发下�
 2020-03-13T09:16:16 make: *** No targets.  Stop.
 2020-03-13T09:16:36 make: *** No targets.  Stop.
 
-cw@SYS3:~/sdk/3126i$ vi Makefile 
+cw@SYS3:~/sdk/3126i$ vi Makefile
 2020-03-13T09:55:47 make: *** No targets.  Stop.
 2020-03-13T10:04:06 make: *** No targets.  Stop.
 ```
@@ -393,15 +393,15 @@ cw@SYS3:~/sdk/3126i$ vi Makefile
 
 
 ```
-cw@SYS3:~/sdk/3126i$ vi Makefile 
+cw@SYS3:~/sdk/3126i$ vi Makefile
   1 ### DO NOT EDIT THIS FILE ###
   2 ifeq ($(TARGET_OUTPUT_DIR),)
   3 $(error "Please use "source buildroot/build/envsetup.sh" to select a buildroot config")
   4 endif
-  5 
+  5
   6 O=$(TARGET_OUTPUT_DIR)//原因就是这个输出在output/rk3128/下的makefile由于ctrl+c，里面是空白的，还没有写入，把这个文件删除了就好
-  7 include $(O)/Makefile   
-  //1696  cd buildroot/output/rockchip_rk3128/  rm Makefile 
+  7 include $(O)/Makefile
+  //1696  cd buildroot/output/rockchip_rk3128/  rm Makefile
   8 ### DO NOT EDIT THIS FILE ###
 ```
 
@@ -409,7 +409,7 @@ cw@SYS3:~/sdk/3126i$ vi Makefile
 
 ```
 原因就是这个输出在output/rk3128/下的makefile由于ctrl+c强制停止脚本，里面是空白的，还没有写入，把这个文件删除了就好
-                                                                                                                                          
+
  ~/sdk/3126i_study/buildroot/output/rockchip_rk3128/Makefile 这个makefile是自动生成的。所以强制停止
   # Automatically generated by /home/cw/sdk/3126i_study/buildroot/support/scripts/mkmakefile: don't edit
 ```
@@ -430,7 +430,7 @@ cw@SYS3:~/sdk/3126i$ vi Makefile
 2020-03-13T10:26:28 resize2fs 1.43.9 (8-Feb-2018)
 2020-03-13T10:26:28 Resizing the filesystem on /home/cw/sdk/3126i/buildroot/output/rockchip_rk3128/images/rootfs.ext2 to 106117 (4k) blocks.
 2020-03-13T10:26:28 The filesystem on /home/cw/sdk/3126i/buildroot/output/rockchip_rk3128/images/rootfs.ext2 is now 106117 (4k) blocks long.
-2020-03-13T10:26:28 
+2020-03-13T10:26:28
 ```
 
 ### 3.3 切换单板与脚本的关系
@@ -461,7 +461,7 @@ drwxr-xr-x  2 c    c    4096 3月  15 00:01 .git
 ```
 root@c:/home/c/linux/v2/device/rockchip# ln -sf rk3128/BoardConfig.mk .BoardConfig.mk
 root@c:/home/c/linux/v2# source envsetup.sh   #envsetup.sh 会source .BoardConfig.mk 里面的环境变量
-root@c:/home/c/linux/v2# ./build.sh 
+root@c:/home/c/linux/v2# ./build.sh
 
 
 如下可以看到，编译的时候，就单板已切换
@@ -572,7 +572,7 @@ make: *** 没有规则可制作目标“arch//Makefile”。 停止。
 有 source envsetup.sh 的话会怎么样:
 
 ```
-c@c:~/linux/v1$ source envsetup.sh 
+c@c:~/linux/v1$ source envsetup.sh
 Top of tree: /home/c/linux/v1
 
 You're building on Linux
@@ -585,7 +585,7 @@ Lunch menu...pick a combo:
 25. rockchip_rk3126c_dpf
 26. rockchip_rk3126c_recovery
 27. rockchip_rk3128
- 
+
 Which would you like? [0]: 27
 -bash: /home/c/linux/v1/device/rockchip/.BoardConfig.mk: 没有那个文件或目录
 ===========================================
@@ -622,9 +622,9 @@ make: 离开目录“/home/c/linux/v1/buildroot”
 2. 在 repo sync 的时候，通过 manifest 中的 copy 选项拷贝至工程根目录下：
 
 3. **修改 device/rockchip/rkxx(芯片平台)/.BoardConfig.mk 脚本中的特定变量以编出对应**
-   
+
    (换芯片要重新修改这个软连接)
-   
+
 4. 产品固件。
    如 RK3308 平台，可修改 device/rockchip/rk3308/BoardConfig.mk 文件：
 
@@ -661,18 +661,18 @@ $./build.sh -h  //帮助文档
 - rootfs             编译default rootfs, currently build buildroot as default
 - buildroot        编译buildroot rootfs
 - yocto              编译yocto rootfs, currently build ros as default
-- ros                  编译 ros rootfs  
-- debian             编译 debian rootfs  
+- ros                  编译 ros rootfs
+- debian             编译 debian rootfs
 - pcba                编译pcba
 - recovery          编译 recovery
 - all -build uboot, kernel, rootfs, recovery image
-- cleanall -clean uboot, kernel, rootfs, recovery  
+- cleanall -clean uboot, kernel, rootfs, recovery
 - firmware -pack all the image we need to boot up system
 - updateimg -pack update image   打包update镜像
 - save -save images, patches, commands used to debug
 - default -build all modules  默认编译所有的模块
 
-  
+
 ```shell
 #!/bin/bash
 
@@ -743,7 +743,7 @@ function build_uboot(){
 	fi
 	cd u-boot && ./make.sh $RK_UBOOT_DEFCONFIG && cd -
 	# $? 是上一个程序执行是否成功的标志，如果执行成功则$? 为0，否则 不为0
-	
+
 	if [ $? -eq 0 ]; then
 		echo "====Build uboot ok!===="
 	else
@@ -753,7 +753,7 @@ function build_uboot(){
 }
 
 //编译kernel,前面source声明了
-# TARGET_ARCH 目标架构 
+# TARGET_ARCH 目标架构
 # RK_KERNEL_DEFCONFIG 内核默认配置
 #TARGET_KERNEL_DTS 使用的dts
 function build_kernel(){
@@ -772,7 +772,7 @@ function build_kernel(){
 }
 //编译kernel模块
 前面source声明了
-# TARGET_ARCH 目标架构 
+# TARGET_ARCH 目标架构
 # RK_KERNEL_DEFCONFIG 内核默认配置
 function build_modules(){
 	echo "============Start build kernel modules============"
@@ -914,7 +914,7 @@ function build_distro(){
 }
 
 function build_rootfs(){
-	rm -f $RK_ROOTFS_IMG  
+	rm -f $RK_ROOTFS_IMG
 
 	case "$1" in
 		yocto)
@@ -1134,7 +1134,7 @@ device/rockchip/common/mk-buildroot.sh
 
 ```shell
   1 #!/bin/bash
-  2 
+  2
   3 COMMON_DIR=$(cd `dirname $0`; pwd)
   4 if [ -h $0 ]
   5 then
@@ -1144,7 +1144,7 @@ device/rockchip/common/mk-buildroot.sh
   9 cd $COMMON_DIR
  10 cd ../../..    #回到SDK根目录
  11 TOP_DIR=$(pwd)  #回到SDK根目录
- 12 BOARD_CONFIG=$1 
+ 12 BOARD_CONFIG=$1
  13 source $BOARD_CONFIG
  14 if [ -z $RK_CFG_BUILDROOT ]
  15 then
@@ -1158,8 +1158,8 @@ device/rockchip/common/mk-buildroot.sh
  23     tail -n 100 $TOP_DIR/br.log
  24     exit 1
  25 fi
- 26 echo "log saved on $TOP_DIR/br.log. pack buildroot image at: $TOP_DIR/buildroot/output/$RK_CFG_BUILDROOT/images/rootfs.$RK_ROOTFS_TYPE"                           
-~                                    
+ 26 echo "log saved on $TOP_DIR/br.log. pack buildroot image at: $TOP_DIR/buildroot/output/$RK_CFG_BUILDROOT/images/rootfs.$RK_ROOTFS_TYPE"
+~
 ```
 
 
@@ -1200,7 +1200,7 @@ export RK_ROOTFS_IMG=buildroot/output/$RK_CFG_BUILDROOT/images/rootfs.$RK_ROOTFS
 
 ### 6.1 为什么要使用buildroot？
 
-  （文件系统搭建，强烈建议直接用buildroot，官网[http://buildroot.uclibc.org/]上有使用教程非常详细）文件系统通常要包含很多第三方软件，比如busybox，udhcpc,tftp，apache，sqlite，PHP，iptable,DNS等，为了避免繁杂的移植工作。buildroot应运而生。通过menuconfig配置我们需要的功能，不需要的功能去掉，再执行make指令编译，buildroot就会自动从指定的服务器上下载源码包,自动编译,自动搭建成我们所需要的嵌入式根文件系统。 
+  （文件系统搭建，强烈建议直接用buildroot，官网[http://buildroot.uclibc.org/]上有使用教程非常详细）文件系统通常要包含很多第三方软件，比如busybox，udhcpc,tftp，apache，sqlite，PHP，iptable,DNS等，为了避免繁杂的移植工作。buildroot应运而生。通过menuconfig配置我们需要的功能，不需要的功能去掉，再执行make指令编译，buildroot就会自动从指定的服务器上下载源码包,自动编译,自动搭建成我们所需要的嵌入式根文件系统。
 
 - buildroot/package/：下面放着应用软件的配置文件，每个应用软件的配置文件有Config.in和soft_name.mk，其中soft_name.mk(这种其实就Makefile脚本的自动构建脚本)文件可以去下载应用软件的包。
 
@@ -1210,14 +1210,14 @@ export RK_ROOTFS_IMG=buildroot/output/$RK_CFG_BUILDROOT/images/rootfs.$RK_ROOTFS
 
     - 编译出来的主机工具在host/usr下
 - 根目录所需要的库及一些基本目录就在host/< tuple >/sysroot/或host/usr/< tuple >/sysroot/里 (< tuple >:arm-buildroot-linux-gnueabi),如果是外部toolchain,比如lirano的就在libc里,名字不一样而已　　
-  
+
   - build：所有源码包解压出来的文件存放地和编译的发生地
 
   - staging：软链接到host/< tuple >/sysroot/ 就是上面说到的文件系统需要的库等目录,方便查看
 
   - target： 目录是用来制作rootfs的，里面放着Linux系统基本的目录结构，以及各种编译好的应用库和bin可执行文件。不能用来nfs mount到开发板,因为buildroot不是root权权运行的,所以现dev/,etc/等一些文件无法创建,所以目录还不完整,要用images/里的rootfs.tar解压出来的根文件目录才能mount.使用如下命令：sudo tar -C /destination/of/extraction -xf images/rootfs.tar
 
-  - Images：目录下就是最终生成的可烧写到板子上的各种image。 
+  - Images：目录下就是最终生成的可烧写到板子上的各种image。
 
 - buildroot/dl：存放下载的源码包及应用软件的压缩包
 
@@ -1229,7 +1229,7 @@ export RK_ROOTFS_IMG=buildroot/output/$RK_CFG_BUILDROOT/images/rootfs.$RK_ROOTFS
 
 - buildroot/configs：放置开发板的一些配置参数
 
-- buildroot/dl：目录存放从官网上下载的开源软件包，第一次下载后，下次就不会再去从官网下载了，而是从dl/目录下拿开源包，以节约时间。**本身下载通常都是很慢的,你可以手动找到相关包下载后放到这里就OK了,make时会自动检测这个目录.** 
+- buildroot/dl：目录存放从官网上下载的开源软件包，第一次下载后，下次就不会再去从官网下载了，而是从dl/目录下拿开源包，以节约时间。**本身下载通常都是很慢的,你可以手动找到相关包下载后放到这里就OK了,make时会自动检测这个目录.**
 
 - buildroot/docs： 存放相关的参考文档。
 
@@ -1258,16 +1258,16 @@ export RK_ROOTFS_IMG=buildroot/output/$RK_CFG_BUILDROOT/images/rootfs.$RK_ROOTFS
 ├── CHANGES
 ├── Config.in
 ├── Config.in.legacy
-├── configs:  放置开发板的一些配置参数. 
+├── configs:  放置开发板的一些配置参数.
 ├── COPYING
 ├── DEVELOPERS
-├── dl:       存放下载的源代码及应用软件的压缩包. 
-├── docs:     存放相关的参考文档. 
-├── fs:       放各种文件系统的源代码. 
-├── linux:    存放着Linux kernel的自动构建脚本. 
+├── dl:       存放下载的源代码及应用软件的压缩包.
+├── docs:     存放相关的参考文档.
+├── fs:       放各种文件系统的源代码.
+├── linux:    存放着Linux kernel的自动构建脚本.
 ├── Makefile
 ├── Makefile.legacy
-├── output: 是编译出来的输出文件夹. 
+├── output: 是编译出来的输出文件夹.
 │   ├── build: 存放解压后的各种软件包编译完成后的现场.
 │   ├── host: 存放着制作好的编译工具链，如gcc、arm-linux-gcc等工具.
 │   ├── images: 存放着编译好的uboot.bin, zImage, rootfs等镜像文件，可烧写到板子里, 让linux系统跑起来.
@@ -1355,11 +1355,11 @@ cw@SYS3:~/sdk/3126i/buildroot/output/rockchip_rk3128$ du -h --max-depth=1
 893M  ./host
 15G   .
 
-- `build/` 包含所有的源文件，包括 Buildroot 所需主机工具和选择的包，这个目录包含所有 模块源码。 存放除交叉编译器之外的所有组件，每个组件自己有一个文件夹 
-- `host/`   包含host所需要的各种安装包（为运行buildroot所需要的各组件，及交叉编译器） 
-- `images/` 包含压缩好的根文件系统镜像文件，kernel image, bootloader and root filesystem等images 
+- `build/` 包含所有的源文件，包括 Buildroot 所需主机工具和选择的包，这个目录包含所有 模块源码。 存放除交叉编译器之外的所有组件，每个组件自己有一个文件夹
+- `host/`   包含host所需要的各种安装包（为运行buildroot所需要的各组件，及交叉编译器）
+- `images/` 包含压缩好的根文件系统镜像文件，kernel image, bootloader and root filesystem等images
 - `staging/` 这个目录类似根文件系统的目录结构，包含编译生成的所有头文件和库，以及其他开发文件，不过他们没有裁剪，比较庞大，不适用于目标文件系统。
-- `target/` 包含完整的根文件系统，对比 `staging/`，它没有开发文件，不包含头文件，二进制文件也经过 `strip` 处理。 **包含几乎与目标根文件系统一样的目录，尚缺少的是设备文件/dev**（Buildroot不是运行在也不想运行在root权限下），因而这个目录也不能作为目标系统的根文件系统，你应该使用images/下的其中一个作为目标系统的根文件系统 
+- `target/` 包含完整的根文件系统，对比 `staging/`，它没有开发文件，不包含头文件，二进制文件也经过 `strip` 处理。 **包含几乎与目标根文件系统一样的目录，尚缺少的是设备文件/dev**（Buildroot不是运行在也不想运行在root权限下），因而这个目录也不能作为目标系统的根文件系统，你应该使用images/下的其中一个作为目标系统的根文件系统
 
 ###  5.4  模块配置
 
@@ -1417,7 +1417,7 @@ data            init  linuxrc  mnt    proc  run            sys     timestamp    
 make graph-depends    生成已编译完整系统的依赖关系图   output/graphs/graph-depends.pdf
 make <pkg>-graph-depends 给定的包生成依赖关系图      output/graph/<pkg>-graph-depends.pdf
 
-## 7 buildroot使用入门
+## 7 buildroot随手改
 
 ### 7.1 编译
 
@@ -1425,20 +1425,19 @@ make <pkg>-graph-depends 给定的包生成依赖关系图      output/graph/<pk
 $source envsetup.sh
 $make menuconfig
 $ make savedefconfig
-$ make  
-$ ./build.sh rootfs //据说实际就是make
-$ ./mkfirmware.sh   完成编译后执行 SDK 根目录下的 mkfirmware.sh 脚本生成固件所有烧写所需的镜像将都会
+$ make  （或./build.sh rootfs 其实就是mak）
+$ ./mkfirmware.sh        生成固件所烧写镜像
 ```
 
 ### 7.2 切换单板
 
 ```
 root@c:/home/c/linux/v2/device/rockchip# ln -sf rk3128/BoardConfig.mk .BoardConfig.mk
-root@c:/home/c/linux/v2# source envsetup.sh  
-root@c:/home/c/linux/v2# ./build.sh 
+root@c:/home/c/linux/v2# source envsetup.sh
+root@c:/home/c/linux/v2# ./build.sh
 ```
 
-### 7.3 重新编译包
+### 7.3 编译原理
 
  针对output/**build**/某个包进行了修改，需要单独重新编译该软件包，直接编译Buildroot是不起效果的。
 
@@ -1468,26 +1467,55 @@ $make
 
 BuildRoot 如何单独编译某个一包？
 
-1. 如果修改了源码，在编译前运行 make < package >-dirclean
+1. 如果修改了package源码，在编译前运行 make < package >-dirclean。
 
 
 ```
-make <package> -dirclean //删除output/build/package 这个文件夹   
+make <package> -dirclean //删除output/build/package 这个文件夹
+make                     //自动对这个包重新编译
 ```
 
-2. 如果只是修改output 目录下的东西，编译前运行 make < package >-rebuild
+2. 如果只是修改output 目录下代码，只需要启动编译的步骤，编译前运行 make < package >-rebuild千万不要make <package> -dirclean ，这样会删除整个output/<package>/这个文件夹，修改全没了。
 
 ```
  make <package> -rebuild
  make 或 make <package>
 ```
 
-### 7.4 补丁
+###7.4 拷贝文件到开发板根文件系统
 
- 如果要修改软件包的源码，你可以通过打补丁的方式进行修改，补丁生成后集中放在package/目录，buildroot会在解压软件包时自动打上相应补丁。 
+开发根文件系统则存放在output/target，内核镜像、uboot、压缩的根文件系统存放在output/images下target
+
+- 方法一：手动复制到output/target下
 
 ```
-以rkwifibt 为例
+cw@SYS3:~/sdk/3126i/buildroot/output/rockchip_rk3128$ ag -g "sink-test"
+build/intel-wds-ece955a9947e8d5848223c849d2c0f3f928078d4/sink/sink-test
+
+cw@SYS3:~/sdk/3126i/buildroot/output/rockchip_rk3128$cp build/intel-wds-ece955a9947e8d5848223c849d2c0f3f928078d4/sink/sink-test target/
+
+cw@SYS3:~/sdk/3126i$  make
+cw@SYS3:~/sdk/3126i$  ./mkfirmware.sh
+```
+
+- 方法一：在包的配置mk文件，设置istall阶段自动拷贝
+
+intel-wds编译后，想把它在output/包/下生成的某个可执行文件复制到开发板根文件系统（根文件系统则存放在output/target，也就是target目录，注意target目录就是开发板下面的除了dev目录的所有文件）
+package/intel-wds/intel-wds.mk 在配置文件里面修改，编译后install把某个文件一起拷贝到开发板目录
+
+```c
+define INTEL_WDS_INSTALL_TARGET_CMDS
+	cp -f $(@D)/sink/sink-test $(TARGET_DIR)/usr/bin/
+endef
+```
+
+### 7.5 output下修改保存为补丁
+
+如何给package 增加一个patch,生成补丁后，拷贝到对应的buildroot/package/对应包下。buildroot在解压源代码的时候，自动打上这个目录下的所有补丁，注意补丁的格式和序号。打补丁的过程，make编译的时可以看到log。
+
+以rkwifibt 为例,
+
+````
 1. cd buildroot/output/rockchip_rk3308_release/build/rkwifibt-1.0.0
 2. 初始化仓库
 git init
@@ -1500,9 +1528,14 @@ git add wifi_start.sh
 git commit -s
 6. 生成补丁
 git format-patch
+````
+
+举例buildroot/package/connma，make的时候解压在ouput文件夹下面，解压后，会自动打上这些patch
+
 ```
-
-
+cw@SYS3:~/sdk/3126i/buildroot/package/connman ls
+0001-tethering-Reorder-header-includes.patch  0002-nat-build-failure.patch  Config.in  connman.hash  connman.mk  S45connman
+```
 
 ## 8 UBOOT
 
@@ -1616,11 +1649,11 @@ kernel/
     ├── trust.img
     └── uboot.img
     得到了所有镜像文件后，为了方便烧写及量产，通常可手动将这些单独的镜像通过脚本打包
-    成为 update.img。 
+    成为 update.img。
 
   ## 11分区说明
 
-   http://opensource.rock-chips.com/wiki_Boot_option 
+   http://opensource.rock-chips.com/wiki_Boot_option
 
   ## 启动流程
 
@@ -1664,4 +1697,4 @@ kernel/
   - Boot from U-Disk means firmware for stage 4 and 5(not including SPL and U-Boot) in Disk, optionally only including stage 5;
   - Boot from net/tftp means firmeware for stage 4 and 5(not including SPL and U-Boot) on the network;
 
- ![img](RK_Linux_Compile.assets/894px-Rockchip_bootflow20181122.jpg) 
+ ![img](RK_Linux_Compile.assets/894px-Rockchip_bootflow20181122.jpg)
