@@ -1414,10 +1414,138 @@ data            init  linuxrc  mnt    proc  run            sys     timestamp    
 | `reinstall` | 重新运行安装命令                                             |
 | `rebuild`   | 重新运行编译命令 - 这只有在使用该`OVERRIDE_SRCDIR`功能（重新指定源码包位置）时才有意义，或者直接在编译目录中修改文件时才有意义 |
 
-make graph-depends    生成已编译完整系统的依赖关系图   output/graphs/graph-depends.pdf
-make <pkg>-graph-depends 给定的包生成依赖关系图      output/graph/<pkg>-graph-depends.pdf
 
-## 7 buildroot随手改
+
+5.7 编译结果
+
+- 编译结果位于output/images
+
+包含一个或多个不同格式的rootfs
+
+一个linux内核，可能一个或多个设备树块
+
+一个或多个bootloader镜像
+
+安装镜像的时候，不同设备不一样，没有一个标准，buildroot提供一些工具来产生USB/SDCARD/FLASH
+
+-  make list-defconfigs
+
+  列出所有buildroot/config/下所有的defconfig
+
+环境变量O = output
+
+## 6 官方
+
+
+
+
+
+### 6.2 Build tree
+
+### Build tree: $(O)
+
+output/
+
+▶ Global output directory
+▶ Can be customized for out-of-tree build by passing O=<dir>
+▶ Variable: O (as passed on the command line)
+▶ Variable: BASE_DIR (as an absolute path)
+
+### Build tree: $(O)/build
+
+Build tree: $(O)/build
+▶ output/
+	▶ build/
+		▶buildroot-config/
+		▶busybox-1.22.1/
+		▶host-pkgconf-0.8.9/
+		▶kmod-1.18/
+		▶build-time.log
+▶ Where all source tarballs are extracted
+▶ Where the build of each package takes place
+▶ In addition to the package sources and object files, stamp files are created by
+Buildroot
+▶ Variable: BUILD_DIR
+
+### Build tree: $(O)/host
+
+​	▶ host/
+​		▶lib
+​		▶bin
+​		▶sbin
+​		▶<tuple>/sysroot/bin
+​		▶<tuple>/sysroot/lib
+​		▶<tuple>/sysroot/usr/lib
+​		▶<tuple>/sysroot/usr/bin
+​	▶ Contains both the tools built for the host (cross-compiler, etc.) and the sysroot of
+the toolchain
+​	▶ Variable: HOST_DIR
+​	▶ Host tools are directly in host/
+​	▶ The sysroot is in host/<tuple>/sysroot/usr
+​	▶ <tuple> is an identifier of the architecture, vendor, operating system, C library and
+ABI. E.g: arm-unknown-linux-gnueabihf.
+​	▶ Variable for the sysroot: STAGING_DIR
+
+### Build tree: $(O)/staging
+
+​	▶ staging/
+​	▶ Just a symbolic link to the sysroot, i.e. to host/<tuple>/sysroot/.
+​	▶ Available for convenience
+
+### Build tree: $(O)/target
+
+​	▶ target/
+​		▶bin/
+​		▶etc/
+​		▶lib/
+​		▶usr/bin/
+​		▶usr/lib/
+​		▶usr/share/
+​		▶usr/sbin/
+​	▶THIS_IS_NOT_YOUR_ROOT_FILESYSTEM
+​	▶...
+​	▶ The target root filesystem
+​	▶ Usual Linux hierarchy
+​	▶ Not completely ready for the target: permissions, device files, etc.
+​	▶ Buildroot does not run as root: all files are owned by the user running Buildroot, not
+setuid, etc.
+​	▶ Used to generate the final root filesystem images in images/
+​	▶ Variable: TARGET_DIR
+
+​	▶ images/
+​		▶zImage
+​		▶armada-370-mirabox.dtb
+​		▶rootfs.tar
+​		▶rootfs.ubi
+​		▶ Contains the final images: kernel image, bootloader image, root filesystem image(s)
+​		▶ Variable: BINARIES_DIR
+
+​		▶ graphs/
+​		▶ Visualization of Buildroot operation: dependencies between packages, time to build
+the different packages
+​		▶ make graph-depends
+​		▶ make graph-build
+​		▶ make graph-size
+​		▶ Variable: GRAPHS_DIR
+​		▶ See the section Analyzing the build later in this training.
+
+
+
+​	▶ legal-info/
+​		▶manifest.csv
+​		▶host-manifest.csv
+​		▶licenses.txt
+​		▶licenses/
+​		▶sources/
+▶ Legal information: license of all packages, and their source code, plus a licensing
+manifest
+▶ Useful for license compliance
+▶ make legal-info
+▶ Variable: LEGAL_INFO_DIR
+
+## 7 buildroot
+
+## 随手改
 
 ### 7.1 编译
 
@@ -1539,6 +1667,44 @@ cw@SYS3:~/sdk/3126i/buildroot/package/connman ls
 
 ## 8 buildroot命令
 
+### 8.1 编译类命令
+
+### make menuconfig
+
+▶ make menuconfig   RK SDK支持
+▶ make nconfig          RK SDK有点残废
+▶ make xconfig          RK SDK不支持
+▶ make gconfig          RK SDK不支持
+
+ncurses 实现了menuconfig/nconfig,
+Qt 实现 xconfig
+Gtk 实现 gconfig
+
+### make
+$ make 配置后编译:
+
+### make 2>&1 | tee build.log
+
+编译时候保存日志（亲测ok）
+
+
+### make clean
+
+删除所有build output，只保留配置文件
+
+### make distclean
+
+删除一切，包括所有配置文件，下载文件
+
+### make V=1
+
+详细构建，默认情况下，Buildroot隐藏在生成期间运行的许多命令，只展示最重要的。
+
+ 要获得完全详细的生成，请传递V=1：
+
+
+### 8.2 分析类命令
+
 ### make graph-size
 
 分析文件系统大小组成，文件大小，包大小
@@ -1629,11 +1795,11 @@ dot  -Tpdf -o /home/cw/sdk/3126i/buildroot/output/rockchip_rk3128/graphs/intel-w
 执行make graph-build会生成如下文件：
 
 ▶ make graph-build generates several graphs in $(O)/graphs/:
-▶ build.hist-build.pdf, build time in build order   编译顺序下的逐个编译时间
-▶ build.hist-duration.pdf, build time by duration                              按照耗时从大到小排列。
-▶ build.hist-name.pdf, build time by package name                         按照字母排序
-▶ build.pie-packages.pdf, pie chart of the per-package build time    每个包的编译时间饼图
-▶ build.pie-steps.pdf, pie chart of the per-step build time                 编译顺序下，每一步的编译时间
+▶ build.hist-build.pdf, build time in build order                                    安装编译顺序
+▶ build.hist-duration.pdf, build time by duration                                 按照耗时从大到小排列。
+▶ build.hist-name.pdf, build time by package name                           按照字母排序
+▶ build.pie-packages.pdf, pie chart of the per-package build time     每个包的编译时间饼图
+▶ build.pie-steps.pdf, pie chart of the per-step build time                  编译顺序下，每一步的编译时间
 
 
 
