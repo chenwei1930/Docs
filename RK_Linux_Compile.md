@@ -87,14 +87,34 @@ MaskRom 模式是设备变砖的最后一条防线。强行进入 MaskRom 涉及
 
 ### 1.2.2 烧写方法
 
+## hotkey ##
+
+为了用户开发方便，rockchip 定义了一些快捷键用于调试或触发某些操作。快捷键主要通过串口输入实
+现：
+开机长按 ctrl+c：进入 U-Boot 命令行模式；
+开机长按 ctrl+d：进入 loader 烧写模式；
+开机长按 ctrl+b：进入 maskrom 烧写模式；
+开机长按 ctrl+f：进入 fastboot 模式；
+开机长按 ctrl+m：打印 bidram/system 信息；
+开机长按 ctrl+i：使能内核 initcall_debug；
+开机长按 ctrl+p：打印 cmdline 信息；
+开机长按 ctrl+s："Starting kernel..."之后进入 U-Boot 命令行；
+开机反复按机器的 power button：进入 loader 烧写模式。但是用户需要先使能：
+
+```
+CONFIG_PWRKEY_DNL_TRIGGER_NUM
+```
+
+这是一个 int 类型的宏，用户根据实际情况定义（可理解为：灵敏度）。当连续按 power button 的次
+数超过定义值后，U-Boot 会进入 loader 烧写模式。默认值为 0，表示禁用该功能。
+
 - Maskrom模式下烧写
 
 ```
 1、 进入Maskrom
 如果没有烧录过系统的芯片，上电就是maskrom模式
-reboot 命令重启，开机马上按'Ctrl+C'进入uboot命令选择界面
-help查看帮助
-rbrom进入Maskrom
+或者reboot 命令重启，开机马上按'ctrl+d'进入uboot命令选择界面，help查看帮助，rbrom进入Maskrom
+或者reboot 命令重启， ctrl+b：进入 maskrom 烧写模式；
 
 2、按上图图片，直接烧写
 ```
@@ -108,9 +128,8 @@ rbrom进入Maskrom
 方法一
 reboot loader就会进入loader模式
 方法二
-reboot重启
-Ctrl+C进入uboot命令行
-输入  rockusb 0 mmc 0就会进入loder模式
+reboot重启Ctrl+C进入uboot命令行输入  rockusb 0 mmc 0就会进入loder模式
+或者 reboot重启 开机长按 ctrl+d：进入 loader 烧写模式
 2、烧写
 采用loader烧写，说明芯片已经烧写过固件有loader和parameter在机器，所以可以单模块烧写，比如值烧写rootfs
 ```
@@ -118,7 +137,6 @@ Ctrl+C进入uboot命令行
 单模块烧写
 
 ```
-
 在Maskrom下单模块烧写，并且你烧写过paramenter，那么这时候，单模块烧写，你就要选上（loader+单模块），比如说，你编译了builroot这时候生成的是rootfs，这时候loader+rootfs。这两项选上再烧写。
 
 在loader模式下单模块烧写,你烧写过paramenter，那么会有分区信息，这时候就可以单模块烧写。在loader模式下，你只编译了buildroot生成的rootfs，那么只需要烧写 勾选上rootfs，其他不用选，烧写。
@@ -269,7 +287,7 @@ make rkwifibt-rebuild //重新编译
 make之后，要./build.sh rootfs要打包rootfs，还要./mkfirmware.sh
 ```
 
-### 2.2 编译Linux
+### 2.2 编译Kernel
 
 ```
 cd kernel
@@ -286,7 +304,7 @@ scripts/kconfig/conf  --savedefconfig=defconfig Kconfig
 cw@SYS3:~/sdk/3126i/kernel$ cp defconfig arch/arm/configs/rockchip_linux_defconfig
 这条命令下生产了defconfig文件arch/arm/configs/rockchip_linux_defconfig
 
-注意（为什么指定arch，不加的话影响是啥）：
+注意（为什么指定ARCH=arm，不加的话影响是啥）：
 arch是说明用的是32位的机器，如RK3126、RK2128
 cw@SYS3:~/sdk/3328/kernel$make menuconfig ARCH=arm
 注意kernel对于32位，make menuconfig和make savedefconfig都必须加上ARCH=arm， menuconfig配置后save在拷贝到arch/arm/configs/rockchip_linux_defconfig。
@@ -2013,3 +2031,12 @@ kernel/
   - Boot from net/tftp means firmeware for stage 4 and 5(not including SPL and U-Boot) on the network;
 
  ![img](RK_Linux_Compile.assets/894px-Rockchip_bootflow20181122.jpg)
+
+
+
+# 12 TrustZone 
+
+目前 Rockchip 所有的平台都启用了 ARM TrustZone 技术，在整个 TrustZone 的架构中 U-Boot 属于
+Non-Secure World，所以无法访问任何安全的资源（如：某些安全 memory、安全 efuse...）。
+
+ Trustzone 是 ARM 公司为了解决可能遇到的软硬件安全问题提出的一种硬件解决方案。]基于 Trustzone 这种硬件架构设计的软硬件，能在很大程度和范围内保证系统的安全性，使软硬件破解都变得相对很困难。
