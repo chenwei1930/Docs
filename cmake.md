@@ -22,7 +22,7 @@ CMake 就是针对上面问题所设计的工具：它首先允许开发者编�
 
 本文将从实例入手，一步步讲解 CMake 的常见用法，文中所有的实例代码可以在[这里](https://github.com/wzpan/cmake-demo)找到。如果你读完仍觉得意犹未尽，可以继续学习我在文章末尾提供的其他资源。
 
-## 入门案例：单个源文件
+##1 入门案例：单个源文件
 
 本节对应的源代码所在目录：[Demo1](https://github.com/wzpan/cmake-demo/tree/master/Demo1)。
 
