@@ -14,6 +14,7 @@ Lunch menu...pick a combo:
 3. rockchip_rk3308_robot_release
 Which would you like? [1]
 如选择 rockchip_rk3308_release，输入对应序号 （你的单板序号）。
+注意这一步输错的话，建议多输入这个错误字符，再回车，强烈建议不要ctrl+c，否者可能造成编译过程中创建一半被中断，比如创建一个makefile空白，还没写入内容。编译就会遇到目标不存在等问题
 
 3、编译
 $ make
