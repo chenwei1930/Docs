@@ -4,7 +4,7 @@
 
 从实例入手，讲解 CMake 的常见用法。
 
-## 什么是 CMake
+# 什么是 CMake
 
 > All problems in computer science can be solved by another level of indirection.
 >
@@ -22,7 +22,7 @@ CMake 就是针对上面问题所设计的工具：它首先允许开发者编�
 
 本文将从实例入手，一步步讲解 CMake 的常见用法，文中所有的实例代码可以在[这里](https://github.com/wzpan/cmake-demo)找到。如果你读完仍觉得意犹未尽，可以继续学习我在文章末尾提供的其他资源。
 
-##1 入门案例：单个源文件
+## 1 入门案例：单个源文件
 
 本节对应的源代码所在目录：[Demo1](https://github.com/wzpan/cmake-demo/tree/master/Demo1)。
 
@@ -122,11 +122,9 @@ Linking C executable Demo
 2 ^ 10 is 1024
 ```
 
-## 多个源文件
+## 2 多个源文件
 
 ### 同一目录，多个源文件
-
-
 
 本小节对应的源代码所在目录：[Demo2](https://github.com/wzpan/cmake-demo/tree/master/Demo2)。
 
@@ -147,13 +145,10 @@ Linking C executable Demo
 ```
 # CMake 最低版本号要求
 cmake_minimum_required (VERSION 2.8)
-
 # 项目信息
 project (Demo2)
-
 # 指定生成目标
 add_executable(Demo main.cc MathFunctions.cc)
-
 ```
 
 唯一的改动只是在 `add_executable` 命令中增加了一个 `MathFunctions.cc` 源文件。这样写当然没什么问题，但是如果源文件很多，把所有源文件的名字都加进去将是一件烦人的工作。更省事的方法是使用 `aux_source_directory` 命令，该命令会查找指定目录下的所有源文件，然后将结果存进指定变量名。其语法如下：
@@ -173,12 +168,11 @@ project (Demo2)
 
 # 指定生成目标
 add_executable(Demo main.cc MathFunctions.cc)
-
 ```
 
 这样，CMake 会将当前目录所有源文件的文件名赋值给变量 `DIR_SRCS` ，再指示变量 `DIR_SRCS` 中的源文件需要编译成一个名称为 Demo 的可执行文件。
 
-### 多个目录，多个源文件
+## 3 多个目录，多个源文件
 
 本小节对应的源代码所在目录：[Demo3](https://github.com/wzpan/cmake-demo/tree/master/Demo3)。
 
@@ -194,7 +188,6 @@ add_executable(Demo main.cc MathFunctions.cc)
           +--- MathFunctions.cc
           |
           +--- MathFunctions.h
-
 ```
 
 对于这种情况，需要分别在项目根目录 Demo3 和 math 目录里各编写一个 CMakeLists.txt 文件。为了方便，我们可以先将 math 目录里的文件编译成静态库再由 main 函数调用。
@@ -237,9 +230,7 @@ add_library (MathFunctions ${DIR_LIB_SRCS}
 
 在该文件中使用命令 `add_library` 将 src 目录中的源文件编译为静态链接库。
 
-## 自定义编译选项
-
-
+##  4 自定义编译选项
 
 本节对应的源代码所在目录：[Demo4](https://github.com/wzpan/cmake-demo/tree/master/Demo4)。
 
@@ -385,15 +376,13 @@ Now we use our own MathFunctions library.
 #define USE_MYMATH
 ```
 
-## 安装和测试
-
-
+## 5 安装和测试
 
 本节对应的源代码所在目录：[Demo5](https://github.com/wzpan/cmake-demo/tree/master/Demo5)。
 
 CMake 也可以指定安装规则，以及添加测试。这两个功能分别可以通过在产生 Makefile 后使用 `make install` 和 `make test` 来执行。在以前的 GNU Makefile 里，你可能需要为此编写 `install` 和 `test` 两个伪目标和相应的规则，但在 CMake 里，这样的工作同样只需要简单的调用几条命令。
 
-### 定制安装规则
+## 6 定制安装规则
 
 首先先在 math/CMakeLists.txt 文件里添加下面两行：
 
@@ -431,7 +420,7 @@ Demo  libMathFunctions.a
 config.h  MathFunctions.h
 ```
 
-### 为工程添加测试
+## 7 为工程添加测试
 
 添加测试同样很简单。CMake 提供了一个称为 CTest 的测试工具。我们要做的只是在项目根目录的 CMakeLists 文件中调用一系列的 `add_test` 命令。
 
@@ -506,7 +495,7 @@ do_test (2 10 "is 1024")
 
 关于 CTest 的更详细的用法可以通过 `man 1 ctest` 参考 CTest 的文档。
 
-## 支持 gdb
+## 8 支持 gdb
 
 让 CMake 支持 gdb 的设置也很容易，只需要指定 `Debug` 模式下开启 `-g` 选项：
 
@@ -518,15 +507,13 @@ set(CMAKE_CXX_FLAGS_RELEASE "$ENV{CXXFLAGS} -O3 -Wall")
 
 之后可以直接对生成的程序使用 gdb 来调试。
 
-## 添加环境检查
-
-
+## 9 添加环境检查
 
 本节对应的源代码所在目录：[Demo6](https://github.com/wzpan/cmake-demo/tree/master/Demo6)。
 
 有时候可能要对系统环境做点检查，例如要使用一个平台相关的特性的时候。在这个例子中，我们检查系统是否自带 pow 函数。如果带有 pow 函数，就使用它；否则使用我们定义的 power 函数。
 
-#### 添加 CheckFunctionExists 宏
+## 10 添加 CheckFunctionExists 宏
 
 首先在顶层 CMakeLists 文件中添加 CheckFunctionExists.cmake 宏，并调用 `check_function_exists` 命令测试链接器是否能够在链接阶段找到 `pow` 函数。
 
@@ -538,7 +525,7 @@ check_function_exists (pow HAVE_POW)
 
 将上面这段代码放在 `configure_file` 命令前。
 
-#### 预定义相关宏变量
+## 11 预定义相关宏变量
 
 接下来修改 [config.h.in](http://config.h.in/) 文件，预定义相关的宏变量。
 
@@ -547,7 +534,7 @@ check_function_exists (pow HAVE_POW)
 #cmakedefine HAVE_POW
 ```
 
-#### 在代码中使用宏和函数
+## 12 在代码中使用宏和函数
 
 最后一步是修改 [main.cc](http://main.cc/) ，在代码中使用宏和函数：
 
@@ -561,7 +548,7 @@ check_function_exists (pow HAVE_POW)
 #endif
 ```
 
-## 添加版本号
+## 13 添加版本号
 
 
 
@@ -622,9 +609,7 @@ int main(int argc, char *argv[])
 }
 ```
 
-## 生成安装包
-
-
+## 14 生成安装包
 
 本节对应的源代码所在目录：[Demo8](https://github.com/wzpan/cmake-demo/tree/master/Demo8)。
 
@@ -707,7 +692,7 @@ Demo8-1.0.1-Linux.sh  Demo8-1.0.1-Linux.tar.gz  Demo8-1.0.1-Linux.tar.Z
 
 关于 CPack 的更详细的用法可以通过 `man 1 cpack` 参考 CPack 的文档。
 
-## 将其他平台的项目迁移到 CMake
+## 15 将其他平台的项目迁移到 CMake
 
 CMake 可以很轻松地构建出在适合各个平台执行的工程环境。而如果当前的工程环境不是 CMake ，而是基于某个特定的平台，是否可以迁移到 CMake 呢？答案是可能的。下面针对几个常用的平台，列出了它们对应的迁移方案。
 
@@ -732,7 +717,7 @@ CMake 可以很轻松地构建出在适合各个平台执行的工程环境。�
 - [gencmake](http://websvn.kde.org/trunk/KDE/kdesdk/cmake/scripts/) 根据现有文件推导 CMakeLists.txt 文件。
 - [CMakeListGenerator](http://www.vanvelzensoftware.com/postnuke/index.php?name=Downloads&req=viewdownload&cid=7) 应用一套文件和目录分析创建出完整的 CMakeLists.txt 文件。仅支持 Win32 平台。
 
-## 相关链接
+## 16 相关链接
 
 1. [官方主页](http://www.cmake.org/)
 2. [官方文档](http://www.cmake.org/cmake/help/cmake2.4docs.html)
@@ -750,105 +735,30 @@ CMake 可以很轻松地构建出在适合各个平台执行的工程环境。�
    - [Packaging Software with CPack](http://www.kitware.com/media/archive/kitware_quarterly0107.pdf)
    - [视频教程: 《Getting Started with CMake》](http://www.youtube.com/watch?v=CLvZTyji_Uw)
 
-## 类似工具
+## 17 类似工具
 
 - [SCons](http://scons.org/)：Eric S. Raymond、Timothee Besset、Zed A. Shaw 等大神力荐的项目架构工具。和 CMake 的最大区别是使用 Python 作为执行脚本。
 
-------
+# 命令大全
 
-1. [这个页面](http://www.cmake.org/Wiki/CMake_Projects)详细罗列了使用 CMake 的知名项目 [↩︎](https://www.hahack.com/codes/cmake/#fnref1)
+## option
 
-- [Prev](https://www.hahack.com/codes/livereload-for-hexo/)
-- [Archive](https://www.hahack.com/archive)
-- [Next](https://www.hahack.com/slides/clumsy-web-worker/)
+```
+option
+Provides an option that the user can optionally select.
+option 提供一个用户可以任选的选项。语法如下
+option(<option_variable> "help string describing option"
+            [initial value])
+Provide an option for the user to select as ON or OFF. If no initial value is provided, OFF is used.
+option 提供选项让用户选择是 ON 或者 OFF ，如果没有提供初始化值，使用OFF。
+也就是说默认的值是OFF。
+```
 
-## Comments
-
-[0](https://www.hahack.com/codes/cmake/null) 条评论
-
-未登录用户
-
-Error: Network Error
-
-
-
-[支持 Markdown 语法](https://guides.github.com/features/mastering-markdown/)预览使用 GitHub 登录
-
-来做第一个留言的人吧！
-
-[ edit on Github](https://github.com/wzpan/hexo-blog/edit/master/source/_posts/cmake.md)
-
- 2013-12-27
-
-
-
-- 
-- [codes37](https://www.hahack.com/categories/codes/)
-
-
-
-- [CMake1](https://www.hahack.com/tags/CMake/)
-- [Makefile1](https://www.hahack.com/tags/Makefile/)
-
-
-
-1. [什么是 CMake](https://www.hahack.com/codes/cmake/#什么是-CMake)
-2. 入门案例：单个源文件
-   1. [编写 CMakeLists.txt](https://www.hahack.com/codes/cmake/#编写-CMakeLists-txt)
-   2. [编译项目](https://www.hahack.com/codes/cmake/#编译项目)
-
-[多个源文件](https://www.hahack.com/codes/cmake/#多个源文件)
-
-1. [同一目录，多个源文件](https://www.hahack.com/codes/cmake/#同一目录，多个源文件)
-2. [多个目录，多个源文件](https://www.hahack.com/codes/cmake/#多个目录，多个源文件)
-
-[自定义编译选项](https://www.hahack.com/codes/cmake/#自定义编译选项)
-
-1. [修改 CMakeLists 文件](https://www.hahack.com/codes/cmake/#修改-CMakeLists-文件)
-2. [修改 main.cc 文件](https://www.hahack.com/codes/cmake/#修改-main-cc-文件)
-3. [编写 config.h.in 文件](https://www.hahack.com/codes/cmake/#编写-config-h-in-文件)
-4. 编译项目
-   1. [USE_MYMATH 为 ON](https://www.hahack.com/codes/cmake/#USE-MYMATH-为-ON)
-   2. [USE_MYMATH 为 OFF](https://www.hahack.com/codes/cmake/#USE-MYMATH-为-OFF)
-
-[安装和测试](https://www.hahack.com/codes/cmake/#安装和测试)
-
-1. [定制安装规则](https://www.hahack.com/codes/cmake/#定制安装规则)
-2. [为工程添加测试](https://www.hahack.com/codes/cmake/#为工程添加测试)
-
-[支持 gdb](https://www.hahack.com/codes/cmake/#支持-gdb)
-
-[添加环境检查](https://www.hahack.com/codes/cmake/#添加环境检查)
-
-1. [添加 CheckFunctionExists 宏](https://www.hahack.com/codes/cmake/#添加-CheckFunctionExists-宏)
-2. [预定义相关宏变量](https://www.hahack.com/codes/cmake/#预定义相关宏变量)
-3. [在代码中使用宏和函数](https://www.hahack.com/codes/cmake/#在代码中使用宏和函数)
-
-[添加版本号](https://www.hahack.com/codes/cmake/#添加版本号)
-
-[生成安装包](https://www.hahack.com/codes/cmake/#生成安装包)
-
-[将其他平台的项目迁移到 CMake](https://www.hahack.com/codes/cmake/#将其他平台的项目迁移到-CMake)
-
-1. [autotools](https://www.hahack.com/codes/cmake/#autotools)
-2. [qmake](https://www.hahack.com/codes/cmake/#qmake)
-3. [Visual Studio](https://www.hahack.com/codes/cmake/#Visual-Studio)
-4. [CMakeLists.txt 自动推导](https://www.hahack.com/codes/cmake/#CMakeLists-txt-自动推导)
-
-[相关链接](https://www.hahack.com/codes/cmake/#相关链接)
-
-[类似工具](https://www.hahack.com/codes/cmake/#类似工具)
-
-------
-
-© 2020 wzpan [![知识共享许可协议](a.assets/license-1587046898232.png)](http://creativecommons.org/licenses/by-nc-sa/3.0/deed.zh)
-
-[▲](https://www.hahack.com/codes/cmake/#)
-
-×
-
-
-
-拖拽到此处
-
-图片将完成下载
+第一个参数就是我们要设置的默认值的名字
+第二个参数是对值的解释，类似于注释
+第三个值是这个默认值的值，如果没有声明，CMake默认的是OFF
+使用：设置好之后我们在命令行去使用的时候，也可以去给他设定值：cmake -
+DMY-MESSAGE=on ../
+注意：使用的时候我们应该在值的前面加“D”
+这条命令可将MY-MESSAGE的值设置为on，通过这个值我们可以去触发相关的
+判断
