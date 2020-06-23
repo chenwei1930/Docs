@@ -1620,8 +1620,12 @@ root@c:/home/c/linux/v2# ./build.sh
 output/包/包含以下文件追踪编译过程。
 
 ```
-.stamp_configured 配置 .stamp_downloaded 下载.stamp_extracted 解压.stamp_patched 打上补丁
- .stamp_staging_installed 编译 .stamp_target_installe 安装
+.stamp_configured 配置
+.stamp_downloaded 下载
+.stamp_extracted 解压
+.stamp_patched 打上补丁
+.stamp_staging_installed 编译 
+.stamp_target_installe 安装
 ```
 
 #### 7.3.1 完全重建buildroot
