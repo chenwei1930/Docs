@@ -14,8 +14,10 @@ Lunch menu...pick a combo:
 3. rockchip_rk3308_robot_release
 Which would you like? [1]
 如选择 rockchip_rk3308_release，输入对应序号 （你的单板序号）。
-注意这一步输错的话，建议多输入这个错误字符，再回车，强烈建议不要ctrl+c，否者可能造成编译过程中创建一半被中断，比如创建一个makefile空白，还没写入内容。编译就会遇到目标不存在等问题
-注意shell的环境变量，只在当前shell有效，所以不要登入多个shell，会导致环境变量缺失编译失败。
+注意：
+这一步输错的话，建议多输入这个错误字符，再回车，强烈建议不要ctrl+c，否者可能造成编译过程中创建一半被中断，比如创建一个makefile空白，还没写入内容。编译就会遇到目标不存在等问题
+注意：
+shell的环境变量，只在当前shell有效，所以不要登入多个shell，会导致环境变量缺失编译失败。
 
 3、编译
 $ make
@@ -89,7 +91,7 @@ MaskRom 模式是设备变砖的最后一条防线。强行进入 MaskRom 涉及
 
 ### 1.2.2 烧写方法
 
-## hotkey ##
+#### hotkey ##
 
 为了用户开发方便，rockchip 定义了一些快捷键用于调试或触发某些操作。快捷键主要通过串口输入实
 现：
@@ -115,7 +117,7 @@ CONFIG_PWRKEY_DNL_TRIGGER_NUM
 ```
 1、 进入Maskrom
 如果没有烧录过系统的芯片，上电就是maskrom模式
-或者reboot 命令重启，开机马上按'ctrl+d'进入uboot命令选择界面，help查看帮助，rbrom进入Maskrom
+或者reboot 命令重启，开机马上按'ctrl+c'进入uboot命令选择界面，help查看帮助，‘rbrom’进入Maskrom
 或者reboot 命令重启， ctrl+b：进入 maskrom 烧写模式；
 
 2、按上图图片，直接烧写
@@ -307,8 +309,12 @@ index 4232fac868..06a4728bc3 100644
 
 make rkwifibt-dirclean //清除掉之前的
 make rkwifibt-rebuild //重新编译
-再make 即可（实际就是等价于与./build.sh rootfs）//#编译 Buildroot 根文件系统
-make之后，要./build.sh rootfs要打包rootfs，还要./mkfirmware.sh
+再make 即可（实际就是等价于与./build.sh rootfs）。还要./mkfirmware.sh
+
+
+cw@SYS3:~/sdk/3126i$ make savedefconfig
+cw@SYS3:~/sdk/3126i$ ./build.sh rootfs （或者直接make，等价的）
+cw@SYS3:~/sdk/3126i$ ./mkfirmware.sh  （打包固件）
 ```
 
 ### 2.2 编译Kernel
