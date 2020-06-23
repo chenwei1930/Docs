@@ -206,7 +206,6 @@ lrwxrwxrwx  1 cw cw   21 Mar  5 15:41 .BoardConfig.mk -> rk3128/BoardConfig.mk
 
 ```shell
 cw@SYS3:~/sdk/3126i/device/rockchip$ vim .BoardConfig.mk
-
 1 #!/bin/bash
 2
 3 # Target arch
@@ -261,6 +260,29 @@ cw@SYS3:~/sdk/3126i/device/rockchip$ vim .BoardConfig.mk
 39 #misc image
 40 export RK_MISC=wipe_all-misc.img
 
+```
+
+Linux export 命令用于设置或显示环境变量。
+
+在 shell 中执行程序时，shell 会提供一组环境变量。export 可新增，修改或删除环境变量，供后续执行的程序使用。export 的效力仅限于该次登陆操作。（所以环境变量只在当前secureCRT窗口shell有效，再开一个窗口shell就没了）
+
+```
+export [-fnp][变量名称]=[变量设置值]
+```
+
+**参数说明**：
+
+- -f 　代表[变量名称]中为函数名称。
+- -n 　删除指定的变量。变量实际上并未删除，只是不会输出到后续指令的执行环境中。
+- -p 　列出所有的shell赋予程序的环境变量。
+
+列出当前所有的环境变量
+
+```
+# export -p //列出当前的环境变量值
+declare -x HOME=“/root“
+declare -x LANG=“zh_CN.UTF-8“
+declare -x LANGUAGE=“zh_CN:zh“
 ```
 
 #### 2.1.2  make
