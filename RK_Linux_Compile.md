@@ -1607,6 +1607,8 @@ $ ./mkfirmware.sh        生成固件所烧写镜像
 
 ### 7.2 切换单板
 
+source是改的是rootfs的配置
+
 ```
 root@c:/home/c/linux/v2/device/rockchip# ln -sf rk3128/BoardConfig.mk .BoardConfig.mk
 root@c:/home/c/linux/v2# source envsetup.sh
@@ -2020,7 +2022,63 @@ kernel/
 
   ## 11分区说明
 
-   http://opensource.rock-chips.com/wiki_Boot_option
+[分区说明](  http://opensource.rock-chips.com/wiki_Boot_option)
+
+Rockchip android系统平台使用parameter文件来配置一些系统参数，比如固件版本，存储器分区信息等。
+
+```
+cw@SYS3:~/sdk/312x_i/rockdev$ more /home/cw/sdk/312x_i/device/rockchip/rk3128/parameter-buildroot.txt
+FIRMWARE_VER: 8.1
+MACHINE_MODEL: RK3128
+MACHINE_ID: 007
+MANUFACTURER: RK3128
+MAGIC: 0x5041524B
+ATAG: 0x00200800
+MACHINE: 3128
+CHECK_MASK: 0x80
+PWR_HLD: 0,0,A,0,1
+TYPE: GPT
+CMDLINE: mtdparts=rk29xxnand:0x00002000@0x00004000(uboot),0x00002000@0x00006000(trust),0x00002000@0x00008000(misc),0x00010000@0x0000a000(boot),0x00010000
+@0x0001a000(recovery),0x00010000@0x0002a000(backup),0x00020000@0x0003a000(oem),0x00100000@0x0005a000(rootfs),-@0x0015a000(userdata:grow)
+uuid:rootfs=614e0000-0000-4b53-8000-1d28000054a9
+```
+
+**编译时候遇到生成的rootfs大于parameter文件限制的情况**
+
+```
+tune2fs 1.43.9 (8-Feb-2018)
+Setting maximal mount count to -1
+Setting interval between checks to 0 seconds
+create uboot.img...done.
+create trust.img...done.
+create loader...done.
+create boot.img...done.
+/home/cw/sdk/312x_i/device/rockchip/rk3128/parameter-buildroot.txt
+0x00002000@0x00004000(uboot),0x00002000@0x00006000(trust),0x00002000@0x00008000(misc),0x00010000@0x0000a000(boot),0x00010000@0x0001a000(recovery),0x00010000@0x0002a000(backup),0x00020000@0x0003a000(oem),0x00100000@0x0005a000(rootfs),-@0x0015a000(userdata:grow)
+ error: rootfs image size exceed parameter! 
+```
+
+```
+cw@SYS3:~/sdk/312x_i/buildroot/output/rockchip_rk3128/images$ ls -alh
+total 1.4G
+drwxr-xr-x 2 cw cw 4.0K Jun 24 09:32 .
+drwxrwxr-x 6 cw cw 4.0K Jun 24 09:31 ..
+-rw-r--r-- 1 cw cw 311M Jun 24 09:31 rootfs.cpio
+-rw-r--r-- 1 cw cw 172M Jun 24 09:32 rootfs.cpio.gz
+-rw-r--r-- 1 cw cw 660M Jun 24 09:32 rootfs.ext2
+lrwxrwxrwx 1 cw cw   11 Jun 24 09:32 rootfs.ext4 -> rootfs.ext2
+-rw-r--r-- 1 cw cw 173M Jun 24 09:32 rootfs.squashfs
+-rw-r--r-- 1 cw cw 314M Jun 24 09:32 rootfs.tar
+
+,0x00100000@0x0005a000(rootfs) = 
+```
+
+- 查看实际rootfs.ext2 占据了660M字节
+
+- 0x00100000@0x0005a000(rootfs) ，计算：（0x00100000块）*512字节/1024/1024 = 512M字节。
+
+**所以需要修改parameter的rootfs大小，这里改为0x01000000@0x0005a000(rootfs)  即8,192‬M字节**
+注意：du -sh 与ls -alh 插看文件大小会不一样，建议使用 ls -alh
 
   ## 启动流程
 
