@@ -12,7 +12,7 @@ Lunch menu...pick a combo:
 1. rockchip_rk3308_release
 2. rockchip_rk3308_debug
 3. rockchip_rk3308_robot_release
-Which would you like? [1]
+Which would you like? [1
 如选择 rockchip_rk3308_release，输入对应序号 （你的单板序号）。
 注意：
 这一步输错的话，建议多输入这个错误字符，再回车，强烈建议不要ctrl+c，否者可能造成编译过程中创建一半被中断，比如创建一个makefile空白，还没写入内容。编译就会遇到目标不存在等问题
@@ -20,7 +20,8 @@ Which would you like? [1]
 shell的环境变量，只在当前shell有效，所以不要登入多个shell，会导致环境变量缺失编译失败。
 
 3、编译
-$ make
+$ ./build.sh 全自动
+make
 
 4、完成编译后生成固件
 $ ./mkfirmware.sh  执行 SDK 根目录下的 mkfirmware.sh 脚本
@@ -2020,11 +2021,99 @@ kernel/
     得到了所有镜像文件后，为了方便烧写及量产，通常可手动将这些单独的镜像通过脚本打包
     成为 update.img。
 
-  ## 11分区说明
+  ## 11 paramete文件分区说明
 
 [分区说明](  http://opensource.rock-chips.com/wiki_Boot_option)
 
+Rockchip Parameter File Format
+
 Rockchip android系统平台使用parameter文件来配置一些系统参数，比如固件版本，存储器分区信息等。
+Parameter文件是非常重要的系统配置文件，最好在能了解清楚各个配置功能时再做修改，避免出现parameter文
+件配置异常造成系统不能正常工作的问题。
+Parameter文件大小有限制，最大不能超过64KB。如图，烧录包括parameter.
+
+```
+图一：GPT分区模式
+图二：传统cmdline分区模式
+```
+
+
+
+![image-20200624151316516](RK_Linux_Compile.assets/image-20200624151316516.png)
+
+```
+3.1. FIRMWARE_VER:8.1
+固件版本，打包updata.img时会使用到，升级工具会根据这个识别固件版本。
+3.2. MACHINE_MODEL:RK3326
+机器型号，打包updata.img使用，不同的项目，可以自己修改，用于升级工具显示。在recovery里面升级固件时
+可以用于判断固件是否匹配
+3.3. MACHINE_ID:007
+产品开发ID，可以为字符和数字组合，打包updata.img使用，不同的项目使用不同的ID，可以用于识别机器机
+型。在recovery里面升级固件时可以用于判断固件是否匹配。
+3.4. MANUFACTURER: rk3326
+厂商信息，打包updata.img使用，可以自己修改，用于升级工具显示。
+3.5. MAGIC: 0x5041524B
+魔数MAGIC，不能修改，一些新的AP使用DTS，这一项没有用，为了兼容，不要删除或修改。
+3.6. ATAG: 0x60000800
+ATAG，不能修改，一些新的AP使用DTS，这一项没有用，为了兼容，不要删除或修改。
+3.7. MACHINE: 3226
+内核识别用，不能修改，这个定义和内核匹配。
+RK29xx识别码：MACHINE: 2929
+RK292x识别码：MACHINE: 2928
+RK3066识别码：MACHINE: 3066
+RK3326识别码：MACHINE: 3326
+3.8. CHECK_MASK: 0x80
+保留，不能修改。
+3.9. TYPE: GPT
+指定该文件CMDLINE里面定义的分区用于创建GPT使用，不会烧录到NVM（NAND，EMMC等）存储器件里面。
+3.10. CMDLINE：
+console=ttyFIQ0 androidboot.console=ttyFIQ0，串口定义。
+initrd=0x62000000,0x00800000，第一个参数是boot.img加载到sdram的位置，第二个参数为ramdisk的大小，
+目前ramdisk大小没有限制。
+androidboot.xxx的定义在android启动时使用，有些平台会在kernel的dts里面定义，这部分定义一般不用修改，
+只用用发布SDK默认的就可以了。
+MTD分区定义说明：
+mtdparts=rk29xxnand:0x00002000@0x00002000(uboot),0x00002000@0x00004000(trust),0x00002000@0x0
+0006000(misc),
+0x00008000@0x00008000(resource),0x00010000@0x00010000(kernel),0x00010000@0x00020000(boot),0x0
+0020000@0x00030000(recovery),
+0x00038000@0x00050000(backup),0x00002000@0x00088000(security),0x00100000@0x0008a000(cache),0x
+00400000@0x0018a000(system),
+0x00008000@0x0058a000(metadata),0x00080000@0x00592000(vendor),0x00080000@0x00612000(oem),0x
+00000400@0x00692000(frp),-@0x00692400(userdata)
+分区定义说明：
+1、为了兼容性，目前RK所有AP都是用rk29xxnand做标识。
+2、单个分区说明：
+例如：0x00002000@0x00008000(boot)，@符号之前的数值是分区大小，@符号之后的数值是分区的起始位置，
+括号里面的字符是分区的名字。所有数值的单位是sector，1个sector为512Bytes.上例中，boot分区起始位置为
+0x8000 sectors位置，大小为0x2000 sectors(4MB).
+3、为了性能，每个分区起始地址需要32KB（64 sectors）对齐，大小也需要32KB的整数倍。
+4、如果使用sparse格式的镜像，升级时会擦除数据，为了兼容性更好，对应的分区最好按4MB对齐，大小也按
+4MB整数倍配置。
+名称 Parameter定义地址 EMMC逻辑地址 NAND逻辑地址 大小
+GPT -- 0 0 32KB
+LOADER -- 0x40 0x40 4MB-32KB
+保留 -- 0x2000 0x2000 4MB
+UBOOT 0x4000 0x4000 0x4000 4MB
+TRUST 0x6000 0x6000 0x6000 4MB
+名称 Parameter定义地址 EMMC逻辑地址 NAND逻辑地址 大小
+保留 -- 0 0 32KB
+LOADER -- 0x40 0x40 4MB-32KB
+parameter -- 0x2000 0x0 4MB
+UBOOT 0x2000 0x4000 0x2000 4MB
+TRUST 0x4000 0x6000 0x4000 4MB
+5、使用GPT分区时，parameter里面定义的地址，都是真实的逻辑地址（LBA），例如uboot定义在0x4000，那
+么烧录到EMMC和NAND里面时，逻辑地址也是0x4000.
+最后一个分区需要指定grow参数，工具会把剩余的空间都分配给最后一个分区。
+6、使用传统cmdline分区时，如果是EMMC颗粒，0-4MB的空间是保留存放loader的，parameter里面定义的分区
+都需要加上4MB，例如uboot定义在0x2000，实际烧录到EMMC里面时，和使用GPT分区时烧录的逻辑地址是一样
+的，也是0x4000。如果是NAND颗粒，为了和原来产品兼容，所有地址都是真实逻辑地址，例如uboot定义在
+0x2000，实际烧录到NAND里面是，逻辑地址也是0x2000，和使用GPT时不一样。
+注：NAND FLASH的机器，0x40有可能会写loader的镜像，和parameter在同一个4MB空间内，有效的数据是相
+互错开存放的，不会覆盖。
+```
+
+
 
 ```
 cw@SYS3:~/sdk/312x_i/rockdev$ more /home/cw/sdk/312x_i/device/rockchip/rk3128/parameter-buildroot.txt
@@ -2057,6 +2146,7 @@ create boot.img...done.
 0x00002000@0x00004000(uboot),0x00002000@0x00006000(trust),0x00002000@0x00008000(misc),0x00010000@0x0000a000(boot),0x00010000@0x0001a000(recovery),0x00010000@0x0002a000(backup),0x00020000@0x0003a000(oem),0x00100000@0x0005a000(rootfs),-@0x0015a000(userdata:grow)
  error: rootfs image size exceed parameter! 
 ```
+看下rootfs的我大小
 
 ```
 cw@SYS3:~/sdk/312x_i/buildroot/output/rockchip_rk3128/images$ ls -alh
@@ -2077,8 +2167,14 @@ lrwxrwxrwx 1 cw cw   11 Jun 24 09:32 rootfs.ext4 -> rootfs.ext2
 
 - 0x00100000@0x0005a000(rootfs) ，计算：（0x00100000块）*512字节/1024/1024 = 512M字节。
 
-**所以需要修改parameter的rootfs大小，这里改为0x01000000@0x0005a000(rootfs)  即8,192‬M字节**
+所以需要修改parameter的rootfs大小，这里改为0x00200000@0x0005a000(rootfs)   即1024M字节
 注意：du -sh 与ls -alh 插看文件大小会不一样，建议使用 ls -alh
+
+
+
+如果parameter文件配置错误，可能导致启动卡死，如下图，修改rootfs为0x1000000（8G大小），超过了合法的方位，于是开机的时候死机，这时候断电重启动ctrl+c输入rbrom重新进入maskrom，重新烧录合法的估计。
+
+![image-20200624163709370](RK_Linux_Compile.assets/image-20200624163709370.png)
 
   ## 启动流程
 
