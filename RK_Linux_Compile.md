@@ -2021,11 +2021,21 @@ kernel/
     得到了所有镜像文件后，为了方便烧写及量产，通常可手动将这些单独的镜像通过脚本打包
     成为 update.img。
 
-  ## 11 paramete文件分区说明
+## 11 paramete文件分区说明
 
-[分区说明](  http://opensource.rock-chips.com/wiki_Boot_option)
+[分区说明](  http://opensource.rock-chips.com/wiki_Boot_option)参考《Rockchip Parameter File Format》
 
-Rockchip Parameter File Format
+** 介绍 **
+
+1. 分区大小@分区地址格式
+
+0x00100000@0x0005a000(rootfs) @符号之前的数值是分区大小，@符号之后的数值是分区的起始位置，
+
+2. 编译出来的大小超过paramenter定义，会编译报错
+3. 修改分区的大小是16进制，并同步修改后面分区的起始气质
+4. 现在一般是GPT分区模式分区模式
+
+
 
 Rockchip android系统平台使用parameter文件来配置一些系统参数，比如固件版本，存储器分区信息等。
 Parameter文件是非常重要的系统配置文件，最好在能了解清楚各个配置功能时再做修改，避免出现parameter文
@@ -2033,11 +2043,9 @@ Parameter文件是非常重要的系统配置文件，最好在能了解清楚�
 Parameter文件大小有限制，最大不能超过64KB。如图，烧录包括parameter.
 
 ```
-图一：GPT分区模式
+图一：GPT分区模式 （瑞芯微电子一般使用这个）
 图二：传统cmdline分区模式
 ```
-
-
 
 ![image-20200624151316516](RK_Linux_Compile.assets/image-20200624151316516.png)
 
@@ -2176,7 +2184,64 @@ lrwxrwxrwx 1 cw cw   11 Jun 24 09:32 rootfs.ext4 -> rootfs.ext2
 
 ![image-20200624163709370](RK_Linux_Compile.assets/image-20200624163709370.png)
 
-  ## 启动流程
+## 12 DDR
+
+
+
+1. 将DDR初始化的固件存放于rkbin/bin/rk31/rk3128_ddr_128MB_v1.00.bin
+2. 修改对应的配置文件RK3128MINIALL.ini，制定新的路径
+
+```shell
+cw@SYS3:~/sdk/312x_i/rkbin$ git diff
+diff --git a/RKBOOT/RK3128MINIALL.ini b/RKBOOT/RK3128MINIALL.ini
+index befd74c..b512589 100644
+--- a/RKBOOT/RK3128MINIALL.ini
++++ b/RKBOOT/RK3128MINIALL.ini
+@@ -5,7 +5,7 @@ MAJOR=2
+ MINOR=56
+ [CODE471_OPTION]
+ NUM=1
+-Path1=bin/rk31/rk3128_ddr_300MHz_v2.12.bin
++Path1=bin/rk31/rk3128_ddr_128MB_v1.00.bin
+ Sleep=1
+ [CODE472_OPTION]
+ NUM=1
+@@ -14,7 +14,7 @@ Path1=bin/rk31/rk3128_usbplug_v2.57.bin
+ NUM=2
+ LOADER1=FlashData
+ LOADER2=FlashBoot
+-FlashData=bin/rk31/rk3128_ddr_300MHz_v2.12.bin
++FlashData=bin/rk31/rk3128_ddr_128MB_v1.00.bin
+ FlashBoot=bin/rk31/rk312x_miniloader_v2.57.bin
+ [OUTPUT]
+ PATH=rk3128_loader_v2.12.256.bin
+cw@SYS3:~/sdk/312x_i/rkbin$ 
+```
+
+3.  执行脚本制作loader
+
+```shell
+   312x_i/rkbin$ tools/boot_merger --replace tools/rk_tools/ ./ ./RKBOOT/RK3128MINIALL.ini
+```
+
+   
+
+
+
+312x_i/rkbin/RKTRUST/RK3126TOS.ini 修改如下内容，重新生成trust， 然后在u-boot下执行./make.sh
+
+```
+[TOS_BIN_PATH]                                                                   
+TOSTA=bin/rk31/rk3126_tee_laddr_v1.00.bin
+ADDR=0x1800000
+OUTPUT=trust_laddr.img
+```
+
+
+
+
+
+## 13 启动流程
 
   This chapter introduce the generic boot flow for Rockchip Application Processors, including the detail about what image we may use in Rockchip platform for kind of boot path:
 
