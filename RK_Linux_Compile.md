@@ -1,3 +1,7 @@
+
+
+
+
 RK Linux编译
 
 ## 1.1 下载SDK并编译，生成固件
@@ -1597,7 +1601,7 @@ ABI. E.g: arm-unknown-linux-gnueabihf.
 
 ​	▶ target/
 ​		▶bin/
-​		▶etc/
+		▶etc/
 ​		▶lib/
 ​		▶usr/bin/
 ​		▶usr/lib/
@@ -1774,38 +1778,16 @@ cw@SYS3:~/sdk/3126i/buildroot/package/connman ls
 
 ### 8.1 编译类命令
 
-### make menuconfig
-
-▶ make menuconfig   RK SDK支持
-▶ make nconfig          RK SDK有点残废
-▶ make xconfig          RK SDK不支持
-▶ make gconfig          RK SDK不支持
-
-ncurses 实现了menuconfig/nconfig,
-Qt 实现 xconfig
-Gtk 实现 gconfig
-
-### make
-$ make 配置后编译:
-
-### make 2>&1 | tee build.log
-
-编译时候保存日志（亲测ok,用于分析出错原因有用）
-
-
-### make clean
-
-删除所有build output，只保留配置文件
-
-### make distclean
-
-删除一切，包括所有配置文件，下载文件
-
-### make V=1
-
-详细构建，默认情况下，Buildroot隐藏在生成期间运行的许多命令，只展示最重要的。
-
- 要获得完全详细的生成，请传递V=1：
+| make menuconfig            | make menuconfig   RK SDK支持 make nconfig          RK SDK有点残废make xconfig          RK SDK不支持 make gconfig          RK SDK不支持 |
+| -------------------------- | ------------------------------------------------------------ |
+|                            | make 配置后编译:                                             |
+| make                       | make 配置后编译:                                             |
+| make 2>&1 \| tee build.log | 编译时候保存日志（亲测ok,用于分析出错原因有用）              |
+| make clean                 | 删除所有build output，只保留配置文件                         |
+| make distclean             | 删除一切，包括所有配置文件，下载文件                         |
+| make V=1                   | 详细构建，默认情况下，Buildroot隐藏在生成期间运行的许多命令，只展示最重要的。要获得完全详细的生成，请传递V=1： |
+| make graph-size            | 分析文件系统大小组成，文件大小，包大小                       |
+| make graph-depends         | 生成全部软件依赖图                                           |
 
 
 ### 8.2 分析类命令
@@ -2448,3 +2430,122 @@ Make update image failed!
 Non-Secure World，所以无法访问任何安全的资源（如：某些安全 memory、安全 efuse...）。
 
  Trustzone 是 ARM 公司为了解决可能遇到的软硬件安全问题提出的一种硬件解决方案。]基于 Trustzone 这种硬件架构设计的软硬件，能在很大程度和范围内保证系统的安全性，使软硬件破解都变得相对很困难。
+
+
+
+#13 busybox
+
+- BR2_PACKAGE_BUSYBOX_CONFIG.
+
+- make busybox-menuconfig
+
+```
+cw@SYS3:~/sdk/312x_i$ ag -g busybox.config
+distro/package/busybox/busybox.config
+buildroot/board/rockchip/rv1108/busybox.config
+buildroot/board/rockchip/rk3308/busybox.config
+buildroot/board/rockchip/common/base/busybox.config
+buildroot/board/rockchip/common/tinyrootfs/busybox.config
+buildroot/board/rockchip/common/robot/base/busybox.config
+
+buildroot/output/rockchip_rk3128/build/buildroot-config/br2/package/busybox/config.h
+buildroot/output/rockchip_rk3128/build/buildroot-config/br2/package/busybox/config/fragment/files.h
+buildroot/output/rockchip_rk3128/target/busybox.config
+```
+
+cw@SYS3:~/sdk/312x_i/buildroot$ make busybox-menuconfig
+
+
+
+只在开启的时候有效
+
+If you already have a BusyBox configuration file, you can directly specify this file in the Buildroot configuration, using
+BR2_PACKAGE_BUSYBOX_CONFIG.
+
+make busybox-menuconfig //进入output/build目录下的busybox目录执行相应的Makefile文件，出现busybox配置菜单  
+
+```
+cw@SYS3:~/sdk/312x_i$ busybox
+BusyBox v1.22.1 (Ubuntu 1:1.22.0-15ubuntu1.4) multi-call binary.
+BusyBox is copyrighted by many authors between 1998-2012.
+Licensed under GPLv2. See source distribution for detailed
+copyright notices.
+
+Usage: busybox [function [arguments]...]
+   or: busybox --list[-full]
+   or: busybox --install [-s] [DIR]
+   or: function [arguments]...
+
+        BusyBox is a multi-call binary that combines many common Unix
+        utilities into a single executable.  Most people will create a
+        link to busybox for each function they wish to use and BusyBox
+        will act like whatever it was invoked as.
+
+Currently defined functions:
+        [, [[, acpid, adjtimex, ar, arp, arping, ash, awk, basename,
+        blockdev, brctl, bunzip2, bzcat, bzip2, cal, cat, chgrp, chmod,
+        chown, chpasswd, chroot, chvt, clear, cmp, cp, cpio, crond, crontab,
+        cttyhack, cut, date, dc, dd, deallocvt, depmod, devmem, df, diff,
+        dirname, dmesg, dnsdomainname, dos2unix, dpkg, dpkg-deb, du,
+        dumpkmap, dumpleases, echo, ed, egrep, env, expand, expr, false,
+        fdisk, fgrep, find, fold, free, freeramdisk, fstrim, ftpget, ftpput,
+        getopt, getty, grep, groups, gunzip, gzip, halt, head, hexdump,
+        hostid, hostname, httpd, hwclock, id, ifconfig, ifdown, ifup, init,
+        insmod, ionice, ip, ipcalc, kill, killall, klogd, last, less, ln,
+        loadfont, loadkmap, logger, login, logname, logread, losetup, ls,
+        lsmod, lzcat, lzma, lzop, lzopcat, md5sum, mdev, microcom, mkdir,
+        mkfifo, mknod, mkswap, mktemp, modinfo, modprobe, more, mount, mt,
+        mv, nameif, nc, netstat, nslookup, od, openvt, passwd, patch, pidof,
+        ping, ping6, pivot_root, poweroff, printf, ps, pwd, rdate, readlink,
+        realpath, reboot, renice, reset, rev, rm, rmdir, rmmod, route, rpm,
+        rpm2cpio, run-parts, sed, seq, setkeycodes, setsid, sh, sha1sum,
+        sha256sum, sha512sum, sleep, sort, start-stop-daemon, stat,
+        static-sh, strings, stty, su, sulogin, swapoff, swapon, switch_root,
+        sync, sysctl, syslogd, tac, tail, tar, taskset, tee, telnet,
+        telnetd, test, tftp, time, timeout, top, touch, tr, traceroute,
+        traceroute6, true, tty, tunctl, udhcpc, udhcpd, umount, uname,
+        uncompress, unexpand, uniq, unix2dos, unlzma, unlzop, unxz, unzip,
+        uptime, usleep, uudecode, uuencode, vconfig, vi, watch, watchdog,
+        wc, wget, which, who, whoami, xargs, xz, xzcat, yes, zcat
+
+```
+
+
+
+```
+cw@SYS3:~/sdk/312x_i/buildroot/output/rockchip_rk3128$ cd host/
+cw@SYS3:~/sdk/312x_i/buildroot/output/rockchip_rk3128/host$ ^C
+cw@SYS3:~/sdk/312x_i/buildroot/output/rockchip_rk3128/host$ cd ..
+cw@SYS3:~/sdk/312x_i/buildroot/output/rockchip_rk3128$ ag -g rtc_demo*
+build/rtc_demo-1.0.0/rtc_demo.c
+build/rtc_demo-1.0.0/Makefile
+build/rtc_demo-1.0.0/LICENSE
+build/rtc_demo-1.0.0/rtc_demo.h
+target/usr/lib/librtc_demo.so
+host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/librtc_demo.so
+host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/rtc_demo.h
+cw@SYS3:~/sdk/312x_i/buildroot/output/rockchip_rk3128$ rm target/usr/lib/librtc_demo.so  host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/librtc_demo.so host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/rtc_demo.h
+cw@SYS3:~/sdk/312x_i/buildroot/output/rockchip_rk3128$ 
+cw@SYS3:~/sdk/312x_i/buildroot/output/rockchip_rk3128$ 
+cw@SYS3:~/sdk/312x_i/buildroot/output/rockchip_rk3128$ 
+```
+
+# 14 字体问题
+
+1、
+
+```
+ISO/IEC 8859-1:1998，又称Latin-1或“西欧语言”
+发布时间 2014-12-31
+ISO 8859-1，正式编号为ISO/IEC 8859-1:1998，又称Latin-1或“西欧语言”，是国际标准化组织内ISO/IEC 8859的第一个8位字符集。它以ASCII为基础，在空置的0xA0-0xFF的范围内，加入96个字母及符号，藉以供使用附加符号的拉丁字母语言使用。曾推出过 ISO 8859-1:1987 版。
+
+此字符集支持部分于欧洲使用的语言，包括阿尔巴尼亚语、巴斯克语、布列塔尼语、加泰罗尼亚语、丹麦语、荷兰语、法罗语、弗里西语、加利西亚语、德语、格陵兰语、冰岛语、爱尔兰盖尔语、意大利语、拉丁语、卢森堡语、挪威语、葡萄牙语、里托罗曼斯语、苏格兰盖尔语、西班牙语及瑞典语。
+
+英语虽然没有重音字母，但仍会标明为ISO/IEC 8859-1编码。除此之外，欧洲以外的部分语言，如南非荷兰语、斯瓦希里语、印尼语及马来语、菲律宾他加洛语等也可使用ISO/IEC 8859-1编码。
+```
+
+
+
+![1](F:\github\Docs\RK_Linux_Compile.assets/1.png)
+
+![1](F:\github\Docs\RK_Linux_Compile.assets/1-1593769606528.png)
