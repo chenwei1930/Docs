@@ -2535,6 +2535,23 @@ cw@SYS3:~/sdk/312x_i/buildroot/output/rockchip_rk3128$
 1、
 
 ```
+
+rk3308_robot_defconfig
+201:CONFIG_VFAT_FS=m
+
+lsk_defconfig
+198:CONFIG_VFAT_FS=y
+
+rockchip_linux_defconfig
+501:CONFIG_VFAT_FS=y
+502:CONFIG_FAT_DEFAULT_CODEPAGE=936
+503:CONFIG_FAT_DEFAULT_IOCHARSET="utf8"
+
+```
+
+
+
+```
 ISO/IEC 8859-1:1998，又称Latin-1或“西欧语言”
 发布时间 2014-12-31
 ISO 8859-1，正式编号为ISO/IEC 8859-1:1998，又称Latin-1或“西欧语言”，是国际标准化组织内ISO/IEC 8859的第一个8位字符集。它以ASCII为基础，在空置的0xA0-0xFF的范围内，加入96个字母及符号，藉以供使用附加符号的拉丁字母语言使用。曾推出过 ISO 8859-1:1987 版。
