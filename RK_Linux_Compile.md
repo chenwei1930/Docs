@@ -1,7 +1,12 @@
 RK Linux编译
 
 ## 1.1 下载SDK并编译，生成固件
-```
+
+1. shell的环境变量，只在当前shell有效，所以不要登入多个shell，会导致环境变量缺失编译失败。
+2. 不要强制停止source envsetup.sh的执行，可能导致文件缺失，比如生成的makefile为空，这时候你要删除空的makefile再重新编译
+
+
+```shell
 1、同步代码
 $.repo/repo/repo sync --no-tags
 
@@ -39,16 +44,17 @@ rockdev
 ├── rootfs.img
 ├── trust.img
 └── uboot.img
+
 ```
+
 ## 1.2 烧写工具
+
 请用SDK里面AndroidTool.exe ，不建议复制出来，SDK里面已经配置好了各子项名称路径，你可以直接选用。如
 
 Windows工具：[AndroidTool](http://www.t-firefly.com/doc/download/page/id/4.html#windows_22)
 
-```
-    提示：AndroidTool_v2.35版本：升级MBR分区的Ubuntu固件
-         AndroidTool_v2.58版本：升级GPT分区的Ubuntu固件
-```
+提示：AndroidTool_v2.35版本：升级MBR分区的Ubuntu固件
+            AndroidTool_v2.58版本：升级GPT分区的Ubuntu固件
 
 ![image-20200309223410774](RK_Linux_Compile/image-20200309223410774.png)
 
@@ -180,7 +186,7 @@ reboot重启Ctrl+C进入uboot命令行输入  rockusb 0 mmc 0就会进入loder�
 
  ![img](RK_Linux_Compile/win_3128_tool_download.png)
 
-### 1.2.4 各分区镜像
+### 1.2.4 各分区镜像功能
 
 uboot：对应的是uboot.img。  uboot 属于bootloader的一种，是用来引导启动内核的，它的最终目的就是，从flash中读出内核，放到内存中，启动内核
 trust：对应的是trust.img， 其中含有ATF以及休眠唤醒相关的文件。安全保护使用。
@@ -191,9 +197,58 @@ boot: Android 的初始文件映像，即ramdisk，负责初始化并加载 syst
 recovery:急救模式映像，对应的是recovery.img
 system: Android 的 system 分区映像，ext4 文件系统格式，对应的是system.img
 
+
+
+分析编译的镜像：
+
+- boot.ing 是编译内核kernel生成的，
+
+- uboot.img、MiniLoaderAll.bin和trust是编译uboot生成的，
+
+- recovery和rootfs是编译buildroot生成的
+
+- userdata.img是用户数据镜像
+
+
+```shell
+cw@SYS3:~/sdk/312x_i/rockdev$ ls -l
+
+boot.img -> ../kernel/zboot.img
+MiniLoaderAll.bin -> ../u-boot/rk3128_loader_v2.12.256.bin
+misc.img -> ../device/rockchip/rockimg/wipe_all-misc.img
+oem.img
+parameter.txt -> ../device/rockchip/rk3128/parameter-buildroot.txt
+recovery.img -> ../buildroot/output/rockchip_rk3128_recovery/images/recovery.img
+rootfs.ext4 -> ../buildroot/output/rockchip_rk3128/images/rootfs.ext2
+rootfs.img -> ../buildroot/output/rockchip_rk3128/images/rootfs.ext2
+trust.img -> ../u-boot/trust.img
+uboot.img -> ../u-boot/uboot.img
+update.img
+userdata.img
+```
+
+这是制作镜像的相关脚本
+
+```
+cw@SYS3:~/sdk/312x_i/device/rockchip/common$ ls 
+.
+..
+build.sh
+gen_patches_body.sh
+mk-buildroot.sh
+mk-debian.sh
+mkfirmware.sh
+mk-fitimage.sh
+mk-image.sh
+mk-multi-npu_boot.sh
+mk-ramdisk.sh
+mk-toolchain.sh
+rkflash.sh
+Version.mk
+```
 ## 2 编译
 
-### 2.1 编译Buildroot
+### 2.1 编译Buildroot  source脚本只用来编译rootfs
 
 #### 2.1.1 source
 
@@ -320,27 +375,30 @@ cw@SYS3:~/sdk/3126i$ ./mkfirmware.sh  （打包固件）
 
 ### 2.2 编译Kernel
 
-```
+四条编译命令
+
+```shell
 cd kernel
-
-一共kernel下执行四条命令
-cw@SYS3:~/sdk/3126i/kernel$ make  ARCH=arm rockchip_linux_defconfig
-cw@SYS3:~/sdk/3126i/kernel$ make  ARCH=arm menuconfig
-这条命令生成了.config文件
-
-cw@SYS3:~/sdk/3126i/kernel$ make ARCH=arm savedefconfig
+kernel$ make ARCH=arm rockchip_linux_defconfig
+kernel$ make ARCH=arm menuconfig             //这条命令生成了.config文件
+kernel$ make ARCH=arm savedefconfig          //条命令下生成上defconfig文件
 scripts/kconfig/conf  --savedefconfig=defconfig Kconfig
-这条命令下生成上defconfig文件
+kernel$ cp defconfig arch/arm/configs/rockchip_linux_defconfig
 
-cw@SYS3:~/sdk/3126i/kernel$ cp defconfig arch/arm/configs/rockchip_linux_defconfig
-这条命令下生产了defconfig文件arch/arm/configs/rockchip_linux_defconfig
+//这条命令下生产了defconfig文件arch/arm/configs/rockchip_linux_defconfig
+```
 
-注意（为什么指定ARCH=arm，不加的话影响是啥）：
+原理分析
+
+1. 为什么指定ARCH=arm，不加的话影响是啥？
+
+```
 arch是说明用的是32位的机器，如RK3126、RK2128
 cw@SYS3:~/sdk/3328/kernel$make menuconfig ARCH=arm
 注意kernel对于32位，make menuconfig和make savedefconfig都必须加上ARCH=arm， menuconfig配置后save在拷贝到arch/arm/configs/rockchip_linux_defconfig。
-如果不加 ARCH=arm的话，默认是64位，这时候，这时候你git diff下发现rockchip_linux_defconfig会有很大的改动。
-加 ARCH=arm的话，就是32位机器，你git diff下发现rockchip_linux_defconfig就是刚才菜单的那些修改。
+
+
+如果不加 ARCH=arm的话，默认是64位，这时候，这时候你git diff下发现rockchip_linux_defconfig会有很大的改动。加 ARCH=arm的话，就是32位机器，你git diff下发现rockchip_linux_defconfig就是刚才菜单的那些修改。
 你看下下面文件搜索就会明白
 cw@SYS3:~/sdk/3126i/kernel$ ag -g "rockchip_linux_defconfig"
 arch/arm/configs/rockchip_linux_defconfig
@@ -1245,7 +1303,7 @@ export RK_ROOTFS_IMG=buildroot/output/$RK_CFG_BUILDROOT/images/rootfs.$RK_ROOTFS
 
 执行编译命令时，将会根据 `.mk` 文件进行编译。
 
-##  6 Buildroot 介绍
+##  6 Buildroot 原理介绍
 
 ### 6.1 为什么要使用buildroot？
 
@@ -1483,15 +1541,9 @@ data            init  linuxrc  mnt    proc  run            sys     timestamp    
 
 环境变量O = output
 
-## 6 官方
+### 5.8 官方
 
-
-
-
-
-### 6.2 Build tree
-
-### Build tree: $(O)
+####Build tree: $(O)
 
 output/
 
@@ -1553,7 +1605,7 @@ ABI. E.g: arm-unknown-linux-gnueabihf.
 ​		▶usr/sbin/
 ​	▶THIS_IS_NOT_YOUR_ROOT_FILESYSTEM
 ​	▶...
-​	▶ The target root filesystem
+	▶ The target root filesystem
 ​	▶ Usual Linux hierarchy
 ​	▶ Not completely ready for the target: permissions, device files, etc.
 ​	▶ Buildroot does not run as root: all files are owned by the user running Buildroot, not
@@ -1584,7 +1636,7 @@ the different packages
 ​		▶manifest.csv
 ​		▶host-manifest.csv
 ​		▶licenses.txt
-​		▶licenses/
+		▶licenses/
 ​		▶sources/
 ▶ Legal information: license of all packages, and their source code, plus a licensing
 manifest
@@ -1592,9 +1644,7 @@ manifest
 ▶ make legal-info
 ▶ Variable: LEGAL_INFO_DIR
 
-## 7 buildroot
-
-## 随手改
+## 7 buildroot 瑞芯微介绍
 
 ### 7.1 编译
 
@@ -2023,57 +2073,66 @@ kernel/
 
 ## 11 paramete文件分区说明
 
-[分区说明](  http://opensource.rock-chips.com/wiki_Boot_option)参考《Rockchip Parameter File Format》
+Rockchip android系统平台使用parameter文件来配置一些系统参数，比如固件版本，存储器分区信息等。
+Parameter文件是非常重要的系统配置文件，最好在能了解清楚各个配置功能时再做修改，避免出现parameter文
+件配置异常造成系统不能正常工作的问题。
+Parameter文件大小有限制，最大不能超过64KB。如图，烧录包括parameter.
 
-** 介绍 **
+[分区说明](  http://opensource.rock-chips.com/wiki_Boot_option)
+
+参考《Rockchip Parameter File Format》
 
 1. 分区大小@分区地址格式
 
 0x00100000@0x0005a000(rootfs) @符号之前的数值是分区大小，@符号之后的数值是分区的起始位置，
 
-2. 编译出来的大小超过paramenter定义，会编译报错
-3. 修改分区的大小是16进制，并同步修改后面分区的起始气质
-4. 现在一般是GPT分区模式分区模式
-
-
-
-Rockchip android系统平台使用parameter文件来配置一些系统参数，比如固件版本，存储器分区信息等。
-Parameter文件是非常重要的系统配置文件，最好在能了解清楚各个配置功能时再做修改，避免出现parameter文
-件配置异常造成系统不能正常工作的问题。
-Parameter文件大小有限制，最大不能超过64KB。如图，烧录包括parameter.
+1. 编译出来的大小超过paramenter定义，会编译报错
+2. 修改分区的大小是16进制，并同步修改后面分区的起始气质
+3. 现在一般是GPT分区模式分区模式
 
 ```
 图一：GPT分区模式 （瑞芯微电子一般使用这个）
 图二：传统cmdline分区模式
 ```
 
+### 11.1 分区表举例rk3128/parameter-buildroot.txt
+
+```
+cw@SYS3:~/sdk/312x_i/rockdev$ more /home/cw/sdk/312x_i/device/rockchip/
+FIRMWARE_VER: 8.1
+MACHINE_MODEL: RK3128
+MACHINE_ID: 007
+MANUFACTURER: RK3128
+MAGIC: 0x5041524B
+ATAG: 0x00200800
+MACHINE: 3128
+CHECK_MASK: 0x80
+PWR_HLD: 0,0,A,0,1
+TYPE: GPT
+CMDLINE: mtdparts=rk29xxnand:0x00002000@0x00004000(uboot),0x00002000@0x00006000(trust),0x00002000@0x00008000(misc),0x00010000@0x0000a000(boot),0x00010000
+@0x0001a000(recovery),0x00010000@0x0002a000(backup),0x00020000@0x0003a000(oem),0x00100000@0x0005a000(rootfs),-@0x0015a000(userdata:grow)
+uuid:rootfs=614e0000-0000-4b53-8000-1d28000054a9
+```
+
+### 11.2 分区表定义
+
+
+| FIRMWARE_VER:8.1     | 固件版本，打包updata.img时会使用到，升级工具会根据这个识别固件版本。 |
+| -------------------- | ------------------------------------------------------------ |
+| MACHINE_MODEL:RK3326 | 机器型号，打包updata.img使用，不同的项目，可以自己修改，用于升级工具显示。在recovery里面升级固件时 |
+| MACHINE_ID:007       | 产品开发ID，可以为字符和数字组合，打包updata.img使用，不同的项目使用不同的ID，可以用于识别机器机 型。在recovery里面升级固件时可以用于判断固件是否匹配。 |
+| MANUFACTURER: rk3326 | 厂商信息，打包updata.img使用，可以自己修改，用于升级工具显示。 |
+| MAGIC: 0x5041524B    | 魔数MAGIC，不能修改，一些新的AP使用DTS，这一项没有用，为了兼容，不要删除或修改。 |
+| ATAG: 0x60000800     | ATAG，不能修改，一些新的AP使用DTS，这一项没有用，为了兼容，不要删除或修改。 |
+| MACHINE: 3226        | 内核识别用，不能修改，这个定义和内核匹配。RK29xx识别码：MACHINE: 2929RK292x识别码：MACHINE: 2928RK3066识别码：MACHINE: 3066RK3326识别码：MACHINE: 3326 |
+| CHECK_MASK: 0x80     | 保留，不能修改。                                             |
+| TYPE: GPT            | 指定该文件CMDLINE里面定义的分区用于创建GPT使用，不会烧录到NVM（NAND，EMMC等）存储器件里面。 |
+| CMDLINE：            | console=ttyFIQ0 androidboot.console=ttyFIQ0，串口定义。      |
+
 ![image-20200624151316516](RK_Linux_Compile.assets/image-20200624151316516.png)
 
 ```
-3.1. FIRMWARE_VER:8.1
-固件版本，打包updata.img时会使用到，升级工具会根据这个识别固件版本。
-3.2. MACHINE_MODEL:RK3326
-机器型号，打包updata.img使用，不同的项目，可以自己修改，用于升级工具显示。在recovery里面升级固件时
-可以用于判断固件是否匹配
-3.3. MACHINE_ID:007
-产品开发ID，可以为字符和数字组合，打包updata.img使用，不同的项目使用不同的ID，可以用于识别机器机
-型。在recovery里面升级固件时可以用于判断固件是否匹配。
-3.4. MANUFACTURER: rk3326
-厂商信息，打包updata.img使用，可以自己修改，用于升级工具显示。
-3.5. MAGIC: 0x5041524B
-魔数MAGIC，不能修改，一些新的AP使用DTS，这一项没有用，为了兼容，不要删除或修改。
-3.6. ATAG: 0x60000800
-ATAG，不能修改，一些新的AP使用DTS，这一项没有用，为了兼容，不要删除或修改。
-3.7. MACHINE: 3226
-内核识别用，不能修改，这个定义和内核匹配。
-RK29xx识别码：MACHINE: 2929
-RK292x识别码：MACHINE: 2928
-RK3066识别码：MACHINE: 3066
-RK3326识别码：MACHINE: 3326
-3.8. CHECK_MASK: 0x80
-保留，不能修改。
-3.9. TYPE: GPT
-指定该文件CMDLINE里面定义的分区用于创建GPT使用，不会烧录到NVM（NAND，EMMC等）存储器件里面。
+
 3.10. CMDLINE：
 console=ttyFIQ0 androidboot.console=ttyFIQ0，串口定义。
 initrd=0x62000000,0x00800000，第一个参数是boot.img加载到sdram的位置，第二个参数为ramdisk的大小，
@@ -2123,24 +2182,10 @@ TRUST 0x4000 0x6000 0x4000 4MB
 
 
 
-```
-cw@SYS3:~/sdk/312x_i/rockdev$ more /home/cw/sdk/312x_i/device/rockchip/rk3128/parameter-buildroot.txt
-FIRMWARE_VER: 8.1
-MACHINE_MODEL: RK3128
-MACHINE_ID: 007
-MANUFACTURER: RK3128
-MAGIC: 0x5041524B
-ATAG: 0x00200800
-MACHINE: 3128
-CHECK_MASK: 0x80
-PWR_HLD: 0,0,A,0,1
-TYPE: GPT
-CMDLINE: mtdparts=rk29xxnand:0x00002000@0x00004000(uboot),0x00002000@0x00006000(trust),0x00002000@0x00008000(misc),0x00010000@0x0000a000(boot),0x00010000
-@0x0001a000(recovery),0x00010000@0x0002a000(backup),0x00020000@0x0003a000(oem),0x00100000@0x0005a000(rootfs),-@0x0015a000(userdata:grow)
-uuid:rootfs=614e0000-0000-4b53-8000-1d28000054a9
-```
 
-**编译时候遇到生成的rootfs大于parameter文件限制的情况**
+### 11.3 分区表和编译关系
+
+编译时候遇到生成的rootfs大于parameter文件限制的情况
 
 ```
 tune2fs 1.43.9 (8-Feb-2018)
@@ -2238,6 +2283,116 @@ OUTPUT=trust_laddr.img
 ```
 
 
+
+关于rkbin下的配置文件，修改后,重新编译u-boot
+
+```
+cw@SYS3:~/sdk/312x_i/u-boot$ ./make.sh
+  CHK     include/config/uboot.release
+  CHK     include/generated/timestamp_autogenerated.h
+  UPD     include/generated/timestamp_autogenerated.h
+  CHK     include/config.h
+  CFG     u-boot.cfg
+  CHK     include/generated/version_autogenerated.h
+  CHK     include/generated/generic-asm-offsets.h
+  CHK     include/generated/asm-offsets.h
+  HOSTCC  tools/mkenvimage.o
+  HOSTCC  tools/fit_image.o
+  HOSTCC  tools/image-host.o
+  HOSTCC  tools/dumpimage.o
+  HOSTCC  tools/mkimage.o
+  HOSTCC  tools/rockchip/boot_merger.o
+  HOSTCC  tools/rockchip/loaderimage.o
+  HOSTLD  tools/mkenvimage
+  HOSTLD  tools/loaderimage
+  HOSTLD  tools/dumpimage
+  HOSTLD  tools/mkimage
+  HOSTLD  tools/boot_merger
+  CC      drivers/usb/gadget/f_fastboot.o
+  CC      cmd/version.o
+  CC      lib/display_options.o
+  CC      common/main.o
+  LD      cmd/built-in.o
+  LD      common/built-in.o
+  LD      lib/built-in.o
+  LD      drivers/usb/gadget/built-in.o
+  LD      u-boot
+  OBJCOPY u-boot.srec
+  OBJCOPY u-boot-nodtb.bin
+  SYM     u-boot.sym
+make[2]: 'arch/arm/dts/rk3126-evb.dtb' is up to date.
+  COPY    u-boot.dtb
+  CAT     u-boot-dtb.bin
+  COPY    u-boot.bin
+  ALIGN   u-boot.bin
+  CFGCHK  u-boot.cfg
+
+ load addr is 0x60000000!
+pack input u-boot.bin 
+pack file size: 715440(698 KB)
+crc = 0x540e3c8e
+uboot version: U-Boot 2017.09-gcd1c982e9a #cw (Jul 02 2020 - 14:10:53)
+pack uboot.img success! 
+pack uboot okay! Input: u-boot.bin
+
+ load addr is 0x61800000!
+pack input /home/cw/sdk/312x_i/rkbin/bin/rk31/rk3126_tee_laddr_v1.00.bin 
+pack file size: 619256(604 KB)
+crc = 0x5dac0a49
+trustos version: Trust os
+pack trust_laddr.img success! 
+pack trust okay! Input: /home/cw/sdk/312x_i/rkbin/RKTRUST/RK3128TOS.ini
+out:rk3128_loader_v2.12.256.bin
+fix opt:rk3128_loader_v2.12.256.bin
+merge success(rk3128_loader_v2.12.256.bin)
+/home/cw/sdk/312x_i/u-boot
+pack rk3128_loader_v2.12.256.bin okay! Input: /home/cw/sdk/312x_i/rkbin/RKBOOT/RK3128MINIALL.ini
+
+Platform RK3128 is build OK, with exist .config
+```
+
+```\
+Making /home/cw/sdk/312x_i/rockdev/userdata.img from /home/cw/sdk/312x_i/device/rockchip/userdata/userdata_normal with size(5M)
+0+0 records in
+0+0 records out
+0 bytes copied, 1.9893e-05 s, 0.0 kB/s
+mke2fs 1.43.9 (8-Feb-2018)
+Discarding device blocks: done                            
+Creating filesystem with 5120 1k blocks and 1280 inodes
+
+Allocating group tables: done                            
+Writing inode tables: done                            
+Copying files into the device: done
+Writing superblocks and filesystem accounting information: done
+
+tune2fs 1.43.9 (8-Feb-2018)
+Setting maximal mount count to -1
+Setting interval between checks to 0 seconds
+create uboot.img...done.
+ error: /home/cw/sdk/312x_i/u-boot/trust.img not found! 
+create loader...done.
+create boot.img...done.
+/home/cw/sdk/312x_i/device/rockchip/rk3128/parameter-buildroot.txt
+0x00002000@0x00004000(uboot),0x00002000@0x00006000(trust),0x00002000@0x00008000(misc),0x00010000@0x0000a000(boot),0x00010000@0x0001a000(recovery),0x00010000@0x0002a000(backup),0x00020000@0x0003a000(oem),0x00200000@0x0005a000(rootfs),-@0x0025a000(userdata:grow)
+ Image: image in rockdev is ready 
+Make image ok!
+Make update.img
+start to make update.img...
+Android Firmware Package Tool v1.66
+------ PACKAGE ------
+Add file: ./package-file
+Add file: ./package-file done,offset=0x800,size=0x28f,userspace=0x1
+Add file: ./Image/MiniLoaderAll.bin
+Add file: ./Image/MiniLoaderAll.bin done,offset=0x1000,size=0x3194e,userspace=0x64
+Add file: ./Image/parameter.txt
+Add file: ./Image/parameter.txt done,offset=0x33000,size=0x20b,userspace=0x1
+Add file: ./Image/trust.img
+Error:<AddFile> open file failed,err=2!
+------ FAILED ------
+Press any key to quit:
+mv: cannot stat '/home/cw/sdk/312x_i/tools/linux/Linux_Pack_Firmware/rockdev/update.img': No such file or directory
+Make update image failed!
+```
 
 
 
