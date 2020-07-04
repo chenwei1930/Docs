@@ -48,8 +48,59 @@ rockdev
 ├── rootfs.img
 ├── trust.img
 └── uboot.img
+```
+
+
+
+小技巧：编译之后，查看环境变量中各项配置：确定脚本执行的信息，以firefly为例
 
 ```
+cw@SYS3:~/sdk/312x_i$ env
+RK_MISC=wipe_all-misc.img   
+RK_ARCH=arm        系统架构arch =arm 这说明是32位， 如果arch=arm64说明是64位
+XDG_SESSION_ID=20953
+RK_ROOTFS_TYPE=ext4   rootfs文件系统类型
+TERM=xterm
+SHELL=/bin/bash        
+SSH_CLIENT=172.16.21.104 1493 22
+RK_ROOTFS_IMG=rockdev/rootfs.ext4   rootfs使用的文件系统
+LIBRARY_PATH=/usr/local/lib
+RK_UBOOT_DEFCONFIG=rk3128            uboot使用的默认配置
+OLDPWD=/home/cw/sdk/312x_i/kernel        
+RK_CFG_PCBA=rockchip_rk3128_pcba
+RK_PARAMETER=parameter-buildroot.txt
+SSH_TTY=/dev/pts/47
+USER=cw
+RK_JOBS=12
+RK_USERDATA_DIR=userdata_normal
+RK_OEM_FS_TYPE=ext2
+MAIL=/var/mail/cw
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+PWD=/home/cw/sdk/312x_i
+RK_BOOT_IMG=zboot.img
+LANG=en_US.UTF-8
+RK_KERNEL_DTS=rk3128-fireprime          内核使用的dts
+RK_KERNEL_DEFCONFIG=rockchip_linux_defconfig  内核defconfig
+RK_USERDATA_FS_TYPE=ext2
+TARGET_OUTPUT_DIR=/home/cw/sdk/312x_i/buildroot/output/rockchip_rk3128
+SHLVL=1
+HOME=/home/cw
+RK_CFG_RECOVERY=rockchip_rk3128_recovery
+RK_TARGET_PRODUCT=rk3128
+RK_CFG_BUILDROOT=rockchip_rk3128
+LOGNAME=cw
+RK_OEM_DIR=oem_normal
+XDG_DATA_DIRS=/usr/local/share:/usr/share:/var/lib/snapd/desktop
+SSH_CONNECTION=172.16.21.104 1493 10.10.10.190 22
+RK_KERNEL_IMG=kernel/arch/arm/boot/zImage
+XDG_RUNTIME_DIR=/run/user/1032
+_=/usr/bin/env
+cw@SYS3:~/sdk/312x_i$ 
+```
+
+
+
+
 
 ## 1.2 烧写工具
 
@@ -62,7 +113,7 @@ Windows工具：[AndroidTool](http://www.t-firefly.com/doc/download/page/id/4.ht
 
 ![image-20200309223410774](RK_Linux_Compile/image-20200309223410774.png)
 
-### 1.2.1 启动模式
+### 1.2.1 启动模式介绍
 
 Rockchip 平台硬件运行的几种模式如表所示，只有当设备处于 Maskrom，及 Loader
 模式下，才能够烧写固件，或对板上固件进行更新操作。
@@ -2213,8 +2264,6 @@ lrwxrwxrwx 1 cw cw   11 Jun 24 09:32 rootfs.ext4 -> rootfs.ext2
 
 ## 12 DDR
 
-
-
 1. 将DDR初始化的固件存放于rkbin/bin/rk31/rk3128_ddr_128MB_v1.00.bin
 2. 修改对应的配置文件RK3128MINIALL.ini，制定新的路径
 
@@ -2251,9 +2300,7 @@ cw@SYS3:~/sdk/312x_i/rkbin$
    312x_i/rkbin$ tools/boot_merger --replace tools/rk_tools/ ./ ./RKBOOT/RK3128MINIALL.ini
 ```
 
-   
-
-
+ 
 
 312x_i/rkbin/RKTRUST/RK3126TOS.ini 修改如下内容，重新生成trust， 然后在u-boot下执行./make.sh
 
@@ -2263,8 +2310,6 @@ TOSTA=bin/rk31/rk3126_tee_laddr_v1.00.bin
 ADDR=0x1800000
 OUTPUT=trust_laddr.img
 ```
-
-
 
 关于rkbin下的配置文件，修改后,重新编译u-boot
 
@@ -2532,7 +2577,7 @@ cw@SYS3:~/sdk/312x_i/buildroot/output/rockchip_rk3128$
 
 # 14 字体问题
 
-1、
+1、查找内核下面的
 
 ```
 
@@ -2551,6 +2596,10 @@ rockchip_linux_defconfig
 
 
 
+
+
+
+
 ```
 ISO/IEC 8859-1:1998，又称Latin-1或“西欧语言”
 发布时间 2014-12-31
@@ -2565,4 +2614,148 @@ ISO 8859-1，正式编号为ISO/IEC 8859-1:1998，又称Latin-1或“西欧语�
 
 ![1](F:\github\Docs\RK_Linux_Compile.assets/1.png)
 
-![1](F:\github\Docs\RK_Linux_Compile.assets/1-1593769606528.png)
+# 15 kernel
+
+```shell
+cd kernel
+make ARCH=arm rockchip_linux_defconfig       //32位机器才加ARCH=arm
+make ARCH=arm menuconfig
+vi .config
+make ARCH=arm savedefconfig   把.config格式改为savedefconfig格式，格式不一样，所以转换下
+vi defconfig
+diff defconfig arch/arm/configs/rockchip_linux_defconfig
+cp defconfig arch/arm/configs/rockchip_linux_defconfig             
+git diff
+git checkout
+git diff
+git checkout arch/
+rm .config
+```
+
+
+
+## 15.1 新加设备树
+
+Linux Kernel 目前支持多平台使用 dts，RK 平台的 dts 文件存放于：
+ARM:arch/arm/boot/dts/
+ARM64 :arch/arm64/boot/dts/rockchip
+
+```shell
+一般 dts 文件的命名规则为”soc-board_name.dts”，如 rk3308-evb-dmic-i2s-v10.dts。
+soc 指的是芯片名称，board_name 一般是根据板子丝印来命名。
+如果你的板子是一体板，则只需要一个 dts 文件来描述即可。
+
+rk3308-ai-va-v10.dts
+└── rk3308.dtsi
+
+如果硬件设计上是核心板和底板的结构，或者产品有多个产品形态，可以把公用的硬件描述放
+在 dtsi 文件，而 dts 文件则描述不同的硬件模块，并且通过 include "xxx.dtsi"将公用的硬件描述
+包含进来。
+├── rk3308-evb-amic-v10.dts
+│ ├── rk3308-evb-ext-v10.dtsi
+│ └── rk3308-evb-v10.dtsi
+│ └── rk3308.dtsi
+└── rk3308-evb-dmic-i2s-v10.dts
+├── rk3308-evb-ext-v10.dtsi
+└── rk3308-evb-v10.dtsi
+└── rk3308.dtsi
+```
+
+dts  语法的几个说明
+dts 语法可以像 c/c++一样，通过#include xxx.dtsi 来包含其他公用的 dts 数据。dts 文件
+将继承包含的 dtsi 文件的所有设备节点的属性和值。
+如 property 在多个 dts/dtsi 文件被定义，它的值最终为 dts 的定义。所有和芯片相关的控制
+器节点都会被定义在 soc.dtsi，如需使能该设备功能，需要在 dts 文件中设置其 status
+为”okay"。
+
+### 1  创建 dts  文件
+
+```
+diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+index 16859011d6b0..1b3c3c383142 100644
+--- a/arch/arm/boot/dts/Makefile
++++ b/arch/arm/boot/dts/Makefile
+@@ -524,6 +524,7 @@ dtb-$(CONFIG_ARCH_ROCKCHIP) += \
+        rk3126-bnd-m88-emmc.dtb \
+        rk3126-evb.dtb \
+        rk3126-linux.dtb \
++       rk3126-linux-dpf.dtb \
+        rk3128-fireprime.dtb \
+        rk3128h-box.dtb \
+        rk3128h-box-avb.dtb \
+```
+
+### 2 修改 dts  所在目录的 Makefile
+
+```shell
+
+diff --git a/arch/arm/boot/dts/rk3126-linux-dpf.dts b/arch/arm/boot/dts/rk3126-linux-dpf.dts
+new file mode 100755
+index 000000000000..6b7bcc86a3fe
+--- /dev/null
++++ b/arch/arm/boot/dts/rk3126-linux-dpf.dts
+@@ -0,0 +1,481 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Copyright (c) 2019 F
++ 
++ 
++ uzhou Rockchip Electronics Co., Ltd
++ */
++
++/dts-v1/;
++#include <dt-bindings/gpio/gpio.h>
++#include <dt-bindings/input/input.h>
++#include <dt-bindings/pinctrl/rockchip.h>
+
+```
+
+编译 kenrel 的时候可以直接 make dts-name.img（如 rk3308-evb-amic-v10.img），即
+可生成对应的 resource.img（包含 dtb 数据）。
+
+### 3 修改编译脚本,指向最新的设备树
+
+```
+cw@SYS3:~/3126c_inner/device/rockchip$ ls -al
+total 92
+drwxrwxr-x 22 cw cw 4096 May 30  2019 .
+drwxrwxr-x  3 cw cw 4096 May 30  2019 ..
+lrwxrwxrwx  1 cw cw   22 May 30  2019 .BoardConfig.mk -> rk3126c/BoardConfig.mk
+drwxrwxr-x  2 cw cw 4096 Jun 30  2019 common
+drwxrwxr-x  2 cw cw 4096 Jul  2  2019 .git
+-rw-rw-r--  1 cw cw   16 May 30  2019 .gitignore
+drwxrwxr-x  6 cw cw 4096 May 30  2019 oem
+drwxrwxr-x  2 cw cw 4096 May 30  2019 px30
+drwxrwxr-x  2 cw cw 4096 May 30  2019 px3se
+drwxrwxr-x  3 cw cw 4096 May 30  2019 rk1808
+drwxrwxr-x  2 cw cw 4096 May 30  2019 rk3036
+drwxrwxr-x  2 cw cw 4096 Jun 30  2019 rk3126c
+drwxrwxr-x  2 cw cw 4096 May 30  2019 rk3128
+drwxrwxr-x  2 cw cw 4096 May 30  2019 rk3128h
+drwxrwxr-x  2 cw cw 4096 May 30  2019 rk3229
+drwxrwxr-x  2 cw cw 4096 May 30  2019 rk3288
+drwxrwxr-x 16 cw cw 4096 May 30  2019 rk3308
+drwxrwxr-x  2 cw cw 4096 May 30  2019 rk3326
+drwxrwxr-x  2 cw cw 4096 May 30  2019 rk3328
+drwxrwxr-x  2 cw cw 4096 May 30  2019 rk3399
+drwxrwxr-x  2 cw cw 4096 May 30  2019 rk3399pro
+drwxrwxr-x  2 cw cw 4096 May 30  2019 rk3399pro-npu
+drwxrwxr-x  2 cw cw 4096 Jun 26  2019 rockimg
+drwxrwxr-x  4 cw cw 4096 May 30  2019 userdata
+cw@SYS3:~/3126c_inner/device/rockchip$ vim .BoardConfig.mk 
+cw@SYS3:~/3126c_inner/device/rockchip$ 
+cw@SYS3:~/3126c_inner/device/rockchip$ git d
+diff --git a/rk3126c/BoardConfig.mk b/rk3126c/BoardConfig.mk
+index cff7bb2..ee248ce 100755
+--- a/rk3126c/BoardConfig.mk
++++ b/rk3126c/BoardConfig.mk
+@@ -7,7 +7,7 @@ export RK_UBOOT_DEFCONFIG=rk3126
+ # Kernel defconfig
+ export RK_KERNEL_DEFCONFIG=rockchip_linux_defconfig
+ # Kernel dts
+-export RK_KERNEL_DTS=rk3126-linux
++export RK_KERNEL_DTS=rk3126-linux-dpf
+ # boot image type
+ export RK_BOOT_IMG=zboot
+```
+
