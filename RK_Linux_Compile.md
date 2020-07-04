@@ -7,7 +7,7 @@ RK Linux编译
 ## 1.1 下载SDK并编译，生成固件
 
 1. shell的环境变量，只在当前shell有效，所以不要登入多个shell，会导致环境变量缺失编译失败。
-2. 不要强制停止source envsetup.sh的执行，可能导致文件缺失，比如生成的makefile为空，这时候你要删除空的makefile再重新编译
+2. 不要强制停止source envsetup.sh的执行，可能导致文件缺失，比如生成的makefile为空，这时候你要删除空的makefile再重新编译。如果已经输入数字错误，就在输入一个错误数字，按回车，脚本提示数字非法
 
 
 ```shell
@@ -1326,38 +1326,6 @@ device/rockchip/common/mk-buildroot.sh
 
 
 
-## 5 firfly参考
-
-### 配置编译文件
-
-选择开发板对应的配置文件。配置文件会链接到 `device/rockchip/.BoardConfig.mk`，查看该文件可确认当前所使用的配置文件：
-
-```
-./build.sh firefly-rk3288.mk
-
-# 文件路径在 `device/rockchip/rk3288/firefly-rk3288.mk`
-```
-
-`.mk` 文件默认配置为编译 Buildroot 固件，下面对 Buildroot 相关配置进行说明：
-
-```
-# Buildroot config
-export RK_CFG_BUILDROOT=rockchip_rk3288     # Buildroot 根文件系统配置文件
-
-# 文件路径在 `buildroot/configs/rockchip_rk3288_defconfig`
-# Recovery config
-export RK_CFG_RECOVERY=rockchip_rk3288_recovery     # recovery 模式下根文件系统配置文件（可省略）
-
-# 文件路径在 `buildroot/configs/rockchip_rk3288_recovery_defconfig`
-# rootfs image path
-export RK_ROOTFS_IMG=buildroot/output/$RK_CFG_BUILDROOT/images/rootfs.$RK_ROOTFS_TYPE   # Buildroot 根文件系统镜像路径
-
-# 本例中，文件路径在 `buildroot/output/rockchip_rk3288/images/rootfs.ext4`
-# 注：该文件路径将在首次编译根文件系统后生成
-```
-
-执行编译命令时，将会根据 `.mk` 文件进行编译。
-
 ##  6 Buildroot 原理介绍
 
 ### 6.1 为什么要使用buildroot？
@@ -1699,7 +1667,7 @@ manifest
 ▶ make legal-info
 ▶ Variable: LEGAL_INFO_DIR
 
-## 7 buildroot 瑞芯微介绍
+## 7 Buildroot 瑞芯微介绍
 
 ### 7.1 编译
 
@@ -1711,17 +1679,97 @@ $ make  （或./build.sh rootfs 其实就是mak）
 $ ./mkfirmware.sh        生成固件所烧写镜像
 ```
 
-### 7.2 切换单板
+### 7.2 切换单板（申明环境变量，用于 envsetup.sh使用）
 
-source是改的是rootfs的配置
+source是改的是rootfs的配置，
+
+切换.BoardConfig.mk是一个软链接，他指向linux不同芯片的默认配置
 
 ```
 root@c:/home/c/linux/v2/device/rockchip# ln -sf rk3128/BoardConfig.mk .BoardConfig.mk
+A<- B 
 root@c:/home/c/linux/v2# source envsetup.sh
 root@c:/home/c/linux/v2# ./build.sh
 ```
 
-### 7.3 编译原理
+不同的芯片，申明了不同的环境变量表示了dts等配置
+
+```shell
+cw@SYS3:~/sdk/312x_i/device/rockchip$ cat .BoardConfig.mk 
+#!/bin/bash
+
+# Target arch
+export RK_ARCH=arm
+# Uboot defconfig
+export RK_UBOOT_DEFCONFIG=rk3128
+# Kernel defconfig
+export RK_KERNEL_DEFCONFIG=rockchip_linux_defconfig
+# Kernel dts
+export RK_KERNEL_DTS=rk3128-fireprime
+# boot image type
+export RK_BOOT_IMG=zboot.img
+# kernel image path
+export RK_KERNEL_IMG=kernel/arch/arm/boot/zImage
+# parameter for GPT table
+export RK_PARAMETER=parameter-buildroot.txt
+# Buildroot config
+export RK_CFG_BUILDROOT=rockchip_rk3128
+# Recovery config
+export RK_CFG_RECOVERY=rockchip_rk3128_recovery
+# Pcba config
+export RK_CFG_PCBA=rockchip_rk3128_pcba
+# Build jobs
+export RK_JOBS=12
+# target chip
+export RK_TARGET_PRODUCT=rk3128
+# Set rootfs type, including ext2 ext4 squashfs
+export RK_ROOTFS_TYPE=ext4
+# rootfs image path
+export RK_ROOTFS_IMG=rockdev/rootfs.${RK_ROOTFS_TYPE}# Buildroot 根文件系统镜像路径
+# Set oem partition type, including ext2 squashfs
+export RK_OEM_FS_TYPE=ext2
+# Set userdata partition type, including ext2, fat
+export RK_USERDATA_FS_TYPE=ext2
+#OEM config
+export RK_OEM_DIR=oem_normal
+#userdata config
+export RK_USERDATA_DIR=userdata_normal
+#misc image
+export RK_MISC=wipe_all-misc.img
+cw@SYS3:~/sdk/312x_i/device/rockchi
+```
+
+
+
+选择开发板对应的配置文件。配置文件会链接到 `device/rockchip/.BoardConfig.mk`，查看该文件可确认当前所使用的配置文件：
+
+```
+./build.sh firefly-rk3288.mk
+
+# 文件路径在 `device/rockchip/rk3288/firefly-rk3288.mk`
+
+```
+
+`.mk` 文件默认配置为编译 Buildroot 固件，下面对 Buildroot 相关配置进行说明：
+
+```
+# Buildroot config
+export RK_CFG_BUILDROOT=rockchip_rk3288     # Buildroot 根文件系统配置文件
+
+# 文件路径在 `buildroot/configs/rockchip_rk3288_defconfig`
+# Recovery config
+export RK_CFG_RECOVERY=rockchip_rk3288_recovery     # recovery 模式下根文件系统配置文件（可省略）
+
+# 文件路径在 `buildroot/configs/rockchip_rk3288_recovery_defconfig`
+# rootfs image path
+export RK_ROOTFS_IMG=buildroot/output/$RK_CFG_BUILDROOT/images/rootfs.$RK_ROOTFS_TYPE   # Buildroot 根文件系统镜像路径
+
+# 本例中，文件路径在 `buildroot/output/rockchip_rk3288/images/rootfs.ext4`
+# 注：该文件路径将在首次编译根文件系统后生成
+
+```
+
+执行编译命令时，将会根据 `.mk` 文件进行编译。7.3 编译原理
 
  针对output/**build**/某个包进行了修改，需要单独重新编译该软件包，直接编译Buildroot是不起效果的。
 
@@ -1825,7 +1873,7 @@ cw@SYS3:~/sdk/3126i/buildroot/package/connman ls
 0001-tethering-Reorder-header-includes.patch  0002-nat-build-failure.patch  Config.in  connman.hash  connman.mk  S45connman
 ```
 
-## 8 buildroot命令
+## 8 Buildroot命令
 
 ### 8.1 编译类命令
 
@@ -2759,3 +2807,4 @@ index cff7bb2..ee248ce 100755
  export RK_BOOT_IMG=zboot
 ```
 
+重新编译即可
