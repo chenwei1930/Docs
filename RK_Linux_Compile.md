@@ -2684,9 +2684,14 @@ rm .config
 
 ## 15.1 新加设备树
 
-Linux Kernel 目前支持多平台使用 dts，RK 平台的 dts 文件存放于：
+- 设备树文件路径
+
+  Linux Kernel 目前支持多平台使用 dts，RK 平台的 dts 文件存放于：
+
 ARM:arch/arm/boot/dts/
 ARM64 :arch/arm64/boot/dts/rockchip
+
+- dts和dtsi
 
 ```shell
 一般 dts 文件的命名规则为”soc-board_name.dts”，如 rk3308-evb-dmic-i2s-v10.dts。
@@ -2709,7 +2714,8 @@ rk3308-ai-va-v10.dts
 └── rk3308.dtsi
 ```
 
-dts  语法的几个说明
+- dts  语法的几个说明
+
 dts 语法可以像 c/c++一样，通过#include xxx.dtsi 来包含其他公用的 dts 数据。dts 文件
 将继承包含的 dtsi 文件的所有设备节点的属性和值。
 如 property 在多个 dts/dtsi 文件被定义，它的值最终为 dts 的定义。所有和芯片相关的控制
@@ -2807,4 +2813,4 @@ index cff7bb2..ee248ce 100755
  export RK_BOOT_IMG=zboot
 ```
 
-重新编译即可
+重新编译即可 ./build.sh kernel
