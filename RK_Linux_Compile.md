@@ -460,13 +460,83 @@ arch/arm/configs/rockchip_linux_defconfig
 arch/arm64/configs/rockchip_linux_defconfig
 ```
 
-### 2.3 自动编译
+### 2.3编译UBOOT
 
-#### 2.3.1 全自动编译
+./make.sh --help  
+
+编译命令： 
+
+./make.sh [board] // [board]：configs/[board]_defconfig文件。  
+
+\1. 首次编译 
+
+```
+make.sh rk3399 // build for rk3399_defconfig ./make.sh evb-rk3399 // build for evb-rk3399_defconfig ./make.sh firefly-rk3288 // build for firefly-rk3288_defconfig
+```
+
+编译完成后的提示： 
+
+```
+Platform RK3399 is build OK, with new .config(make evb-rk3399_defconfig)
+```
+
+
+
+ \2. 二次编译 
+
+无论 32 位或 64 位平台，如果想基于当前".confifig"进行二次编译，则不需要指定[board]： 
+
+```
+./make.sh
+```
+
+编译完成后的提示： 
+
+```
+...... Platform RK3399 is build OK, with exist .config
+```
+
+3.2.4 固件生成 
+
+1. 编译完成后，最终打包生成的固件都在 U-Boot 根目录下：trust、uboot、loader。 
+
+```
+./uboot.img 
+./trust.img 
+./rk3126_loader_v2.09.247.bin
+```
+
+2. 根据固件打包的过程信息可以知道 bin 和 INI 文件的来源。 
+
+uboot.img： 
+
+ ```
+load addr is 0x60000000! // U-Boot的运行地址会被追加在打包头信息里 pack input rockdev/rk3126/out/u-boot.bin pack file size: 478737 crc = 0x840f163c uboot version: v2017.12 Dec 11 2017 pack uboot.img success! pack uboot okay! Input: rockdev/rk3126/out/u-boot.bin
+ ```
+
+loader： 
+
+```
+out:rk3126_loader_v2.09.247.bin fix opt:rk3126_loader_v2.09.247.bin merge success(rk3126_loader_v2.09.247.bin) pack loader okay! Input: /home/guest/project/rkbin/RKBOOT/RK3126MINIALL.ini
+```
+
+trust.img： 
+
+```
+load addr is 0x68400000! // trust的运行地址会被追加在打包头信息里 pack file size: 602104 crc = 0x9c178803 trustos version: Trust os pack ./trust.img success! trust.img with ta is ready pack trust okay! Input: /home/guest/project/rkbin/RKTRUST/RK3126TOS.ini
+```
+
+注意：make clean/mrproper/distclean 会把编译阶段的中间文件都清除，包括 bin 和 img 文件。 
+
+请用户不要把重要的 bin 或者 img 文件放在 U-Boot 的根目录下。
+
+### 2.4 自动编译
+
+#### 2.4.1 全自动编译
 
 ./build.sh   全自动编译会编译并打包固件 `update.img`，生成固件目录 `rockdev/`：
 
-#### 2.3.2 部分编译
+#### 2.4.2 部分编译
 
 - 编译 kernel:      ./build.sh kernel
 
@@ -476,7 +546,7 @@ arch/arm64/configs/rockchip_linux_defconfig
 
   ./build.sh buildroot 注：确保作为普通用户编译 Buildroot 根文件系统，避免不必要的错误。编译过程中会自动下载所需软件包，请保持联网状态
 
-#### 2.3.3 更新链接&打包固件
+#### 2.4.3 更新链接&打包固件
 
 - 更新链接
 
