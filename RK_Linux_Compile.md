@@ -1971,7 +1971,7 @@ make graph-size produces:
 ▶ graph-size.pdf,                             生成每个包消耗size的饼图
 
 ```
-cw@SYS3:~/sdk/3126i$ make graph-depends
+cw@SYS3:~/sdk/3126i$ make graph-size
 umask 0022 && make -C /home/cw/sdk/3126i/buildroot O=/home/cw/sdk/3126i/buildroot/output/rockchip_rk3128 graph-depends
 Getting targets
 Getting dependencies for ['QLauncher', 'alsa-config', 'alsa-lib', 'alsa-plugins', 'alsa-utils', 'android-tools', 'bash', 'busybox', 'cairo', 'camera_engine_rkisp', 'connman',  -libzlib', 'host-xlib_libX11', 'host-xlib_libxkbfile', 'host-mpfr', 'host-xorgproto', 'host-libopenssl', 'host-xlib_libXdmcp', 'host-xlib_libXau', 'host-xlib_xtrans', 'host-libxcb', 'host-libxslt', 'host-xcb-proto', 'host-libpthread-stubs']
@@ -2224,6 +2224,16 @@ kernel/
 
 ## 11 paramete文件分区说明
 
+计算方法：
+
+大小*512字节每块/1024/1024 =   ? （MB）
+
+计算技巧： 在12进制下 /0x800 ， 结果再转10进制
+
+
+
+
+
 Rockchip android系统平台使用parameter文件来配置一些系统参数，比如固件版本，存储器分区信息等。
 Parameter文件是非常重要的系统配置文件，最好在能了解清楚各个配置功能时再做修改，避免出现parameter文
 件配置异常造成系统不能正常工作的问题。
@@ -2380,7 +2390,7 @@ lrwxrwxrwx 1 cw cw   11 Jun 24 09:32 rootfs.ext4 -> rootfs.ext2
 
 ![image-20200624163709370](RK_Linux_Compile.assets/image-20200624163709370.png)
 
-## 12 DDR
+## 12 DDR改128M
 
 1. 将DDR初始化的固件存放于rkbin/bin/rk31/rk3128_ddr_128MB_v1.00.bin
 2. 修改对应的配置文件RK3128MINIALL.ini，制定新的路径
@@ -2587,12 +2597,9 @@ Make update image failed!
 
 
 
-# 12 TrustZone 
+# 12   系统启动流程 
 
-目前 Rockchip 所有的平台都启用了 ARM TrustZone 技术，在整个 TrustZone 的架构中 U-Boot 属于
-Non-Secure World，所以无法访问任何安全的资源（如：某些安全 memory、安全 efuse...）。
-
- Trustzone 是 ARM 公司为了解决可能遇到的软硬件安全问题提出的一种硬件解决方案。]基于 Trustzone 这种硬件架构设计的软硬件，能在很大程度和范围内保证系统的安全性，使软硬件破解都变得相对很困难。
+Bootloader很小，一般在几十KB甚至几百KB，负责做最基本的系统初始化，并把Kernel从存储设备（EMMC/NAND）中拷贝到内存（DDR）中，kernel一般几MB到十几MB、负责控制所有的硬件和系统的调度，根文件系统和system属于用户空间的应用，根文件系统一般只有几MB，负责初始化一个最基本的上层运行环境，为system挂载打基础，system里面是主要的应用，大小几百MB设置几GB，主要的应用和库都包含在里面
 
 
 
@@ -2884,3 +2891,44 @@ index cff7bb2..ee248ce 100755
 ```
 
 重新编译即可 ./build.sh kernel
+
+
+
+# 16 TRUST
+
+ARM TrustZone [1]技术是所有 Cortex-A 类处理器的基本功能，是通过 ARM 架构安全扩展引入的。这些扩展可在 
+
+供应商、平台和应用程序中提供一致的程序员模型，同时提供真实的硬件支持的安全环境。
+
+
+
+目前 Rockchip 平台上的 64 位 SoC 平台上使用的是 ARM Trusted Firmware + OP-TEE OS 的组合；32 位 SoC 平 
+
+台上使用的是 OP-TEE OS。 
+
+
+
+Rockchip 所有的平台都启用了 ARM TrustZone 技术，在整个 TrustZone 的架构中 U-Boot 属于Non-Secure World，所以无法访问任何安全的资源（如：某些安全 memory、安全 efuse...）。 Trustzone 是 ARM 公司为了解决可能遇到的软硬件安全问题提出的一种硬件解决方案。基于 Trustzone 这种硬件架构设计的软硬件，能在很大程度和范围内保证系统的安全性，使软硬件破解都变得相对很困难。
+
+```
+如果把上述这种阶段定义映射到 Rockchip 的平台各级固件上，对应关系为：Maskrom（BL1）、
+Loader（BL2）、Trust（BL31：ARM Trusted Firmware + BL32：OP-TEE OS）、U-Boot（BL33）。
+
+Android 系统的固件启动顺序：
+Maskrom -> Loader -> Trust -> U-Boot -> kernel -> Android
+```
+
+## 16.1 运行内存 
+
+ARM Trusted Firmware 运行在 DRAM 起始偏移 0M~2M 的空间，以 0x10000（64KB）作为程序入口地址。 
+
+OP-TEE OS 运行在 DRAM 起始偏移 132M~148M 之间（结束地址依各平台需求而定）以 0x08400000（132M） 
+
+作为入口地址。 
+
+## 16.2 生命周期 
+
+Trust 自上电初始化之后就始终常驻于内存之中，完成着自己的使命。
+
+
+
