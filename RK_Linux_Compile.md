@@ -447,8 +447,9 @@ kernel$ cp defconfig arch/arm/configs/rockchip_linux_defconfig
 
 1. 为什么指定ARCH=arm，不加的话影响是啥？
 
-```
-arch是说明用的是32位的机器，如RK3126、RK2128
+注意（为什么指定ARCH=arm，不加的话影响是啥）：
+arch是说明用的是32位的机器，如RK3126、RK2128、RK3128
+
 cw@SYS3:~/sdk/3328/kernel$make menuconfig ARCH=arm
 注意kernel对于32位，make menuconfig和make savedefconfig都必须加上ARCH=arm， menuconfig配置后save在拷贝到arch/arm/configs/rockchip_linux_defconfig。
 
