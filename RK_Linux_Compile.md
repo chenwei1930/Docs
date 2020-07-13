@@ -445,6 +445,7 @@ kernel$ cp defconfig arch/arm/configs/rockchip_linux_defconfig
 
 原理分析
 
+```
 1. 为什么指定ARCH=arm，不加的话影响是啥？
 
 注意（为什么指定ARCH=arm，不加的话影响是啥）：
@@ -469,7 +470,7 @@ arch/arm64/configs/rockchip_linux_defconfig
 
 ./make.sh [board] // [board]：configs/[board]_defconfig文件。  
 
-\1. 首次编译 
+1. 首次编译 
 
 ```
 make.sh rk3399 // build for rk3399_defconfig ./make.sh evb-rk3399 // build for evb-rk3399_defconfig ./make.sh firefly-rk3288 // build for firefly-rk3288_defconfig
@@ -483,7 +484,7 @@ Platform RK3399 is build OK, with new .config(make evb-rk3399_defconfig)
 
 
 
- \2. 二次编译 
+2. 二次编译 
 
 无论 32 位或 64 位平台，如果想基于当前".confifig"进行二次编译，则不需要指定[board]： 
 
