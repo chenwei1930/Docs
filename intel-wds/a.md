@@ -1,58 +1,127 @@
-## **ç›®å½•**
+# intel WDS in RockChip 3128 firefly
+
+ÎÄ¼ş±êÊ¶£º 
+
+·¢²¼°æ±¾£ºV1.0.0
+
+ÈÕÆÚ£º2020-02-20
+
+ÎÄ¼şÃÜ¼¶£º¡õ¾øÃÜ   ¡õÃØÃÜ   ¡õÄÚ²¿×ÊÁÏ   ¡ö¹«¿ª
+
+------
+
+**ÃâÔğÉùÃ÷**1
+
+±¾ÎÄµµ°´¡°ÏÖ×´¡±Ìá¹©£¬¸£ÖİÈğĞ¾Î¢µç×Ó¹É·İÓĞÏŞ¹«Ë¾£¨¡°±¾¹«Ë¾¡±£¬ÏÂÍ¬£©²»¶Ô±¾ÎÄµµµÄÈÎºÎ³ÂÊö¡¢ĞÅÏ¢ºÍÄÚÈİµÄ×¼È·ĞÔ¡¢¿É¿¿ĞÔ¡¢ÍêÕûĞÔ¡¢ÊÊÏúĞÔ¡¢ÌØ¶¨Ä¿µÄĞÔºÍ·ÇÇÖÈ¨ĞÔÌá¹©ÈÎºÎÃ÷Ê¾»ò°µÊ¾µÄÉùÃ÷»ò±£Ö¤¡£±¾ÎÄµµ½ö×÷ÎªÊ¹ÓÃÖ¸µ¼µÄ²Î¿¼¡£
+
+ÓÉÓÚ²úÆ·°æ±¾Éı¼¶»òÆäËûÔ­Òò£¬±¾ÎÄµµ½«¿ÉÄÜÔÚÎ´¾­ÈÎºÎÍ¨ÖªµÄÇé¿öÏÂ£¬²»¶¨ÆÚ½øĞĞ¸üĞÂ»òĞŞ¸Ä¡£
+
+ÉÌ±êÉùÃ÷
+
+¡°Rockchip¡±¡¢¡°ÈğĞ¾Î¢¡±¡¢¡°ÈğĞ¾¡±¾ùÎª±¾¹«Ë¾µÄ×¢²áÉÌ±ê£¬¹é±¾¹«Ë¾ËùÓĞ¡£
+
+±¾ÎÄµµ¿ÉÄÜÌá¼°µÄÆäËûËùÓĞ×¢²áÉÌ±ê»òÉÌ±ê£¬ÓÉÆä¸÷×ÔÓµÓĞÕßËùÓĞ¡£
+
+°æÈ¨ËùÓĞ ? 2020 ¸£ÖİÈğĞ¾Î¢µç×Ó¹É·İÓĞÏŞ¹«Ë¾
+
+³¬Ô½ºÏÀíÊ¹ÓÃ·¶³ë£¬·Ç¾­±¾¹«Ë¾ÊéÃæĞí¿É£¬ÈÎºÎµ¥Î»ºÍ¸öÈË²»µÃÉÃ×ÔÕª³­¡¢¸´ÖÆ±¾ÎÄµµÄÚÈİµÄ²¿·Ö»òÈ«²¿£¬²¢²»µÃÒÔÈÎºÎĞÎÊ½´«²¥¡£
+
+¸£ÖİÈğĞ¾Î¢µç×Ó¹É·İÓĞÏŞ¹«Ë¾
+
+Fuzhou Rockchip Electronics Co., Ltd.
+
+µØÖ·£º     ¸£½¨Ê¡¸£ÖİÊĞÍ­ÅÌÂ·Èí¼şÔ°AÇø18ºÅ
+
+ÍøÖ·£º     www.rock-chips.com
+
+¿Í»§·şÎñµç»°£º +86-4007-700-590
+
+¿Í»§·şÎñ´«Õæ£º +86-591-83951833
+
+¿Í»§·şÎñÓÊÏä£º fae@rock-chips.com
+
+------
+
+## **Ç°ÑÔ**
+
+**¸ÅÊö**
+
+±¾ÎÄÖ¼ÔÚ½éÉÜFirefly-RK3128µÄintel WDSÅäÖÃÊ¹ÓÃ
+
+**²úÆ·°æ±¾**
+
+| **Ğ¾Æ¬Ãû³Æ** | **ÄÚºË°æ±¾**     |
+| ------------ | ---------------- |
+| RK2206       | FreeRTOS V10.0.1 |
+
+**¶ÁÕß¶ÔÏó**
+
+±¾ÎÄµµ£¨±¾Ö¸ÄÏ£©Ö÷ÒªÊÊÓÃÓÚÒÔÏÂ¹¤³ÌÊ¦£º
+
+1. ¼¼ÊõÖ§³Ö¹¤³ÌÊ¦
+2. Èí¼ş¿ª·¢¹¤³ÌÊ¦
+
+**ĞŞ¶©¼ÇÂ¼**
+
+| **ÈÕÆÚ**   | **°æ±¾** | **×÷Õß** | **ĞŞ¸ÄËµÃ÷**           |
+| ---------- | -------- | --------  | ---------------------- |
+| 2020-03-12 | V1.0.0   | Conway | ³õÊ¼°æ±¾               |
+
+## **Ä¿Â¼**
 
 [TOC]
 
-## **1. INTEL WDS ä»‹ç»**
+## **1. INTEL WDS ½éÉÜ**
 
-- å¼€å‘ç¯å¢ƒ
+- ¿ª·¢»·¾³
 
-Firefly-RK3128é‡‡ç”¨Cortex-A7æ¶æ„å››æ ¸1.3GHzå¤„ç†å™¨ï¼Œé›†æˆMali-400MP2 GPUï¼Œæ‹¥æœ‰ä¼˜ç§€çš„è¿ç®—ä¸å›¾å½¢å¤„ç†èƒ½åŠ›ï¼›
-æ¿è½½åƒå…†ä»¥å¤ªç½‘å£ã€2.4GHz Wi-Fiå’Œè“ç‰™4.0ï¼Œå±•ç°å‡ºä¸ä¿—çš„ç½‘ç»œæ‰©å±•å’Œä¼ è¾“æ€§èƒ½ï¼ŒFirefly-RK3128 æ¿è½½WiFiä¸º AP6212ã€‚
+Firefly-RK3128²ÉÓÃCortex-A7¼Ü¹¹ËÄºË1.3GHz´¦ÀíÆ÷£¬¼¯³ÉMali-400MP2 GPU£¬ÓµÓĞÓÅĞãµÄÔËËãÓëÍ¼ĞÎ´¦ÀíÄÜÁ¦£»
+°åÔØÇ§Õ×ÒÔÌ«Íø¿Ú¡¢2.4GHz Wi-FiºÍÀ¶ÑÀ4.0£¬Õ¹ÏÖ³ö²»Ë×µÄÍøÂçÀ©Õ¹ºÍ´«ÊäĞÔÄÜ£¬Firefly-RK3128 °åÔØWiFiÎª AP6212¡£
 
 - WDS
 
-WDSæ˜¯ä¸€ç»„åº“ï¼Œä¾›å¸Œæœ›åœ¨linuxä¸Šæ„å»ºWi-Fiæ˜¾ç¤ºåº”ç”¨ç¨‹åºçš„å¼€å‘äººå‘˜ä½¿ç”¨
+WDSÊÇÒ»×é¿â£¬¹©Ï£ÍûÔÚlinuxÉÏ¹¹½¨Wi-FiÏÔÊ¾Ó¦ÓÃ³ÌĞòµÄ¿ª·¢ÈËÔ±Ê¹ÓÃ
 
 
-## 2 Buildrooté…ç½®
+## 2 BuildrootÅäÖÃ
 
-1. ç¬¬ä¸€æ­¥
+1. µÚÒ»²½
 
 ```
-cw@SYS3:~/sdk/3126i$ source envsetup.sh   é€‰æ‹©3128
-cw@SYS3:~/sdk/3126i$ make menuconfig      é…ç½®è§ä¸‹å›¾
+cw@SYS3:~/sdk/3126i$ source envsetup.sh   Ñ¡Ôñ3128
+cw@SYS3:~/sdk/3126i$ make menuconfig      ÅäÖÃ¼ûÏÂÍ¼
 ```
 
 ![image-20200312143607651](intelwds.assets/image-20200312143607651.png)
 
-è¯¥èœå•ä¸‹é¢ï¼Œåªå¼€AP6212Aã€‚å¯ç”¨/æœç´¢AP6212
+¸Ã²Ëµ¥ÏÂÃæ£¬Ö»¿ªAP6212A¡£¿ÉÓÃ/ËÑË÷AP6212
 
 ![image-20200312144606498](intelwds.assets/image-20200312144606498.png)
 
-å¯ç”¨/æœç´¢udp ï¼ˆå³ï¼‰é€‰ä¸Š
+¿ÉÓÃ/ËÑË÷udp £¨¼´£©Ñ¡ÉÏ
 
 ![image-20200312144741803](intelwds.assets/image-20200312144741803.png)
 
-æŒ‰å›¾ä¸­å¼€å¯gstreamï¼Œå’Œå›¾ä¸­ä¸€æ‘¸ä¸€æ ·å³å¯ï¼Œç‰¹åˆ«æ˜¯BR2_PACKAGE_GST1_PLUGINS_BAD
+°´Í¼ÖĞ¿ªÆôgstream£¬ºÍÍ¼ÖĞÒ»ÃşÒ»Ñù¼´¿É£¬ÌØ±ğÊÇBR2_PACKAGE_GST1_PLUGINS_BAD
 
 ![image-20200312144940739](intelwds.assets/image-20200312144940739.png)
 
-å¼€å¯intel-wds
+¿ªÆôintel-wds
 
 ![image-20200312145955947](intelwds.assets/image-20200312145955947.png)
 
-è‚–åšè¯´çš„ï¼šIntrospection support(å³ BR2_PACKAGE_WPA_SUPPLICANT_DBUS_INTROSPECTION)å¼€å¯ï¼Œè¿™ä¸ªä¸ºè§£å†³P2Pï¼Œä½†æ˜¯æ— æ•ˆï¼Œç°åœ¨å…ˆå¼€ç€å§
+Ğ¤ˆËµµÄ£ºIntrospection support(¼´ BR2_PACKAGE_WPA_SUPPLICANT_DBUS_INTROSPECTION)¿ªÆô£¬Õâ¸öÎª½â¾öP2P£¬µ«ÊÇÎŞĞ§£¬ÏÖÔÚÏÈ¿ª×Å°É
 
 
-2. ç¬¬äºŒæ­¥ä¿å­˜å¹¶ç¼–è¯‘
+2. µÚ¶ş²½±£´æ²¢±àÒë
 
 ```
 cw@SYS3:~/sdk/3126i$ make savedefconfig
-cw@SYS3:~/sdk/3126i$ ./build.sh rootfs ï¼ˆæˆ–è€…ç›´æ¥makeï¼Œç­‰ä»·çš„ï¼‰
-cw@SYS3:~/sdk/3126i$ ./mkfirmware.sh  ï¼ˆæ‰“åŒ…å›ºä»¶ï¼‰
+cw@SYS3:~/sdk/3126i$ ./build.sh rootfs £¨»òÕßÖ±½Ómake£¬µÈ¼ÛµÄ£©
+cw@SYS3:~/sdk/3126i$ ./mkfirmware.sh  £¨´ò°ü¹Ì¼ş£©
 ```
 
-3ã€æ£€æŸ¥ rockchip_rk3128_defconfigï¼Œå°‘çš„è¯å°±æ‰‹åŠ¨ä¿®æ”¹åŠ ä¸Šå»
+3¡¢¼ì²é rockchip_rk3128_defconfig£¬ÉÙµÄ»°¾ÍÊÖ¶¯ĞŞ¸Ä¼ÓÉÏÈ¥
 
 ```
 cw@SYS3:~/sdk/3126i/buildroot$ git diff
@@ -87,7 +156,7 @@ index 4232fac868..4ea55ad722 100644
 +BR2_PACKAGE_WPA_SUPPLICANT_DBUS_INTROSPECTION=y
 ```
 
-4. æ£€æŸ¥æ¨¡å—wpa_supplicantç›¸å…³é…ç½®ï¼Œä¸‹é¢3é¡¹é…ç½®æ£€æŸ¥ä¸‹ï¼Œæ˜¯å…³çš„å°±å¼€èµ·æ¥ã€‚
+4. ¼ì²éÄ£¿éwpa_supplicantÏà¹ØÅäÖÃ£¬ÏÂÃæ3ÏîÅäÖÃ¼ì²éÏÂ£¬ÊÇ¹ØµÄ¾Í¿ªÆğÀ´¡£
 
 ```
 buildroot/output/rockchip_rk3128/build/wpa_supplicant-2.6/wpa_supplicant$ vim .config 
@@ -96,15 +165,15 @@ buildroot/output/rockchip_rk3128/build/wpa_supplicant-2.6/wpa_supplicant$ vim .c
 496 CONFIG_WIFI_DISPLAY=y
 ```
 
-5ã€é‡ç¼–è¯‘wpa_supplicant
+5¡¢ÖØ±àÒëwpa_supplicant
 
 ```
 cw@SYS3:~/sdk/3126i$ make wpa_supplicant-rebuild
-cw@SYS3:~/sdk/3126i$ make æˆ–è€…  ï¼ˆ./build.sh rootfs å®é™…å°±æ˜¯æ‰§è¡Œï¼‰
+cw@SYS3:~/sdk/3126i$ make »òÕß  £¨./build.sh rootfs Êµ¼Ê¾ÍÊÇÖ´ĞĞ£©
 cw@SYS3:~/sdk/3126i$ ./mkfirmware.sh 
 ```
 
-7ã€æ£€æŸ¥æ¨¡å—connmanç›¸å…³é…ç½®ï¼Œä¸‹é¢3é¡¹é…ç½®æ£€æŸ¥ä¸‹ï¼Œæ˜¯å…³çš„å°±å¼€èµ·æ¥ã€‚
+7¡¢¼ì²éÄ£¿éconnmanÏà¹ØÅäÖÃ£¬ÏÂÃæ3ÏîÅäÖÃ¼ì²éÏÂ£¬ÊÇ¹ØµÄ¾Í¿ªÆğÀ´¡£
 
 ```shell
 cw@SYS3:~/sdk/3126i/buildroot/output/rockchip_rk3128/build/connman-1.35/gsupplicant$ vim supplicant.c 
@@ -121,19 +190,19 @@ index f56b595..c7dd5b2 100644cd on
 \+        go_intent = 7;
 ```
 
-8ã€é‡ç¼–è¯‘connman
+8¡¢ÖØ±àÒëconnman
 
 ```shell
 cw@SYS3:~/sdk/3126i$ make connman-rebuild
-cw@SYS3:~/sdk/3126i$ make (æˆ–è€…  ./build.sh rootfså…¶å®å°±æ˜¯make)
+cw@SYS3:~/sdk/3126i$ make (»òÕß  ./build.sh rootfsÆäÊµ¾ÍÊÇmake)
 cw@SYS3:~/sdk/3126i$ ./mkfirmware.sh 
 ```
 
-## 3 kernelé…ç½®
+## 3 kernelÅäÖÃ
 
-ç¬¬ä¸€æ­¥ï¼šä¿®æ”¹è®¾å¤‡æ ‘ï¼š
+µÚÒ»²½£ºĞŞ¸ÄÉè±¸Ê÷£º
 
-åº”ä¸ºä½¿ç”¨RKçš„SDKï¼Œä»fireflyæŠ„è¿‡æ¥çš„è®¾å¤‡æ ‘æœ‰é—®é¢˜ã€‚éœ€è¦é…ç½®ä¸€ä¸ªwifi 32Kçš„å¼•è„šåˆ°PMUä¸Šé¢ã€‚
+Ó¦ÎªÊ¹ÓÃRKµÄSDK£¬´Ófirefly³­¹ıÀ´µÄÉè±¸Ê÷ÓĞÎÊÌâ¡£ĞèÒªÅäÖÃÒ»¸öwifi 32KµÄÒı½Åµ½PMUÉÏÃæ¡£
 
 ```shell
 w@SYS3:~/sdk/3126i/kernel$ git show
@@ -173,7 +242,7 @@ index 0f54e87689f2..041dd108c0c9 100644
 
 ```
 
-ç¬¬äºŒæ­¥ï¼š ä¿®æ”¹vopå¯„å­˜å™¨é©±åŠ¨ï¼ˆè¡¥ä¸ https://10.10.10.29/c/rk/kernel/+/96675ï¼‰
+µÚ¶ş²½£º ĞŞ¸Ävop¼Ä´æÆ÷Çı¶¯£¨²¹¶¡ https://10.10.10.29/c/rk/kernel/+/96675£©
 
 ```shell
 cw@SYS3:~/sdk/3126i/kernel$ git diff
@@ -193,15 +262,15 @@ index 6fb3c0f63b71..83adba87f35c 100644
  };
 ```
 
-ç¬¬äºŒæ­¥ï¼šå¼€å¯wifiå¹¶ç¼–è¯‘
+µÚ¶ş²½£º¿ªÆôwifi²¢±àÒë
 
 ```
 cw@SYS3:~/sdk/312/kernel$make  ARCH=arm rockchip_linux_defconfig  
 cw@SYS3:~/sdk/3328/kernel$make menuconfig ARCH=arm
 
-æ³¨æ„kernelå¯¹äº32ä½ï¼Œmake menuconfigå’Œmake savedefconfigéƒ½å¿…é¡»åŠ ä¸ŠARCH=armï¼Œ
-menuconfigé…ç½®åsaveåœ¨æ‹·è´åˆ°arch/arm/configs/rockchip_linux_defconfigã€‚ 
-ä¸åŠ  ARCH=armçš„è¯ï¼Œé»˜è®¤æ˜¯64ä½ï¼Œè¿™æ—¶å€™ï¼Œè¿™æ—¶å€™ä½ git diffä¸‹å‘ç°rockchip_linux_defconfigä¼šæœ‰å¾ˆå¤§çš„æ”¹åŠ¨ã€‚åŠ  ARCH=armçš„è¯ï¼Œå°±æ˜¯32ä½æœºå™¨ï¼Œä½ git diffä¸‹å‘ç°rockchip_linux_defconfigå°±æ˜¯åˆšæ‰menuconfigçš„é‚£äº›ä¿®æ”¹ã€‚ä½ çœ‹ä¸‹ä¸‹é¢æ–‡ä»¶æœç´¢å°±ä¼šæ˜ç™½
+×¢Òâkernel¶ÔÓÚ32Î»£¬make menuconfigºÍmake savedefconfig¶¼±ØĞë¼ÓÉÏARCH=arm£¬
+menuconfigÅäÖÃºósaveÔÚ¿½±´µ½arch/arm/configs/rockchip_linux_defconfig¡£ 
+²»¼Ó ARCH=armµÄ»°£¬Ä¬ÈÏÊÇ64Î»£¬ÕâÊ±ºò£¬ÕâÊ±ºòÄãgit diffÏÂ·¢ÏÖrockchip_linux_defconfig»áÓĞºÜ´óµÄ¸Ä¶¯¡£¼Ó ARCH=armµÄ»°£¬¾ÍÊÇ32Î»»úÆ÷£¬Äãgit diffÏÂ·¢ÏÖrockchip_linux_defconfig¾ÍÊÇ¸Õ²ÅmenuconfigµÄÄÇĞ©ĞŞ¸Ä¡£Äã¿´ÏÂÏÂÃæÎÄ¼şËÑË÷¾Í»áÃ÷°×
 cw@SYS3:~/sdk/3126i/kernel$ ag -g "rockchip_linux_defconfig"
 arch/arm/configs/rockchip_linux_defconfig
 arch/arm64/configs/rockchip_linux_defconfig
@@ -210,50 +279,50 @@ arch/arm64/configs/rockchip_linux_defconfig
 ![image-20200312165810044](intelwds.assets/image-20200312165810044.png)
 
 ```
-å¦‚å›¾æ‰€ç¤ºï¼Œæ³¨æ„æ˜¯bootupé€‰é¡¹ï¼Œæ„æ€æ˜¯å¼€æœºå¯åŠ¨AP6XXé©±åŠ¨åŠ è½½è¿›å†…æ ¸ï¼Œæ”¯æŒap6xå‹å·Wi-Fi
+ÈçÍ¼ËùÊ¾£¬×¢ÒâÊÇbootupÑ¡Ïî£¬ÒâË¼ÊÇ¿ª»úÆô¶¯AP6XXÇı¶¯¼ÓÔØ½øÄÚºË£¬Ö§³Öap6xĞÍºÅWi-Fi
 
 cw@SYS3:~/sdk/3126i/kernel$ make savedefconfig  ARCH=arm          
 scripts/kconfig/conf  --savedefconfig=defconfig Kconfig
 
 cw@SYS3:~/sdk/3126i/kernel$ cp defconfig arch/arm/configs/rockchip_linux_defconfig
 
-#ä¸º
+#Îª
 ```
 
-## 4 å¼€å‘æ¿æ“ä½œ
+## 4 ¿ª·¢°å²Ù×÷
 
-### 4.1 æµ‹è¯•ç¨‹åºä»‹ç»
+### 4.1 ²âÊÔ³ÌĞò½éÉÜ
 
-ç¼–è¯‘åintel-wdsè‡ªåŠ¨ç”Ÿæˆsink-testï¼Œå¹¶å¤åˆ¶åˆ°å¼€å‘æ¿çš„usr/bin/ç›®å½•ä¸‹ã€‚
+±àÒëºóintel-wds×Ô¶¯Éú³Ésink-test£¬²¢¸´ÖÆµ½¿ª·¢°åµÄusr/bin/Ä¿Â¼ÏÂ¡£
 
- ### 4.2 æµ‹è¯•æ­¥éª¤
+ ### 4.2 ²âÊÔ²½Öè
 
-å¼€å‘æ¿è¿æ¥hdmiæ˜¾ç¤ºå™¨ï¼Œå¼€æœºåå¼€ä¸€ä¸ªä¸²å£ç•Œé¢ä¸€ä¸ªadbç•Œé¢
+¿ª·¢°åÁ¬½ÓhdmiÏÔÊ¾Æ÷£¬¿ª»úºó¿ªÒ»¸ö´®¿Ú½çÃæÒ»¸öadb½çÃæ
 
-1ã€ å¼€å‘æ¿å¼€æœºåkill æ€æ‰ä¸¤ä¸ªè¿›ç¨‹ï¼ˆå¦‚æœæœ‰ï¼‰ï¼š wpa_supplicantå’Œwestonã€‚
+1¡¢ ¿ª·¢°å¿ª»úºókill É±µôÁ½¸ö½ø³Ì£¨Èç¹ûÓĞ£©£º wpa_supplicantºÍweston¡£
 
 ```
   542 root     44912 S    weston --tty=2 --idle-time=0
   656 root      5880 S    wpa_supplicant -B -i wlan0 -c /userdata/cfg/wpa_supp
-[root@rk3128:/]# kill ä¸¤ä¸ªè¿›ç¨‹å·
+[root@rk3128:/]# kill Á½¸ö½ø³ÌºÅ
 ```
 
-2ã€insmod /bcmdhd.koï¼ˆinsmod system/lib/modules/bcmdhd.ko ï¼‰  ï¼ˆæŒ‰æœ¬æ•™ç¨‹ï¼Œä¸éœ€è¦æ‰§è¡Œï¼‰
+2¡¢insmod /bcmdhd.ko£¨insmod system/lib/modules/bcmdhd.ko £©  £¨°´±¾½Ì³Ì£¬²»ĞèÒªÖ´ĞĞ£©
 
-å¦‚æœWI-Fi åŠ è½½åˆ°å†…æ ¸çš„ï¼Œè¿™ä¸€æ­¥â€œæ¨¡å—åŠ è½½â€çš„æ“ä½œå°±ä¸éœ€è¦ ï¼Œä¸ç„¶å°±ä¼šæŠ¥é”™ä¸€ä¸‹é”™è¯¯ï¼Œè¯´ç¬¦å·é‡å¤
-å¦‚ä¸‹
+Èç¹ûWI-Fi ¼ÓÔØµ½ÄÚºËµÄ£¬ÕâÒ»²½¡°Ä£¿é¼ÓÔØ¡±µÄ²Ù×÷¾Í²»ĞèÒª £¬²»È»¾Í»á±¨´íÒ»ÏÂ´íÎó£¬Ëµ·ûºÅÖØ¸´
+ÈçÏÂ
 
 ```
-[root@rk3128:/]# insmod /bcmdhd.koï¼ˆinsmod system/lib/modules/bcmdhd.ko ï¼‰ 
+[root@rk3128:/]# insmod /bcmdhd.ko£¨insmod system/lib/modules/bcmdhd.ko £© 
 [root@rk3128:/]# insmod system/lib/modules/bcmdhd.ko
 [   27.577071] bcmdhd: exports duplicate symbol bcmsdh_cfg_read (owned by kernel)
 [   27.738885] bcmdhd: exports duplicate symbol bcmsdh_cfg_read (owned by kernel)
 insmod: can't insert 'system/lib/modules/bcmdhd.ko': invalid module format
 ```
 
-3ã€wpa_supplicant -u&
-4ã€connmand
-5ã€æ‰§è¡Œconnmanctlï¼Œåœ¨äº¤äº’å‘½ä»¤ä¾æ¬¡æ‰§è¡Œ
+3¡¢wpa_supplicant -u&
+4¡¢connmand
+5¡¢Ö´ĞĞconnmanctl£¬ÔÚ½»»¥ÃüÁîÒÀ´ÎÖ´ĞĞ
 
 ```
 enable wifi 
@@ -261,25 +330,25 @@ enable p2p
 agent on
 ```
 
-6ã€ADBç•Œé¢
+6¡¢ADB½çÃæ
 
 ```
 [root@rk3128:/usr/bin]# export GST_DEBUG=3
 [root@rk3128:/usr/bin]# ./sink-test
 Rga built version:version:+2017-09-28 10:12:42 
 - Registering Wifi Display with IE 00000600111C440032
-Warning: P2P not found in Connman technologies.ï¼ˆè¿™ä¸ªåªæœ‰ç¬¬ä¸€æ¬¡çƒ§å½•æ‰ä¸ä¼šæœ‰ï¼Œé‡å¯å°±ä¼šè¿™ç§é—®é¢˜)
+Warning: P2P not found in Connman technologies.£¨Õâ¸öÖ»ÓĞµÚÒ»´ÎÉÕÂ¼²Å²»»áÓĞ£¬ÖØÆô¾Í»áÕâÖÖÎÊÌâ)
 Received unknown command: 
 Received unknown command: 
 ```
 
-7ã€æ‰‹æœºä¸Šæ‰“å¼€æ— çº¿æ˜¾ç¤ºï¼Œå¯ä»¥æœåˆ°ConnManè®¾å¤‡ï¼Œç‚¹å‡»è¿æ¥
- ä¸²å£ç•Œé¢ï¼Œä¼šæ˜¾ç¤ºä¸€ä¸ªç¡®è®¤è¿æ¥çš„yes/no,æ‰€ä»¥è¾“å…¥yesï¼Œæœ‰äº›æ‰‹æœºè¿˜ä¼šå¼¹å‡ºæ¥ä¸€ä¸ªçª—å£ï¼Œé—®ç¡®å®šä¸å¦ã€‚
+7¡¢ÊÖ»úÉÏ´ò¿ªÎŞÏßÏÔÊ¾£¬¿ÉÒÔËÑµ½ConnManÉè±¸£¬µã»÷Á¬½Ó
+ ´®¿Ú½çÃæ£¬»áÏÔÊ¾Ò»¸öÈ·ÈÏÁ¬½ÓµÄyes/no,ËùÒÔÊäÈëyes£¬ÓĞĞ©ÊÖ»ú»¹»áµ¯³öÀ´Ò»¸ö´°¿Ú£¬ÎÊÈ·¶¨Óë·ñ¡£
 
 
-## 5 é”™è¯¯
+## 5 ´íÎó
 
-### 5.1 é”™è¯¯ No space left on device (28)
+### 5.1 ´íÎó No space left on device (28)
 
 ```
 18:audioringbuffer_thread_func:<alsasink0> failed to set thread priority
@@ -291,15 +360,15 @@ Received unknown command:
 
 ```
 
-è¿™ä¸ªé”™è¯¯No space left on device (28)è¯´è®¾å¤‡æ²¡å†…é”™äº†ï¼Œè§£å†³å°±æ˜¯ç¬¬ä¸‰ç« ä¸Šé¢é‚£ä¸ªkernelä¸‹é¢çš„gpuè¡¥ä¸ï¼Œéœ€è¦è®¾ç½®overlay
+Õâ¸ö´íÎóNo space left on device (28)ËµÉè±¸Ã»ÄÚ´íÁË£¬½â¾ö¾ÍÊÇµÚÈıÕÂÉÏÃæÄÇ¸ökernelÏÂÃæµÄgpu²¹¶¡£¬ĞèÒªÉèÖÃoverlay
 
-### 5.2 é”™è¯¯Failed to send Action Frame(retry 6
+### 5.2 ´íÎóFailed to send Action Frame(retry 6
 
 ```shell
-é—®é¢˜ï¼š
-[  166.361139] CFG80211-ERROR) wl_cfg80211_send_action_frame : Failed to send Action Frame(retry 6)æœ‰çš„
+ÎÊÌâ£º
+[  166.361139] CFG80211-ERROR) wl_cfg80211_send_action_frame : Failed to send Action Frame(retry 6)ÓĞµÄ
 
-è§£å†³:
+½â¾ö:
 connman$ git diff .
 diff --git a/gsupplicant/supplicant.c b/gsupplicant/supplicant.c
 index f56b595..c7dd5b2 100644
@@ -318,50 +387,50 @@ index f56b595..c7dd5b2 100644
 ### 5.3 check your GStreamer installation.
 
 ```
-é—®é¢˜ï¼š
+ÎÊÌâ£º
 
 ** (sink-test:1046): [1;33mWARNING[0m **: [gst-core-error-quark] Missing element 'deinterlace' - check your GStreamer installation.
 
 ** (sink-test:1046): [1;33mWARNING[0m **: [gst-core-error-quark] Missing element 'deinterlace' - check your GStreamer installation.
 
-è§£å†³ buildroot ä¸‹é¢å¼€å¯è¿™ä¸ª BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_UDP
+½â¾ö buildroot ÏÂÃæ¿ªÆôÕâ¸ö BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_UDP
 ```
 
-### 5.3 p2p æŠ¥é”™Method "SetProperty" with signature "sv" on interface "net.connman.Technology" doesn't exist
+### 5.3 p2p ±¨´íMethod "SetProperty" with signature "sv" on interface "net.connman.Technology" doesn't exist
 
-P2PæŠ¥é”™ï¼Œç¬¬ä¸€æ¬¡çƒ§å†™rootfsä¸ä¼šæœ‰è¿™ä¸ªé—®é¢˜ï¼Œå¤ä½åéƒ½ä¼šå‡ºç°è¿™ä¸ªé—®é¢˜ã€‚cw@SYS3:~/sdk/3126i/buildroot/output/rockchip_rk3128/build/connman-1.35$ cd -
+P2P±¨´í£¬µÚÒ»´ÎÉÕĞ´rootfs²»»áÓĞÕâ¸öÎÊÌâ£¬¸´Î»ºó¶¼»á³öÏÖÕâ¸öÎÊÌâ¡£cw@SYS3:~/sdk/3126i/buildroot/output/rockchip_rk3128/build/connman-1.35$ cd -
 
 ```
 
-P2PæŠ¥é”™ï¼Œè¿™ä¸ªé—®é¢˜ï¼Œåªè¦æ–­ç”µç¬¬ä¸€æ¬¡å¼€æœºå°±ä¸ä¼šæœ‰ï¼Œå¤ä½åéƒ½ä¼šå‡ºç°è¿™ä¸ªé—®é¢˜
-20200310_16ï¼š20:47Error wifi: Already enabled
-20200310_16ï¼š20:50connmanctl> enable p2p
-20200310_16ï¼š20:50Error p2p: Method "SetProperty" with signature "sv" on interface "net.connman.Technology" doesn't exist
-20200310_16ï¼š20:54connmanctl> agent on
+P2P±¨´í£¬Õâ¸öÎÊÌâ£¬Ö»Òª¶ÏµçµÚÒ»´Î¿ª»ú¾Í²»»áÓĞ£¬¸´Î»ºó¶¼»á³öÏÖÕâ¸öÎÊÌâ
+20200310_16£º20:47Error wifi: Already enabled
+20200310_16£º20:50connmanctl> enable p2p
+20200310_16£º20:50Error p2p: Method "SetProperty" with signature "sv" on interface "net.connman.Technology" doesn't exist
+20200310_16£º20:54connmanctl> agent on
 ```
 
-## 6 ä¾èµ–å’ŒåŠŸèƒ½å®ç°
+## 6 ÒÀÀµºÍ¹¦ÄÜÊµÏÖ
 
- WDSå³linuxä¸ŠwifiæŠ•å±æ˜¾ç¤ºã€‚WDS ä¾èµ–å¾ˆå°‘ï¼Œä¸»è¦æ˜¯GStreamer å’ŒGLibã€‚ä½†æ˜¯ä¸ºäº†ç¡®WIFIåŠŸèƒ½okï¼Œä½ è¿˜è¦å®‰è£…wpa_supplicantã€connman
+ WDS¼´linuxÉÏwifiÍ¶ÆÁÏÔÊ¾¡£WDS ÒÀÀµºÜÉÙ£¬Ö÷ÒªÊÇGStreamer ºÍGLib¡£µ«ÊÇÎªÁËÈ·WIFI¹¦ÄÜok£¬Äã»¹Òª°²×°wpa_supplicant¡¢connman
 
-ç›¸å…³ä»£ç 
+Ïà¹Ø´úÂë
 
 ?    buildroot/output/rockchip_rk3128/build/intel-wds-ece955a9947e8d5848223c849d2c0f3f928078d4/
 
-- *sinkï¼š*Wi-Fiæ˜¾ç¤ºæ§½ï¼Œä¾èµ–gStreerã€Connmanå’Œglibä¸»å›è·¯ã€‚
-- *sourceï¼š*Wi-Fiæ˜¾ç¤ºæºï¼Œä¾èµ–gStreerã€Connmanå’Œglibä¸»å¾ªç¯ã€‚
+- *sink£º*Wi-FiÏÔÊ¾²Û£¬ÒÀÀµgStreer¡¢ConnmanºÍglibÖ÷»ØÂ·¡£
+- *source£º*Wi-FiÏÔÊ¾Ô´£¬ÒÀÀµgStreer¡¢ConnmanºÍglibÖ÷Ñ­»·¡£
 
-WDSè½¯ä»¶æ¶æ„
+WDSÈí¼ş¼Ü¹¹
 
-- libwdsï¼šä¸»åº“å®ç°äº†RTSPçš„Wi-Fiæ˜¾ç¤ºæ–¹è¨€ï¼ŒåŒ…æ‹¬è§£æå™¨ã€æ¥æ”¶å™¨å’Œæºçš„å®é™…åå•†é€»è¾‘ä»¥åŠç›¸å…³çš„æ•°æ®ç»“æ„ã€‚å®ƒä¸ä¸ä»»ä½•ç‰¹å®šçš„è¿æ¥ç®¡ç†å™¨ã€åª’ä½“æ¡†æ¶æˆ–ä¸»å¾ªç¯ç›¸å…³è”ã€‚æ­¤åº“è¿˜ä¸MSVCå…¼å®¹ã€‚
-- ç½‘ç»œï¼šæ”¯æŒä¸glibä¸»å¾ªç¯å’Œgflowçš„é›†æˆã€‚
-- P2Pï¼šæ”¯æŒä¸Connman Wifi P2PåŠŸèƒ½çš„é›†æˆ
+- libwds£ºÖ÷¿âÊµÏÖÁËRTSPµÄWi-FiÏÔÊ¾·½ÑÔ£¬°üÀ¨½âÎöÆ÷¡¢½ÓÊÕÆ÷ºÍÔ´µÄÊµ¼ÊĞ­ÉÌÂß¼­ÒÔ¼°Ïà¹ØµÄÊı¾İ½á¹¹¡£Ëü²»ÓëÈÎºÎÌØ¶¨µÄÁ¬½Ó¹ÜÀíÆ÷¡¢Ã½Ìå¿ò¼Ü»òÖ÷Ñ­»·Ïà¹ØÁª¡£´Ë¿â»¹ÓëMSVC¼æÈİ¡£
+- ÍøÂç£ºÖ§³ÖÓëglibÖ÷Ñ­»·ºÍgflowµÄ¼¯³É¡£
+- P2P£ºÖ§³ÖÓëConnman Wifi P2P¹¦ÄÜµÄ¼¯³É
 
-ç¡®ä¿wifiæ­£å¸¸ç›¸å…³
+È·±£wifiÕı³£Ïà¹Ø
 
-- WIFIé€‚é…å™¨ä½¿ç”¨ Intel 7260-family æˆ–Atheros ath9kï¼Œåœ¨å…¶ä»–çš„é€‚é…å™¨å¯èƒ½æœ‰p2pé—®é¢˜
+- WIFIÊÊÅäÆ÷Ê¹ÓÃ Intel 7260-family »òAtheros ath9k£¬ÔÚÆäËûµÄÊÊÅäÆ÷¿ÉÄÜÓĞp2pÎÊÌâ
 
-- [wpa_supplicant](http://w1.fi/wpa_supplicant/): ç‰ˆæœ¬2.4åï¼Œå¼€å¯	
+- [wpa_supplicant](http://w1.fi/wpa_supplicant/): °æ±¾2.4ºó£¬¿ªÆô	
 
   `CONFIG_P2P=y`
 
@@ -369,55 +438,55 @@ WDSè½¯ä»¶æ¶æ„
 
    `CONFIG_CTRL_IFACE_DBUS_NEW=y`
 
-- [connman](https://01.org/connman): ç‰ˆæœ¬1.28 ä»¥å
+- [connman](https://01.org/connman): °æ±¾1.28 ÒÔºó
 
 - gstreamer: either master branch more recent than Feb 3rd 2015 (commit d0a50be2), or 1.4 branch more recent than Feb 3rd 2005 (commit 1ce3260a638d or release 1.4.6 or later).
 
   
 
 
-##  7å…¶ä»–æ¦‚å¿µ
+##  7ÆäËû¸ÅÄî
 
-ä¾èµ–
+ÒÀÀµ
 
-ConnMan(Connection Manager)æ˜¯ä¸€ä¸ªå¼€æºé¡¹ç›®ï¼Œåœ¨Linuxæ“ä½œç³»ç»Ÿä¸­æä¾›ä¸€ä¸ªåå°è¿›ç¨‹ï¼Œæ¥ç®¡ç†ç½‘ç»œè¿æ¥ã€‚ConnManè®¾è®¡å°å·§ï¼Œå¹¶ä¸”å°½å¯èƒ½çš„å‡å°èµ„æºæ¶ˆè€—ï¼Œå› æ­¤ä»–èƒ½å¾ˆå®¹æ˜“çš„é›†æˆè¿›å…¶ä»–å¹³å°ã€‚
-
-
-
-## 8 åŒç±»ç«å“
-
- ç”µè§†æœ3é™¤äº†æ”¯æŒAirPlayã€DLNAè¿˜æ”¯æŒwin10ç³»ç»Ÿçš„æ— çº¿æ˜¾ç¤ºåŠŸèƒ½ 
+ConnMan(Connection Manager)ÊÇÒ»¸ö¿ªÔ´ÏîÄ¿£¬ÔÚLinux²Ù×÷ÏµÍ³ÖĞÌá¹©Ò»¸öºóÌ¨½ø³Ì£¬À´¹ÜÀíÍøÂçÁ¬½Ó¡£ConnManÉè¼ÆĞ¡ÇÉ£¬²¢ÇÒ¾¡¿ÉÄÜµÄ¼õĞ¡×ÊÔ´ÏûºÄ£¬Òò´ËËûÄÜºÜÈİÒ×µÄ¼¯³É½øÆäËûÆ½Ì¨¡£
 
 
 
-DNLAï¼ŒDigital Living Network Allianceï¼Œæ˜¯ç´¢å°¼ã€è‹±ç‰¹å°”ã€å¾®è½¯ç­‰å‘èµ·çš„ä¸€å¥— PCã€ç§»åŠ¨è®¾å¤‡ã€æ¶ˆè´¹ç”µå™¨ä¹‹é—´äº’è”äº’é€šçš„åè®®ã€‚ 
+## 8 Í¬Àà¾ºÆ·
 
-DLNAä¸è‹¹æœçš„AirPlayåŠŸèƒ½æ¯”è¾ƒç±»ä¼¼ï¼Œåè®®ä¹Ÿå¤§ä½“ç›¸åŒï¼Œä»–ä»¬éƒ½å¯ä»¥è®©ä½ æ‰‹æœºä¸­çš„åª’ä½“å†…å®¹æŠ•æ”¾åˆ°ç”µè§†å±å¹•é‡Œã€‚ä¸åŒçš„æ˜¯æ‰‹æœºä¸Šçš„DLNA å¹¶æ²¡æœ‰ç±»ä¼¼Apple TVçš„AirPlayçš„é•œåƒåŠŸèƒ½ï¼Œä¹Ÿæ²¡æœ‰Apple TV æ‰€æ”¯æŒçš„åŒå±ä½“æ¸¸æˆä½“éªŒã€‚ç›®å‰DLNAæ›´å¤šåªæ˜¯èƒ½å°†æ‰‹æœºçš„ç…§ç‰‡å’Œè§†é¢‘æŠ•é€åˆ°å¤§å±å¹•ä¸­ã€‚
+ µçÊÓ¹û3³ıÁËÖ§³ÖAirPlay¡¢DLNA»¹Ö§³Öwin10ÏµÍ³µÄÎŞÏßÏÔÊ¾¹¦ÄÜ 
 
-å¦å¤–ï¼Œåœ¨çº¿è§†é¢‘ä¹Ÿå¯ä»¥ç”¨DLNAæ¨¡å¼æ¨é€åˆ°å®¢å…ç”µè§†ä¸Šæ˜¾ç¤ºï¼Œå®‰å“ç³»ç»Ÿéƒ¨åˆ†æ’­æ”¾å™¨å°±å…·å¤‡DLNAåŠŸèƒ½ï¼Œç›®å‰æ”¯æŒæ— çº¿æ¨é€çš„è§†é¢‘å®¢æˆ·ç«¯æœ‰ä»¥ä¸‹ï¼šè…¾è®¯è§†é¢‘ã€æœç‹è§†é¢‘ã€PPTVè§†é¢‘ã€‚å¯ä»¥å°†åŸæ¥åº”è¯¥åœ¨N7å±å¹•çš„å½±ç‰‡è½¬ç§»åˆ°ç”µè§†å±å¹•ä¸Šã€‚å‰ææ˜¯ä½ è¦æœ‰èƒ½æ”¯æŒDLNAçš„ç”µè§†æˆ–è€…ç”µè§†ç›’ã€‚
+
+
+DNLA£¬Digital Living Network Alliance£¬ÊÇË÷Äá¡¢Ó¢ÌØ¶û¡¢Î¢ÈíµÈ·¢ÆğµÄÒ»Ì× PC¡¢ÒÆ¶¯Éè±¸¡¢Ïû·ÑµçÆ÷Ö®¼ä»¥Áª»¥Í¨µÄĞ­Òé¡£ 
+
+DLNAÓëÆ»¹ûµÄAirPlay¹¦ÄÜ±È½ÏÀàËÆ£¬Ğ­ÒéÒ²´óÌåÏàÍ¬£¬ËûÃÇ¶¼¿ÉÒÔÈÃÄãÊÖ»úÖĞµÄÃ½ÌåÄÚÈİÍ¶·Åµ½µçÊÓÆÁÄ»Àï¡£²»Í¬µÄÊÇÊÖ»úÉÏµÄDLNA ²¢Ã»ÓĞÀàËÆApple TVµÄAirPlayµÄ¾µÏñ¹¦ÄÜ£¬Ò²Ã»ÓĞApple TV ËùÖ§³ÖµÄË«ÆÁÌåÓÎÏ·ÌåÑé¡£Ä¿Ç°DLNA¸ü¶àÖ»ÊÇÄÜ½«ÊÖ»úµÄÕÕÆ¬ºÍÊÓÆµÍ¶ËÍµ½´óÆÁÄ»ÖĞ¡£
+
+ÁíÍâ£¬ÔÚÏßÊÓÆµÒ²¿ÉÒÔÓÃDLNAÄ£Ê½ÍÆËÍµ½¿ÍÌüµçÊÓÉÏÏÔÊ¾£¬°²×¿ÏµÍ³²¿·Ö²¥·ÅÆ÷¾Í¾ß±¸DLNA¹¦ÄÜ£¬Ä¿Ç°Ö§³ÖÎŞÏßÍÆËÍµÄÊÓÆµ¿Í»§¶ËÓĞÒÔÏÂ£ºÌÚÑ¶ÊÓÆµ¡¢ËÑºüÊÓÆµ¡¢PPTVÊÓÆµ¡£¿ÉÒÔ½«Ô­À´Ó¦¸ÃÔÚN7ÆÁÄ»µÄÓ°Æ¬×ªÒÆµ½µçÊÓÆÁÄ»ÉÏ¡£Ç°ÌáÊÇÄãÒªÓĞÄÜÖ§³ÖDLNAµÄµçÊÓ»òÕßµçÊÓºĞ¡£
 
  
 
-è¦ç‚¹ï¼šä¾èµ–å’ŒåŠŸèƒ½åœ¨ç¬¬6ç« 
+Òªµã£ºÒÀÀµºÍ¹¦ÄÜÔÚµÚ6ÕÂ
 
-ç¡¬ä»¶ï¼šç”µè§†æœ3ç­‰
+Ó²¼ş£ºµçÊÓ¹û3µÈ
 
-åŠŸèƒ½ ï¼šåŒç±»ç”¨çš„AirPlayã€DLNA
+¹¦ÄÜ £ºÍ¬ÀàÓÃµÄAirPlay¡¢DLNA
 
-æ”¹è¿›ï¼šæ”¹è¿›å°±æ˜¯gstreamä¼˜åŒ–å§ï¼Œèµ„æ–™æ¯”è¾ƒå°‘
+¸Ä½ø£º¸Ä½ø¾ÍÊÇgstreamÓÅ»¯°É£¬×ÊÁÏ±È½ÏÉÙ
 
 
 
-## 10å…¶ä»–ç¬”è®°åƒåœ¾
+## 10ÆäËû±Ê¼ÇÀ¬»ø
 
-6ã€æ‰‹æœºä¸Šæ‰“å¼€æ— çº¿æ˜¾ç¤ºï¼Œå¯ä»¥æœåˆ°ConnManè®¾å¤‡ï¼Œç‚¹å‡»è¿æ¥
-7ã€è¿æ¥å¤±è´¥ï¼Œä¸²å£çœ‹åˆ°æŠ¥é”™ï¼š
+6¡¢ÊÖ»úÉÏ´ò¿ªÎŞÏßÏÔÊ¾£¬¿ÉÒÔËÑµ½ConnManÉè±¸£¬µã»÷Á¬½Ó
+7¡¢Á¬½ÓÊ§°Ü£¬´®¿Ú¿´µ½±¨´í£º
 [ 167.877065] CFG80211-ERROR) wl_cfg80211_send_action_frame : Failed to send Acti
 on Frame(retry 6)
 
  
 
-å¦‚æœwifiæ˜¯åŠ è½½è¿›å†…æ ¸å’Œæ¨¡å—åŠ è½½çš„
+Èç¹ûwifiÊÇ¼ÓÔØ½øÄÚºËºÍÄ£¿é¼ÓÔØµÄ
 
 ```
 [root@rk3128:/]# cd /system/lib/modules/
@@ -428,19 +497,19 @@ bcmdhd.ko
 [root@rk3128:/system/lib/modules]# 
 [root@rk3128:/system/lib/modules]# chmod 777 bcmdhd.ko 
 [root@rk3128:/system/lib/modules]# ./bcmdhd.ko .ko
-å†…æ ¸åŠ è½½æ¨¡å—æ—¶æç¤ºusb_common: exports duplicate symbol of_usb_get_dr_mode
-1.åˆ†æ:
-æ—¢ç„¶ç¬¦å·é‡å¤äº†ï¼Œé‚£ä¹ˆè¯´æ˜æœ‰ä¸€ä¸ªéƒ¨åˆ†æ—¢è¢«ç¼–è¯‘åˆ°å†…æ ¸ä¸­ä¹Ÿè¢«ç¼–è¯‘æˆæ¨¡å—äº†ï¼Œå› æ­¤åœ¨åŠ è½½æ¨¡å—æ—¶ï¼Œå†…æ ¸æŠ¥ç¬¦å·é‡å¤çš„æç¤º
+ÄÚºË¼ÓÔØÄ£¿éÊ±ÌáÊ¾usb_common: exports duplicate symbol of_usb_get_dr_mode
+1.·ÖÎö:
+¼ÈÈ»·ûºÅÖØ¸´ÁË£¬ÄÇÃ´ËµÃ÷ÓĞÒ»¸ö²¿·Ö¼È±»±àÒëµ½ÄÚºËÖĞÒ²±»±àÒë³ÉÄ£¿éÁË£¬Òò´ËÔÚ¼ÓÔØÄ£¿éÊ±£¬ÄÚºË±¨·ûºÅÖØ¸´µÄÌáÊ¾
 
-2.è§£å†³
-ç›´æ¥é…ç½®å†…æ ¸çš„æŸä¸€éƒ¨åˆ†ç¼–è¯‘æˆæ¨¡å—ï¼Œä¾‹å¦‚ç¬”è€…å°±ç›´æ¥å°†USBè¿™ä¸€éƒ¨åˆ†ç¼–è¯‘æˆæ¨¡å—å³å¯
+2.½â¾ö
+Ö±½ÓÅäÖÃÄÚºËµÄÄ³Ò»²¿·Ö±àÒë³ÉÄ£¿é£¬ÀıÈç±ÊÕß¾ÍÖ±½Ó½«USBÕâÒ»²¿·Ö±àÒë³ÉÄ£¿é¼´¿É
 ```
 
-wifiç›¸å…³ï¼š
+wifiÏà¹Ø£º
 
 ```
-psåˆ é™¤wpa
-ifconfig   çœ‹ä¸åˆ°wlan0è®¾å¤‡
+psÉ¾³ıwpa
+ifconfig   ¿´²»µ½wlan0Éè±¸
 echo 1 > sys/class/rfkill/rfkill1/state     
 ifconfig wlan0 up
 ps
@@ -485,16 +554,16 @@ chmod 777 sink-test
 
 ```
 
-å…³äºbuildrootä¸‹é¢å¦‚ä½•æ‰“è¡¥ä¸
+¹ØÓÚbuildrootÏÂÃæÈçºÎ´ò²¹¶¡
 
 ```
 cw@SYS3:~/sdk/3126i/buildroot/package/connman ls
 0001-tethering-Reorder-header-includes.patch  0002-nat-build-failure.patch  Config.in  connman.hash  connman.mk  S45connman
 ```
 
-###  å¼€å‘æ¿æ‰§è¡Œæµ‹è¯•ç¨‹åº
+###  ¿ª·¢°åÖ´ĞĞ²âÊÔ³ÌĞò
 
--  æ–¹æ³•ä¸€ï¼šå¤åˆ¶åˆ°å¼€å‘æ¿targetæ ¹ç›®å½•ï¼Œé‡æ–°çƒ§å†™rootfs
+-  ·½·¨Ò»£º¸´ÖÆµ½¿ª·¢°åtarget¸ùÄ¿Â¼£¬ÖØĞÂÉÕĞ´rootfs
 
 ```
 cw@SYS3:~/sdk/3126i/buildroot/output/rockchip_rk3128$ ag -g "sink-test"
@@ -505,3 +574,4 @@ cw@SYS3:~/sdk/3126i/buildroot/output/rockchip_rk3128$cp build/intel-wds-ece955a9
 cw@SYS3:~/sdk/3126i$  make
 cw@SYS3:~/sdk/3126i$  ./mkfirmware.sh
 ```
+
