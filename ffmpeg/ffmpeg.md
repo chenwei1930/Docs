@@ -3,3 +3,106 @@ cw@SYS3:~/ffmpeg$ git clone https://github.com/FFmpeg/FFmpeg.git
 cw@SYS3:~/ffmpeg/FFmpeg$ ffplay  --help
 ```
 
+解析M4媒体文件时需要一些关键的信息，
+
+![image-20200722180037079](resourse/image-20200722180037079.png)
+
+```
+过解析该moov容器的字节长度，可以看到，该容器共包含Ox00149c60字节(1,350,752Byte)，容器的类型为moov；接着继续在这个moov容器中往下解析，下一个容器的大小为Ox0000006c(108）字节，类型为mvhd；然后继续在moov容器中往下解析：
+```
+
+
+FFmpeg查看媒体文件信息
+
+ffprobe -v quiet -print_format json -show_streams -show_format test.jpg 
+
+```
+cw@SYS3:~/ffmpeg/my$ ffprobe -v quiet -print_format json -show_streams -show_format test.jpg 
+{
+    "streams": [
+        {
+            "index": 0,
+            "codec_name": "mjpeg",
+            "codec_long_name": "MJPEG (Motion JPEG)",
+            "codec_type": "video",
+            "codec_time_base": "1/25",
+            "codec_tag_string": "[0][0][0][0]",
+            "codec_tag": "0x0000",
+            "width": 547,
+            "height": 386,
+            "coded_width": 547,
+            "coded_height": 386,
+            "has_b_frames": 0,
+            "sample_aspect_ratio": "1:1",
+            "display_aspect_ratio": "547:386",
+            "pix_fmt": "yuvj420p",
+            "level": -99,
+            "color_range": "pc",
+            "color_space": "bt470bg",
+            "chroma_location": "center",
+            "refs": 1,
+            "r_frame_rate": "25/1",
+            "avg_frame_rate": "0/0",
+            "time_base": "1/25",
+            "start_pts": 0,
+            "start_time": "0.000000",
+            "duration_ts": 1,
+            "duration": "0.040000",
+            "bits_per_raw_sample": "8",
+            "disposition": {
+                "default": 0,
+                "dub": 0,
+                "original": 0,
+                "comment": 0,
+                "lyrics": 0,
+                "karaoke": 0,
+                "forced": 0,
+                "hearing_impaired": 0,
+                "visual_impaired": 0,
+                "clean_effects": 0,
+                "attached_pic": 0
+            }
+        }
+    ],
+    "format": {
+        "filename": "test.jpg",
+        "nb_streams": 1,
+        "nb_programs": 0,
+        "format_name": "image2",
+        "format_long_name": "image2 sequence",
+        "start_time": "0.000000",
+        "duration": "0.040000",
+        "size": "44087",
+        "bit_rate": "8817400",
+        "probe_score": 50
+    }
+}
+cw@SYS3:~/ffmpeg/my$ 
+```
+
+Y：亮度分量  UV：色度分量
+
+​    Y与RGB的演算关系为：Y = 0.2126 R + 0.7152 G + 0.0722 B
+
+ 
+
+YUV4:2:2或4：2：0都是指的Y分量和UV分量在一个像素点中占有的**平均比例**。
+YUV422:水平方向上的UV分量减半了
+
+![image-20200722201033071](resourse/image-20200722201033071.png)
+
+
+
+YUV的采样格式及每种格式中单像素所占内存大小
+
+YUV主要的采样格式有YCbCr 4:2:0、YCbCr 4:2:2、YCbCr 4:1:1和 YCbCr 4:4:4。
+
+采样格式          单像素所占内存大小        存放的码流
+
+YCbCr 4:4:4            3  byte                   Y0 U0 V0 Y1 U1 V1 Y2 U2 V2 Y3 U3 V3（4像素为例）
+
+YCbCr 4:2:2            2  byte                   Y0 U0 Y1 V1 Y2 U2 Y3 V3（4像素为例）
+
+YCbCr 4:2:0            1.5byte                  Y0 U0 Y1 Y2 U2 Y3 Y5 V5 Y6 Y7 V7 Y8（8像素为例）
+
+YCbCr 4:1:1            1.5byte                  Y0 U0 Y1 Y2 V2 Y3（4像素为例）
