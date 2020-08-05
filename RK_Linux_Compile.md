@@ -1692,7 +1692,7 @@ ABI. E.g: arm-unknown-linux-gnueabihf.
 
 ​	▶ target/
 ​		▶bin/
-		▶etc/
+​		▶etc/
 ​		▶lib/
 ​		▶usr/bin/
 ​		▶usr/lib/
@@ -1700,7 +1700,7 @@ ABI. E.g: arm-unknown-linux-gnueabihf.
 ​		▶usr/sbin/
 ​	▶THIS_IS_NOT_YOUR_ROOT_FILESYSTEM
 ​	▶...
-	▶ The target root filesystem
+​	▶ The target root filesystem
 ​	▶ Usual Linux hierarchy
 ​	▶ Not completely ready for the target: permissions, device files, etc.
 ​	▶ Buildroot does not run as root: all files are owned by the user running Buildroot, not
@@ -1731,7 +1731,7 @@ the different packages
 ​		▶manifest.csv
 ​		▶host-manifest.csv
 ​		▶licenses.txt
-		▶licenses/
+​		▶licenses/
 ​		▶sources/
 ▶ Legal information: license of all packages, and their source code, plus a licensing
 manifest
