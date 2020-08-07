@@ -120,6 +120,90 @@ index cabffc153fd5..0e2bb0518e00 100644
 
 
 
+# 4 设备树
+
+## 4.1设备树概念
+
+”开源文档中对设备树的描述是，一种描述硬件资源的数据结构，它通过bootloader将硬件资源传给内核，使得内核和硬件资源描述相对独立(也就是说*.dtb文件由Bootloader读入内存，之后由内核来解析)。
+
+注：要使得3.x之后的内核支持使用设备树，除了内核编译时需要打开相对应的选项外，bootloader也需要支持将设备树的数据结构传给内核。
+
+设备树的主要优势：对于同一SOC的不同主板，只需更换设备树文件.dtb即可实现不同主板的无差异支持，而无需更换内核文件。
+
+Device Tree可以描述的信息包括CPU的数量和类别、内存基地址和大小、总线和桥、外设连接、中断控制器和中断使用情况、GPIO控制器和GPIO使用情况、Clock控制器和Clock使用情况。
+
+设备树包含DTC（device tree compiler），DTS（device tree source和DTB（device tree blob）。其对应关系如图1-1所示：
+
+![img](resources/30145634_1428507541823b.jpg)
+
+## 4.2 DTS + DTSI-->DTC-> DTB 
+
+
+
+```
+*.dts文件是一种ASCII文本对Device Tree的描述，放置在内核的/arch/arm/boot/dts目录。一般而言，一个*.dts文件对应一个ARM的machine。
+
+*.dtsi文件作用：由于一个SOC可能有多个不同的电路板，而每个电路板拥有一个 *.dts。这些dts势必会存在许多共同部分，为了减少代码的冗余，设备树将这些共同部分提炼保存在*.dtsi文件中，
+
+DTC
+DTC为编译工具，它可以将.dts文件编译成.dtb文件。DTC的源码位于内核的scripts/dtc目录，内核选中CONFIG_OF，编译内核的时候，主机可执行程序DTC就会被编译出来。 即scripts/dtc/Makefile中
+hostprogs-y := dtc
+always := $(hostprogs-y) 
+在内核的arch/arm/boot/dts/Makefile中，若选中某种SOC，则与其对应相关的所有dtb文件都将编译出来。在linux下，make dtbs可单独编译dtb。以下截取了TEGRA平台的一部分。
+ifeq ($(CONFIG_OF),y)
+dtb-$(CONFIG_ARCH_TEGRA) += tegra20-harmony.dtb \
+tegra30-beaver.dtb \
+tegra114-dalmore.dtb \
+
+DTB
+DTC编译*.dts生成的二进制文件(*.dtb)，bootloader在引导内核时，会预先读取*.dtb到内存，进而由内核解析。
+tegra124-ardbeg.dtb 
+```
+
+
+
+```
+ 
+设备树编译工具DTC
+DTC将.dts编译为.dtb的工具。DTC的源代码在目录scripts/dtc目录中
+
+内核使能了设备树。编译内核的时候DTC工具会自动被编译出来，对应于
+
+scripts/dtc/Makefile  中 hostprogs-y := dtc
+ 也可以单独安装DTC
+
+sudo apt-get install device-tree-compiler
+ 在linux内核的arch/arm/boot/Makefile中。定义了哪些dtb文件会被编译出来，如下
+
+dtb-$(CONFIG_SOC_AM33XX) += \
+    am335x-lxm.dtb \
+    am335x-pigoa800.dtb \
+    am335x-pigoa800-1g.dtb \
+    am335x-pigoa810.dtb \
+    am335x-pigoa810-1g.dtb \
+    am335x-pigoa840.dtb \
+    am335x-pigoa840-1g.dtb \
+    am335x-pigoa84x.dtb \
+    am335x-pigoa84x-1g.dtb \
+    am335x-pigoa84x-ram1g-nand1g.dtb \
+    am335x-pigoa84x-ram1g-nand256.dtb \
+    am335x-pigoa84x-ram512g-nand1g.dtb \
+    am335x-pigoa84x-ram512-nand256.dtb  \
+    am335x-ieda800-1g.dtb \
+    am335x-chiliboard.dtb \
+    am335x-wega-rdk.dtb
+在linux下，我们可以单独编译设备树
+
+make dtbs
+　反汇编
+
+./scripts/dtc/dtc -I dtb -o dts -o xxx.dts arch/arm/boot/dts/xxx.dtb
+```
+
+
+
+
+
 
 
 https://www.cnblogs.com/aaronLinux/p/5496559.html#t1
@@ -171,3 +255,28 @@ arch/arm/kernel/head.S
 ![img](resources/30145634_14285079263u2A.png)
 
 _vet_atags定义在/arch/arm/kernel/head-common.S中，它主要对DTB镜像做了一个简单的校验。
+
+```
+cw@SYS3:~/sdk/312x_i/kernel$ ag unflatten_device_tree
+drivers/of/fdt.c
+374: * __unflatten_device_tree - create tree of device_nodes from flat blob
+385:static void __unflatten_device_tree(const void *blob,
+393:    pr_debug(" -> unflatten_device_tree()\n");
+432:    pr_debug(" <- unflatten_device_tree()\n");
+454:    __unflatten_device_tree(blob, mynodes, &kernel_tree_alloc);
+1077: * called from unflatten_device_tree() to bootstrap devicetree itself
+1147: * unflatten_device_tree - create tree of device_nodes from flat blob
+1154:void __init unflatten_device_tree(void)
+1156:   __unflatten_device_tree(initial_boot_params, &of_root,
+1171: * section. If the FDT memory is reserved already then unflatten_device_tree
+1192:   unflatten_device_tree();
+```
+
+① kernel入口处获取到uboot传过来的.dtb镜像的基地址
+
+② 通过early_init_dt_scan()函数来获取kernel初始化时需要的bootargs和cmd_line等系统引导参数。
+
+③ 调用unflatten_device_tree函数来解析dtb文件，构建一个由device_node结构连接而成的单向链表，并使用全局变量of_allnodes保存这个链表的头指针。
+
+④ 内核调用OF的API接口，获取of_allnodes链表信息来初始化内核其他子系统、设备等。
+
