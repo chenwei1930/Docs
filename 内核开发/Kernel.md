@@ -118,3 +118,56 @@ index cabffc153fd5..0e2bb0518e00 100644
  CONFIG_EXT4_FS=y
 ```
 
+
+
+
+
+https://www.cnblogs.com/aaronLinux/p/5496559.html#t1
+
+DTC为编译工具，它可以将.dts文件编译成.dtb文件。DTC的源码位于内核的scripts/dtc目录，内核选中CONFIG_OF，编译内核的时候，主机可执行程序DTC就会被编译出来。 即scripts/dtc/Makefile中
+
+hostprogs-y := dtc
+
+always := $(hostprogs-y) 
+
+在内核的arch/arm/boot/dts/Makefile中，若选中某种SOC，则与其对应相关的所有dtb文件都将编译出来。在linux下，make dtbs可单独编译dtb。以下截取了TEGRA平台的一部分。
+
+ifeq ($(CONFIG_OF),y)
+
+dtb-$(CONFIG_ARCH_TEGRA) += tegra20-harmony.dtb \
+
+tegra30-beaver.dtb \
+
+tegra114-dalmore.dtb \
+
+tegra124-ardbeg.dtb 
+
+```
+cw@SYS3:~/sdk/312x_i/kernel/scripts/dtc$ ls
+checks.c                 dtc.o                     fdtput.c          modules.order
+checks.o                 dtc-parser.tab.c          flattree.c        srcpos.c
+data.c                   dtc-parser.tab.c_shipped  flattree.o        srcpos.h
+data.o                   dtc-parser.tab.h          fstree.c          srcpos.o
+dtc                      dtc-parser.tab.h_shipped  fstree.o          treesource.c
+dtc.c                    dtc-parser.tab.o          include-prefixes  treesource.o
+dtc.h                    dtc-parser.y              libfdt            update-dtc-source.sh
+dtc-lexer.l              dt_to_config              livetree.c        util.c
+dtc-lexer.lex.c          dtx_diff                  livetree.o        util.h
+dtc-lexer.lex.c_shipped  fdtdump.c                 Makefile          util.o
+dtc-lexer.lex.o          fdtget.c                  Makefile.dtc      version_gen.h
+```
+
+### 2.3. DTB
+
+DTC编译*.dts生成的二进制文件(*.dtb)，bootloader在引导内核时，会预先读取*.dtb到内存，进而由内核解析。
+
+```
+cw@SYS3:~/sdk/312x_i/kernel$ ls arch/arm/kernel/head.S
+arch/arm/kernel/head.S
+```
+
+在arch/arm/kernel/head.S中，有这样一段：
+
+![img](resources/30145634_14285079263u2A.png)
+
+_vet_atags定义在/arch/arm/kernel/head-common.S中，它主要对DTB镜像做了一个简单的校验。
