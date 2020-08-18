@@ -1,0 +1,332 @@
+## 1. 硬件接口
+
+使用前，请获得摄像头模组资料，查看摄像头内部芯片电路与外部的接口连接情况
+
+### 1.1 DVP
+
+![img](camera_debug/dvp.jpg)
+
+
+
+**输入**
+
+| 引脚             |                                                              |
+| ---------------- | ------------------------------------------------------------ |
+| RESET            | 复位管脚。有些摄像头没有这个硬件复位脚。此方式为硬复位模式，camera的各个IO口恢复到出厂默认状态。只有在XCLK开启后，将RESET置为低，硬复位才有效，否则复位无效。 |
+| XCLK（或EXTCLK） | camera的工作时钟管脚，此管脚为主机提供camera的工作时钟。     |
+| PWDN             | 使能管脚。两种配置方式，一种为standby，一种是normal work，设置为standby的时候，一切对camera的操作都是无效的，包括复位。所以在RESET之前，一定要将PWDN管脚设置为normal模式，否则RESET无效。 |
+| IIC（SCK,SDA）   | 主机和camera通信总线. 读和写操作                             |
+
+**输出**
+
+| 引脚             |                                                              |
+| ---------------- | ------------------------------------------------------------ |
+| data             | 数据管脚。此数据脚可以输出的格式有YUV、RGB、JPEG等。         |
+| VSYNC（或FSYNC） | 帧同步信号管脚。一个VYSNC信号结束表示一帧（即一个画面）的数据已经输出完毕 |
+| HSYNC(或LREF)    | 行同步信号管脚。一个HSYNC信号结束表示一行的数据已经输出完毕。 |
+| PCLK             | 像素时钟同步信号管脚。一个PCLK信号结束表示一个像素点的数据已经输出完毕。 |
+
+**电源总线**
+
+| 引脚  |                                       |
+| ----- | ------------------------------------- |
+| AVDD  | camera的模拟电源 （模拟电路供电AVCC） |
+| DOVDD | camera的GPIO口数字电压（I/O 电源）    |
+| DVDD  | camera的数字电源（数字电路供电VCC）   |
+
+​    一般来说，要求先提供sensor的GPIO口电压，接着提供模拟电压，最后提供工作电压。时序如下图：
+
+![img](camera_debug/power.png)
+
+
+
+比如SC031GS 芯片分三路电源供电：DOVDD 外接 1.8V,AVDD 外接 2.8V，DVDD 外接 1.5V：
+
+![image-20200817160321115](resources/image-20200817160321115.png)
+
+
+
+## 2. 摄像头技术指标
+
+**图像解析度/分辨率(Resolution)**
+  ● SXGA(1280x1024)又称130万像素
+  ● XGA(1024x768)又称80万像素
+  ●SVGA(800x600)又称50万像素
+  ●VGA(640x480)又称30万像素(35万是指648X488)
+  ●CIF(352x288)又称10万像素
+  ●SIF/QVGA(320x240)
+  ●QCIF(176x144)
+  ●QSIF/QQVGA(160x120)
+
+**图像格式(imageFormat/Colorspace)**
+  RGB24，420是最常用的两种图像格式。
+  ●RGB24：表示R、G、B三种颜色各8bit，最多可表现256级浓淡，从而可以再现256*256*256种颜色。
+  ●I420：YUV格式之一。
+  ●其它格式有:RGB565，RGB444，YUV4:2:2等。
+
+**自动白平衡调整(AWB)** 
+定义：要求在不同色温环境下，照白色的物体，屏幕中的图像应也是白色的。色温表示光谱成份，光的颜色。色温低表示长波光成分多。当色温改变时，光源中三基色(红、绿、蓝)的比例会发生变化，需要调节三基色的比例来达到彩色的平衡，这就是白平衡调节的实际。
+
+**图像压缩方式**
+  JPEG：(jointphotographicexpertgroup)静态图像压缩方式。一种有损图像的压缩方式。压缩比越大，图像质量也就越差。当图像精度要求不高存储空间有限时，可以选择这种格式。大部分数码相机都使用JPEG格式。
+
+**彩色深度(色彩位数)**
+  反映对色彩的识别能力和成像的色彩表现能力，实际就是A/D转换器的量化精度，是指将信号分成多少个等级。常用色彩位数(bit)表示。彩色深度越高，获得的影像色彩就越艳丽动人。市场上的摄像头均已达到24位，有的甚至是32位。
+
+**图像噪音**
+  指的是图像中的杂点干扰。表现为图像中有固定的彩色杂点。摄像头运行时间长，也会产生热噪生。
+
+**视角**
+  与人的眼睛成像是相同原理，简单说就是成像范围。跟使用的镜头有关。
+
+**输出/输入接口**
+  串行接口(RS232/422):传输速率慢，为115kbit/s
+  并行接口(PP)：速率可以达到1Mbit/s
+  红外接口(IrDA)：速率也是115kbit/s，一般笔记本电脑有此接口。
+  通用串行总线USB：即插即用的接口标准，支持热插拔。USB1.1速率可达12Mbit/s,USB2.0可达480Mbit/s
+  IEEE1394(火线)接口(亦称ilink):其传输速率可达100M~400Mbit/s。
+
+**曝光与噪点**
+
+曝光是用来计算从景物到达相机的光通量大小的物理量。图像传感器只有获得正确的曝光，才能得到高质量的照片。曝光过度，图像看起来太亮曝光不足，则图像看起来太暗。到达传感器的光通量的大小主要由两方面因素决定：曝光时间的长短以及光圈的大小。噪点严重的原图与进行降噪处理后的对比，可以通过长时间曝光降低噪点。长时间曝光也会产生噪点，是因为感光元件的温度升。**曝光时间过长，会导致每一帧所用的时间过长，造成图像卡顿**。因此曝光时间越长，一帧图像上的跑步者运动的过程就越长，因此被拍摄的跑步者就会变模糊。如果曝光时间很短，一帧图像中的跑步者在这个曝光时间内运动的过程也会很短，图像也就越清晰。高速摄影也是这个原理
+
+![img](camera_debug/Hot_Pixel.jpeg)
+
+**白平衡**
+
+白平衡与色温，并不是一件事情。先说色温，任何发光物体都具有色温，说白了色温就是衡量物体发光的颜色。与一般认知不同，红色黄色是低色温，一般只有3000K以下，白色是6000K左右，而蓝色是高色温，实际色温是10000K以上。
+
+ 相机记录颜色，虽然依靠的是亮度信息，但是相机也需要对色彩进行判断，从而获得一个色彩基准，来还原准确的拍摄环境。这其中最重要的，就是我们常说的白平衡。
+
+  白平衡与色温，并不是一件事情。先说色温，任何发光物体都具有色温，说白了色温就是衡量物体发光的颜色。与一般认知不同，红色黄色是低色温，一般只有3000K以下，白色是6000K左右，而蓝色是高色温，实际色温是10000K以上。
+
+- 冷光，色温高，偏蓝
+- 暖光，色温低，偏红
+
+![img](camera_debug/white_balance_1.jpg)
+
+
+
+**增益**
+
+增益是摄像机传感器接收到原始景物的光后，在光电转换过程中，对原始的光进行调大或调小的过程。如果这时是增益调大了，**我们的图象就会比实际的亮，相反就会更暗**。如果传感器很小或质量不是很好，增益后就有很多的噪点。
+
+**AEC/AGC**
+
+AEC/AGC 都是基于亮度进行调节的。AEC(auto exposure control) 调节曝光时间，AGC (auto gain control)调节增益值，最终使图像亮度落在设定亮度阈值范围内。
+
+**Pixel Array**
+
+ gc0308物理上的阵列是648H*492V，实际采样阵列是648H*488V，也是有效阵列。实际取像的阵列是640H*480V。如下图所示：
+
+![image-20200817194554711](camera_debug/pixel_array.png)
+
+vsync: vertical synchronization,  指与显示器的帧数同步. 简单来说就是启用了vsync的渲染过程,帧数不会超过显示器的帧数, 一个同步会被执行. 同步的地方就是显示器扫描线结束最后一行扫描准备开始第一行扫描的地方.
+
+hsync: horizonal synchronization, 相比于vsync来说, 同步的单位从帧降到行,即是保证操作不是在扫描一行的中间出现,而是同步到下一行.
+
+VBLANK: 显示器扫描线完成最后一行后,需要重返左上角,这个过程叫做: vblank,也叫VBI(vertical blank interval) ,因为扫描线变得blank,以防止看到一个斜线显示在屏幕上.
+
+ 空白无效行时间（Vblank/Dummy line）=Bt+St+Et。
+
+ 首先要明白，物理上492行，但是实际感应光线的只有488行，4行是Dark Row，黑暗行；但是这488有数据的行中只有480行是有效行。
+
+
+
+## 3 rk2206拍照命令
+
+如下命令创建文件cif.out,cif.jpeg，并抓图数据保存到cif.out,cif.jpeg。
+
+````
+file.setpath A:
+file.mf cif.out
+file.mf cif.jpeg
+vicap_test dev_create
+vicap_test dev_set --set-dev=vicap_0 --set-workmode=block --set-blocks=6 --set-format=fourcc=NV12,width=640,height=480 --stream-buf=8 --stream-count=1 --stream-mode=photo --skip-count=20
+vicap_test dev_streamon
+````
+
+如果要修改照片的输出格式，比如修改为BG8
+
+```
+vicap_test dev_set --set-dev=vicap_0 --set-workmode=block --set-blocks=6 --set-format=fourcc=BG8,width=640,height=480 --stream-buf=8 --stream-mode=photo --skip-count=20
+```
+
+查看BG8下的帧率
+
+```
+vicap_test dev_set --set-dev=vicap_0 --set-workmode=block --set-blocks=6 --set-format=fourcc=BG8,width=640,height=480 --stream-buf=8 --stream-mode=photo --skip-count=20
+```
+
+
+
+查看RK2206 EVB11焊盘
+
+![img](resources/pcb.png)
+
+按z切换图层 再输入4。查看焊盘
+
+## 4. 摄像头调式步骤
+
+摄像头调式是核心思想，是你的软件运行到什么步骤，摄像头的硬件输出波形是否正常。
+
+软件第一步：初始化IIC
+
+比如使能摄像头的pwdn进入工作模式。检查pwdn
+
+摄像头调试前需要确认的信息：先确保硬件供电范围正常。（也就是软件上你要是能pwn）
+
+````
+确认硬件接口，摄像头封装。是dvp还是mipi或者是lvds，同一个摄像头的不同的硬件接口初始化的配置数组是不一样的。而且dvp接口是D0-D11,你是用到高8位还是全部的12位，这也有所不同，图片格式不同，raw8或者是raw12。 
+其中常用dvp接口，数据线有D0-D11。摄像头模组内部封装。sc031dvp csp封装只有8位，dvp接高8bit就可以。
+
+
+摄像头IIC的地址，读写的IIC标志位， 寄存器地址是16位还是8位，如果是16位的话是先发高8位还是先发低8位。
+
+确认摄像头输出图像的格式，是yuv还是raw还是其他，图像的大小是多少，640H*480V,是水平640像素，高480像素，
+这里的宽高定义看自己的软件定义，比如rk2206平台这里认为宽640高480。
+
+硬件调试，确认在写入寄存器之前，powerdown也就是PDN引脚是不是使能（确认高使能还是低使能）。软件的步骤，第一步是读取摄像头ID，这一步判断IIC是否读正常。第二步，写入寄存器初始化数组初始化寄存器。第三步：写stream on寄存器，启动像素时钟开始拍照。（这时候检查摄像头的PCLK引脚正常的话应该有波形）。如果PCLK没有波形，检查输出时钟MCLK是否有24MHZ。再检查摄像头的供电电压是否正常。
+
+软件进行调试之前，建议PWN一直处于使能状态，stream off函数注释掉，这样方便观察到波形。
+````
+
+### 1 IIC读取摄像头ID失败
+
+摄像头初始化前的，第一步是读取摄像头型号的ID，如果IIC没有读取到信息，软件上就会显示IIC读失败日志。
+
+IIC读取失败的调试方法,
+
+1. **检查IIC软件配置**
+
+IIC 一共两根线，一根数据线和一根时钟线clk。IIC是半双工，IIC走线最长40CM。
+
+IIC Slave address 设备地址一般是7位也有10位的。7位的情况下，比如0x30，这时候低位补0是写，低位补1是读。
+
+IIC 确认读写的寄存器地址位数。如果是16位寄存器地址，要检查主机需要先发高8位，然后再发8位，或者反过来。
+
+
+
+![image-20200817111628369](camera_debug/image-20200817111628369.png)
+
+上图是sc031gs的时序图。
+
+```
+iic读：
+第一个图是读写的框图：
+主机发一个START开始位，再发7位从机设备地址，再发一位R/W标志（0是写，1是读）==》 从机回复ACK应答 ==》 再发寄存器的高8位地址 ==》 从机回复ACK应答  ==》 再发寄存器的低8位地址 ==》 从机回复ACK应答和数据和应答位或停止位。 ==》 主机发送Pasue 停止位
+
+第二个图是写框图：
+主机发一个START开始位，再发7位从机设备地址，再发一位W标志0 ==》 从机回复ACK应答 ==》 再发寄存器的高8位地址 ==》 从机回复ACK应答  ==》 再发寄存器的低8位地址 ==》 从机回复ACK ==》 主机发送数据 ==》 从机回复应答或者无应答 ==》 主机发送一个停止位
+
+
+第二个图是读框图：
+主机发一个START开始位，再发7位从机设备地址，再发一位W标志0 ==》 从机回复ACK应答 ==》 再发寄存器的高8位地址 ==》 从机回复ACK应答  ==》 再发寄存器的低8位地址 ==》 从机回复ACK ==》 主机发送数据 ==》 从机回复应答或者无应答 ==》 主机发送一个停止位
+```
+
+### 2 示波器检查IIC读取摄像头ID的波形
+
+检查配置后，确认无误后，还是读取摄像头ID失败了。
+
+由于软件上第一步就是读取摄像头ID，读取失败了就终止运行了
+
+```
+20200811_17：43:28RK2206>factory.camera
+20200811_17：43:28(rk_camera_init) enter
+20200811_17：43:28[A.14.00][000042.535975]find device class_id:DEV_CLASS_I2C
+20200811_17：43:28[A.14.00][000042.542805][SC031GS]:(0 &I&I&I&[sensor_0]:enable cif clk
+20200811_17：43:28[A.14.00][000042.544557][sensor_0]:Info:get the clk gate id:0x7e
+20200811_17：43:28[A.14.00][000042.550185][SC031GS]:(rt_gc2145_detect_sensor) enter 
+20200811_17：43:28[A.14.00][000042.555982]Err: SC031GS i2c read err!
+20200811_17：43:28[A.14.00][000042.560431][sensor_0]:ERROR: SC031GS i2c read failed !!!
+20200811_17：43:28[A.14.00][000042.571702][SC031GS]:(rk_camera_init) probe failed !!!
+20200811_17：43:28[A.14.00][000042.577663][ERR] app-camera: camera init failed!
+20200811_17：43:28[A.14.00][000042.582706][fac]
+20200811_17：43:28[A.14.00][000042.582748]camera_open is start!
+20200811_17：43:28[A.14.00][000042.588501]
+20200811_17：43:28[A.14.00][000042.588518]find device class_id:DEV_CLASS_VICAP
+20200811_17：43:28[A.14.00][000042.597069][ERR] app-camera: the device:vicap_0 is not found.
+20200811_17：43:28[A.14.00][000042.602363][ERR] app-camera: open vicap failed!
+20200811_17：43:28[A.14.00][000042.608827][fac]
+20200811_17：43:28[A.14.00][000042.608881]
+```
+
+
+
+     起始信号：当 SCL 线是高电平时 SDA 线从高电平向低电平切换。 
+  停止信号：当 SCL 线是高电平时 SDA 线由低电平向高电平切换。
+
+![771e9c18ea62191f6909a2d2e8799c7](camera_debug/771e9c18ea62191f6909a2d2e8799c7.jpg)
+
+
+
+```shell
+
+#define SC031GS_7BIT_ADDRESS         (0x30)
+#define SC031GS_REG_ID_H_ADDRESS     (0x3107)
+#define SC031GS_REG_ID_L_ADDRESS     (0x3108)
+11000000 00
+```
+
+```shell
+[A.14.00][000008.738480]find device class_id:DEV_CLASS_I2C
+[A.14.00][000008.745306]find device class_id:DEV_CLASS_I2C
+[A.14.00][000008.750421][gc2145]:(i2c_0):find i2c:
+[A.14.00][000008.750533][sensor_0]:enable cif clk
+[A.14.00][000008.754022][sensor_0]:Info:get the clk gate id:0x7e
+[A.14.00][000008.759651][gc2145]:(rt_gc2145_detect_sensor) enter 
+[A.14.00][000008.765361]I2cDev_ReadData ret1[sensor_0]:Info: GC2145 pid:0x0!
+[A.14.00][000008.771997]I2cDev_ReadData ret1[sensor_0]:Info: GC2145 pid:0x0,ver:0x31!
+[A.14.00][000008.779389][sensor_0]:Info: GC2145 detected successfully !!!
+```
+
+### 2  第二步不出图情况
+
+通过上面的步骤 说明软件的第一步读出摄像头ID已经成功；
+
+软件第二步写入初始化数组。找摄像头模组厂的FAE索要初始化数组。
+
+软件第二步写stream on寄存器启动摄像头的像素时钟PCLK;
+
+
+
+摄像头寄存器
+
+- 摄像头ID寄存器用于识别摄像头
+- 初始化寄存器数组（设置了曝光、输出尺寸、图像模式、测试模式等、不同硬件接口不同的配置）
+- stream on寄存器启动时钟(PCLK才有波形)
+- stream off寄存器关闭时钟
+
+```shell
+RK2206>I2cDev_ReadData ret1[sensor_0]:Info: GC2145 pid:0x0!
+[A.VICAP][000043.822324]I2cDev_ReadData ret1[sensor_0]:Info: GC2145 pid:0x0,ver:0x31!
+[A.VICAP][000043.829716][sensor_0]:Info: GC2145 detected successfully !!!
+[A.VICAP][000043.840986][gc2145]:(rt_gc2145_detect_sensor) exit 
+[A.VICAP][000043.841728][gc2145]:(rk_gc2145_init) exit 
+[A.VICAP][000043.846600][gc2145]:(rk_gc2145_control) exit 
+[A.VICAP][000043.851724][vicap_0]:init subdev succe!
+[A.VICAP][000043.856343][vicap_0]:len of input fmts:20
+[A.VICAP][000043.861130][vicap_0]:input pixelcode:0x2006,mbus_code:0x2008
+[A.VICAP][000043.872317][vicap_0]:input pixelcode:0x2006,mbus_code:0x2009
+[A.VICAP][000043.878700][vicap_0]:input pixelcode:0x2006,mbus_code:0x2006
+[A.VICAP][000043.885084][vicap_0]:the input format is:0x2006
+[A.VICAP][000043.885576][vicap_0]:y len per block:0xc800
+[A.VICAP][000043.890532][vicap_0]:the plane[0] size:0xc800, the total size of buf:0xc800
+[A.VICAP][000043.901718][vicap_0]:the plane[1] size:0x6400, the total size of buf:0x12c00
+[A.VICAP][000043.909363][vicap_0]:dma status: 0
+[A.VICAP][000043.910104][gc2145]:(rk_gc2145_control) enter 
+[A.VICAP][000043.915312][gc2145]:(rk_gc2145_control) exit 
+[A.VICAP][000043.937699][vicap_0]:Err: take dqbuf sem failed, ret:0xffffffff!
+[A.VICAP][000044.933554][VICAP-TEST]:dqueue buf failed,retry it,1!
+[A.VICAP][000044.934878][vicap_0]:Err: take dqbuf sem failed, ret:0xffffffff!
+```
+
+
+
+- MCLK 给摄像头提供输入时钟
+
+<img src="resources/mclk.png" alt="mclk" style="zoom: 67%;" />
+
+- XCLK摄像头输出时钟
+
+![xlck](resources/xlck.png)
