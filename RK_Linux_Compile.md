@@ -1638,7 +1638,7 @@ data            init  linuxrc  mnt    proc  run            sys     timestamp    
 
 ### 5.8 官方
 
-####Build tree: $(O)
+### Build tree: $(O)
 
 output/
 

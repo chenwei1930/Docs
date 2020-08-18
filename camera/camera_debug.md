@@ -158,17 +158,13 @@ vicap_test dev_set --set-dev=vicap_0 --set-workmode=block --set-blocks=6 --set-f
 vicap_test dev_set --set-dev=vicap_0 --set-workmode=block --set-blocks=6 --set-format=fourcc=BG8,width=640,height=480 --stream-buf=8 --stream-mode=photo --skip-count=20
 ```
 
-
+## 4. 摄像头调式步骤
 
 查看RK2206 EVB11焊盘
 
 ![img](resources/pcb.png)
 
-按z切换图层 再输入4。查看焊盘
-
-## 4. 摄像头调式步骤
-
-摄像头调式是核心思想，是你的软件运行到什么步骤，摄像头的硬件输出波形是否正常。
+按z切换图层 再输入4。查看焊盘摄像头调式是核心思想，是你的软件运行到什么步骤，摄像头的硬件输出波形是否正常。
 
 软件第一步：初始化IIC
 
