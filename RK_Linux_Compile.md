@@ -305,6 +305,19 @@ Version.mk
 
 ### 2.1 编译Buildroot  source脚本只用来编译rootfs
 
+
+
+```
+檵 14:18:28
+我们source之后一般还需要./build.sh device/rockchip/rv1126_rv1109/BoardConfig-tb.mk  这样切换单板吗
+
+林刘迪铭 14:19:00
+source 只是选buildroot的配置，其他的kernel uboot什么的，需要切这个mk
+
+林刘迪铭 14:19:19
+正常版本用BoardConfig.mk就是，tb是快速开机的 
+```
+
 #### 2.1.1 source
 
 ```
