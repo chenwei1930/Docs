@@ -278,3 +278,135 @@ ffmpeg  -f avfoundation -i :0 -ar 44100 -f s16le out.pcm
 
 除此之外还有复杂滤镜、水印、视频裁剪、倍速播放、画中画、直播推流相关等复杂命令，本文意在给ffmpeg功能有个大致了解，暂不给出。
 
+# 5 命令详解
+
+## 5.1 使用ffmpeg调整图像大小
+
+```
+指定长宽：
+ffmpeg -i input.jpg -vf scale=320:240 output_320x240.png
+
+指定长，高度按比例缩放：
+ffmpeg -i input.jpg -vf scale=320:-1 output_320x240.png
+
+缩放为之前的两倍：
+ffmpeg -i input.jpg -vf scale=iw*2:ih input_double_width.png
+
+缩放为之前的二分之一：
+ffmpeg -i input.jpg -vf “scale=iw.5:ih.5” input_half_size.png
+ffmpeg -i input.jpg -vf “scale=iw/2:ih/2” input_half_size.png
+```
+
+## 5.2 ffprobe
+
+```
+ffprobe shy.mp3
+输出内容为：
+复制代码
+Input #0, mp3, from 'shy.mp3':
+  Metadata:
+    genre           : Blues
+    encoder         : Lavf56.4.101
+    comment         : 163 key(Don't modify):L64FU3W4YxX3ZFTmbZ+8/UO6KmVXLfTij3uZN/wCXE4a00XHtvOwccwFlS+8ednRD4MnrdUH+aUYZFVY8bObsrabtBM2Ps/UAWPJtsmW/3RXnn6eJcNUHrPALM0003fIpQnn6MOWbdXqog6WFDLpaZJhoPMnFy9u41HxCalUwMEc+mkHNn+nSLlioJfpv4wPBwUhxfLNmOScmXPzOary2k37A/brRx7QUlMD9rkaZ    album           : 社会摇
+    title           : 社会摇
+    artist          : 萧全
+    track           : 1
+  Duration: 00:04:09.34, start: 0.025056, bitrate: 323 kb/s
+    Stream #0:0: Audio: mp3, 44100 Hz, stereo, s16p, 320 kb/s
+    Stream #0:1: Video: mjpeg, yuvj444p(pc, bt470bg/unknown/unknown), 500x500 [SAR 72:72 DAR 1:1], 90k tbr, 90k tbn, 90k tbc
+    Metadata:
+      comment         : Media (e.g. label side of CD)
+复制代码
+
+首先我们看以下这行信息：
+
+Duration: 00:04:09.34, start: 0.025056, bitrate: 323 kb/s
+这行信息表示，该视频文件的时长是4分9秒340毫秒，开始播放时间是0.025056，整个文件的比特率是256Kbit/s，然后我们看下一行信息：
+
+Stream #0:0: Audio: mp3, 44100 Hz, stereo, s16p, 320 kb/s
+这行信息表示，第一个流是音频流，编码格式是MP3格式，采样率是44.1KHz，声道是立体声，采样表示格式是SInt16(short)的planner(平铺格式)，这路流的比特率320Kbit/s。
+
+四、使用ffprobe查看mp4格式的文件
+本文使用的是视频《泡沫》，执行的命令为：
+
+ffprobe pm.mp4
+输出内容为：
+
+复制代码
+
+Input #0, mov,mp4,m4a,3gp,3g2,mj2, from 'pm.mp4':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 1
+    compatible_brands: isomavc1
+    creation_time   : 2016-12-17T16:02:05.000000Z
+    album           : Yinyuetai
+    artist          : yinyuetai.com
+    comment         : Yinyuetai-1TR1151    date            : 12/18/16 00:02:05
+  Duration: 00:04:33.51, start: 0.000000, bitrate: 1104 kb/s
+    Stream #0:0(und): Video: h264 (Main) (avc1 / 0x31637661), yuv420p, 960x540, 1008 kb/s, 25 fps, 25 tbr, 25k tbn, 50 tbc (default)
+    Metadata:
+      creation_time   : 2016-12-17T16:02:05.000000Z
+      handler_name    : 264@GPAC0.5.1-DEV-rev5472
+    Stream #0:1(und): Audio: aac (LC) (mp4a / 0x6134706D), 44100 Hz, stereo, fltp, 92 kb/s (default)
+    Metadata:
+      creation_time   : 2016-12-17T15:50:54.000000Z
+      handler_name    : Sound Media Handler
+复制代码
+
+首先我们看以下这行信息：
+
+Duration: 00:04:33.51, start: 0.000000, bitrate: 1104 kb/s
+这行信息表示，该视频文件的时长是4分33秒510毫秒，开始播放时间是0，整个文件的比特率是1104Kbit/s，然后我们看下一行信息：
+
+Stream #0:0(und): Video: h264 (Main) (avc1 / 0x31637661), yuv420p, 960x540, 1008 kb/s, 25 fps, 25 tbr, 25k tbn, 50 tbc (default)
+这行信息表示，第一个流是视频流，编码格式是H264格式(封装格式为AVC1)，每一帧的数据表示为yuv420p，分辨率为960x540，这路流的比特率为1108Kbit/s，帧率为每秒钟25帧。
+
+接下来我们看下一行：
+
+Stream #0:1(und): Audio: aac (LC) (mp4a / 0x6134706D), 44100 Hz, stereo, fltp, 92 kb/s (default)
+这行信息表示第二个流是音频流，编码方式为ACC（封装格式为MP4A），并且采用的Profile是LC规格，采样率是44.1KHz，声道是立体声，这路流的比特率92Kbit/s。
+
+到此为止，我们就掌握了使用ffprobe提取媒体的头文件信息的方式，并了解了提取出来的信息的含义
+
+F:\desk\摄像头>ffprobe  input.jpg
+ffprobe version 4.2.1 Copyright (c) 2007-2019 the FFmpeg developers
+  built with gcc 9.1.1 (GCC) 20190807
+  configuration: --disable-static --enable-shared --enable-gpl --enable-version3 --enable-sdl2 --enable-fontconfig --enable-gnutls --enable-iconv --enable-libass --enable-libdav1d --enable-libbluray --enable-libfreetype --enable-libmp3lame --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-libopenjpeg --enable-libopus --enable-libshine --enable-libsnappy --enable-libsoxr --enable-libtheora --enable-libtwolame --enable-libvpx --enable-libwavpack --enable-libwebp --enable-libx264 --enable-libx265 --enable-libxml2 --enable-libzimg --enable-lzma --enable-zlib --enable-gmp --enable-libvidstab --enable-libvorbis --enable-libvo-amrwbenc --enable-libmysofa --enable-libspeex --enable-libxvid --enable-libaom --enable-libmfx --enable-amf --enable-ffnvcodec --enable-cuvid --enable-d3d11va --enable-nvenc --enable-nvdec --enable-dxva2 --enable-avisynth --enable-libopenmpt
+  libavutil      56. 31.100 / 56. 31.100
+  libavcodec     58. 54.100 / 58. 54.100
+  libavformat    58. 29.100 / 58. 29.100
+  libavdevice    58.  8.100 / 58.  8.100
+  libavfilter     7. 57.100 /  7. 57.100
+  libswscale      5.  5.100 /  5.  5.100
+  libswresample   3.  5.100 /  3.  5.100
+  libpostproc    55.  5.100 / 55.  5.100
+Input #0, image2, from 'input.jpg':
+  Duration: 00:00:00.04, start: 0.000000, bitrate: 27365 kb/s
+    Stream #0:0: Video: mjpeg (Baseline), yuvj420p(pc, bt470bg/unknown/unknown), 2000x1333 [SAR 72:72 DAR 2000:1333], 25 tbr, 25 tbn, 25 tbc
+```
+
+# 6 YUV
+
+## 6.1 yuv420
+
+YV12和I420的区别
+
+一般来说，直接采集到的视频数据是RGB24的格式，
+
+RGB24一帧的大小size＝width×heigth×3 Byte，
+
+RGB32的size＝width×heigth×4，
+
+如果是I420（即YUV标准格式4：2：0）的数据量是 size＝width×heigth×1.5 Byte。
+
+在采集到RGB24数据后，需要对这个格式的数据进行第一次压缩。即将图像的颜色空间由RGB2YUV。因为，X264在进行编码的时候需要标准的YUV（4：2：0）。但是这里需要注意的是，虽然YV12也是（4：2：0），但是YV12和I420的却是不同的，在存储空间上面有些区别。如下：
+YV12 ： 亮度（行×列） ＋ V（行×列/4) + U（行×列/4）
+I420 ： 亮度（行×列） ＋ U（行×列/4) + V（行×列/4）
+可以看出，YV12和I420基本上是一样的，就是UV的顺序不同。
+继续我们的话题，经过第一次数据压缩后RGB24－>YUV（I420）。这样，数据量将减少一半，为什么呢？呵呵，这个就太基础了，我就不多写了。同样，如果是RGB24－>YUV（YV12），也是减少一半。但是，虽然都是一半，如果是YV12的话效果就有很大损失。然后，经过X264编码后，数据量将大大减少。将编码后的数据打包，通过RTP实时传送。到达目的地后，将数据取出，进行解码。完成解码后，数据仍然是YUV格式的，所以，还需要一次转换，这样windows的驱动才可以处理，就是YUV2RGB24。
+
+
+
+![img](resources/20131002140914609)
+
