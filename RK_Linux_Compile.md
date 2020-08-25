@@ -305,6 +305,19 @@ Version.mk
 
 ### 2.1 编译Buildroot  source脚本只用来编译rootfs
 
+
+
+```
+檵 14:18:28
+我们source之后一般还需要./build.sh device/rockchip/rv1126_rv1109/BoardConfig-tb.mk  这样切换单板吗
+
+林刘迪铭 14:19:00
+source 只是选buildroot的配置，其他的kernel uboot什么的，需要切这个mk
+
+林刘迪铭 14:19:19
+正常版本用BoardConfig.mk就是，tb是快速开机的 
+```
+
 #### 2.1.1 source
 
 ```
@@ -1638,7 +1651,7 @@ data            init  linuxrc  mnt    proc  run            sys     timestamp    
 
 ### 5.8 官方
 
-####Build tree: $(O)
+### Build tree: $(O)
 
 output/
 
@@ -1692,7 +1705,7 @@ ABI. E.g: arm-unknown-linux-gnueabihf.
 
 ​	▶ target/
 ​		▶bin/
-		▶etc/
+​		▶etc/
 ​		▶lib/
 ​		▶usr/bin/
 ​		▶usr/lib/
@@ -1700,7 +1713,7 @@ ABI. E.g: arm-unknown-linux-gnueabihf.
 ​		▶usr/sbin/
 ​	▶THIS_IS_NOT_YOUR_ROOT_FILESYSTEM
 ​	▶...
-	▶ The target root filesystem
+​	▶ The target root filesystem
 ​	▶ Usual Linux hierarchy
 ​	▶ Not completely ready for the target: permissions, device files, etc.
 ​	▶ Buildroot does not run as root: all files are owned by the user running Buildroot, not
@@ -1731,7 +1744,7 @@ the different packages
 ​		▶manifest.csv
 ​		▶host-manifest.csv
 ​		▶licenses.txt
-		▶licenses/
+​		▶licenses/
 ​		▶sources/
 ▶ Legal information: license of all packages, and their source code, plus a licensing
 manifest
