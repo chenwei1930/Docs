@@ -22,3 +22,30 @@ sudo dnf install librockchip_rga-devel
 https://github.com/Jerzha/samples-toybrick-rga.git
 ```
 
+
+
+```
+[root@RV1126_RV1109:/tmp]# rgaImDemo --querystring
+-/bin/sh: rgaImDemo: not found
+[root@RV1126_RV1109:/tmp]# ./im2d  rgaImDemo --querystring
+./im2d: /lib/libstdc++.so.6: no version information available (required by librga.so)
+./im2d: /lib/libstdc++.so.6: no version information available (required by librga.so)
+./im2d: /lib/libstdc++.so.6: no version information available (required by librga.so)
+./im2d: /lib/libstdc++.so.6: no version information available (required by librga.so)
+./im2d: /lib/libstdc++.so.6: no version information available (required by librga.so)
+./im2d: /lib/libstdc++.so.6: no version information available (required by librga.so)
+./im2d: /lib/libstdc++.so.6: no version information available (required by librga.so)
+librga:RGA_GET_VERSION:3.02,3.020000
+ctx=0x28070,ctx->rgaFd=3
+Rga built version:version:1.00Start selecting mode
+im2d querystring ..
+
+RGA vendor            : Rockchip Electronics Co.,Ltd.
+RGA version           : RGA_2_Enhance
+Max input             : 8192x8192
+Max output            : 4096x4096
+Scale limit           : 0.0625 ~ 16
+Input support format  : RGBA_8888 RGBA_4444 RGBA_5551 RGB_565 RGB_888 YUV420/YUV422 YUV420_10bit/YUV422_10bit 
+output support format : RGBA_8888 RGBA_4444 RGBA_5551 RGB_565 RGB_888 YUV420/YUV422 YUYV 
+```
+
