@@ -189,3 +189,64 @@ static int process_create_device(void)
 
 Grey formats 灰度格式
 
+# 3 YUV
+
+###  3.1 YUV分类
+
+“Y”表示明亮度（Luminance或Luma），也就是灰度值；而“U”和“V” 表示的则是色度（Chrominance或Chroma），作用是描述影像色彩及饱和度，用于指定像素的颜色。
+
+YUV格式：有两大类：planar和packed。
+对于planar的YUV格式，先连续存储所有像素点的Y，紧接着存储所有像素点的U，随后是所有像素点的V。
+对于packed的YUV格式，每个像素点的Y,U,V是连续交存储的。
+
+
+
+### 3.1 YUV420SP和YUV420P
+
+在YUV420中，一个像素点对应一个Y，一个4X4的小方块对应一个U和V。对于所有 YUV420图像，它们的Y值排列是完全相同的，因为只有Y的图像就是灰度图像。YUV420sp与YUV420p的数据格式它们的UV排列在原理上是完 全不同的。420p它是先把U存放完后，再存放V，也就是说UV它们是连续的。而420sp它是UV、UV这样交替存放的。(见下图) 有了上面的理论，我就可以准确的计算出一个YUV420在内存中存放的大小。 width * hight =Y（总和） U = Y / 4  V = Y / 4
+
+所以YUV420 数据在内存中的长度是 width * hight * 3 / 2，
+
+- YUV420SP：
+
+sp（semi-Planar二维平面.属于平面模式和打包模式的混合模式, ）指的是YUV不是3个平面而是分成2个平面。Y数据一个平面，UV数据合用一个平面。UV平面的数据格式是UVUVUV...
+
+![img](resources/20181029164143551.png)
+
+- YUV420P (属于平面模式,3个平面)：
+
+420P是先把U存放完后，再存放V，也就是说UV他们是连续的。
+
+![img](resources/20181029164245522.png)
+
+
+
+# 4 RGB
+
+**RGB565**:
+
+用16个bit表示一个像素，5个bit表示R(红色)，6个bit表示G(绿色)，5个bit表示B(蓝色)，从高位到低位排列如下：
+
+R R R R R G G G G G G B B B B B
+
+**RGB555**:
+
+用16个bit表示一个像素，其中最高位不用，R(红色), G(绿色), B(蓝色)都用5个bit来表示,从高位到低位排列如下:
+
+X R R R R R G G G G G B B B B B
+**RGB24**:
+
+用24个bit表示一个像素，R(红色), G(绿色), B(蓝色)都用8个bit来表示,从高位到低位排列如下:
+
+R R R R R R R R G G G G G G G G B B B B B B B B
+**RGB32（RGBA）**:
+
+用32个bit表示一个像素，R(红色), G(绿色), B(蓝色)都用8个bit来表示，然后用8个bit来表示alpha(透明度),从高位到低位排列如下:
+
+B B B B B B B B G G G G G G G G R R R R R R R R A A A A A A A A
+
+
+
+# 5 常识
+
+![img](resources/v2-b035dd24b316972c990311ac787d8ab0_720w.jpg)
