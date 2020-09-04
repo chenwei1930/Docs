@@ -171,10 +171,6 @@ RGB RAW格式的Sensor是将每个感光点感应到的RGB数值直接传送给H
 
 ​    **要还原一个真正图像，需要每一个点都有RGB三种颜色**，所以，对于CCIR601或656的格式，在Sensor模组的内部会有一个ISP模块，会将Sensor采集到的数据进行插值和特效处理，例如：**如果一个感光点感应的颜色是R，那么，ISP模块就会根据这个感光点周围的G、B感光点的数值来计算出此点的G、B值，那么，这一点的RGB值就被还原了**，然后在编码成601或656的格式传送给Host。
 
-
-
-
-
 ## 3 rk2206拍照命令
 
 如下命令创建文件cif.out,cif.jpeg，并抓图数据保存到cif.out,cif.jpeg。
@@ -363,11 +359,11 @@ RK2206>I2cDev_ReadData ret1[sensor_0]:Info: GC2145 pid:0x0!
 
 - MCLK 给摄像头提供输入时钟
 
-<img src="resources/mclk.png" alt="mclk" style="zoom: 67%;" />
+<img src="camera_debug/mclk.png" alt="mclk" style="zoom: 67%;" />
 
 - XCLK摄像头输出时钟
 
-![xlck](resources/xlck.png)
+![xlck](camera_debug/xlck.png)
 
 ## 5 一些常识
 
