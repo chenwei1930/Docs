@@ -1,0 +1,16 @@
+你今天要基于OS04A10，去做修改几个配置，可以看文档，或是问Camera的同事
+HDR 开关，HDR 2、HDR3配置
+3DNR开关
+畸变开关
+
+
+.hdr_mode Sensor 工作模式，支持线性模式，两帧合成 HDR,三帧合成 HDR
+
+
+CIS
+cmos image sensor
+
+
+struct i2c_driver
+
+ struct v4l2_subdev_ops

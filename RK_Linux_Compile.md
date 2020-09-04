@@ -111,7 +111,7 @@ Windows工具：[AndroidTool](http://www.t-firefly.com/doc/download/page/id/4.ht
 提示：AndroidTool_v2.35版本：升级MBR分区的Ubuntu固件
             AndroidTool_v2.58版本：升级GPT分区的Ubuntu固件
 
-![image-20200309223410774](RK_Linux_Compile/image-20200309223410774.png)
+![image-20200309223410774](RK_Linux_Compile.assets/image-20200309223410774.png)
 
 ### 1.2.1 启动模式介绍
 
@@ -226,9 +226,7 @@ reboot重启Ctrl+C进入uboot命令行输入  rockusb 0 mmc 0就会进入loder�
 
 注意：***如果你烧写的固件laoder版本与原来的机器的不一致，请在升级固件前先执行”擦除Flash”。***
 
-![img](RK_Linux_Compile/win_tool_upgrade_v2.58.png)
-
-
+![img](RK_Linux_Compile.assets/win_tool_upgrade_v2.58.png)
 
 #### 1.2.3.2 烧写分区映像
 
@@ -239,7 +237,7 @@ reboot重启Ctrl+C进入uboot命令行输入  rockusb 0 mmc 0就会进入loder�
 - 确保映像文件的路径正确，需要的话，点路径右边的空白表格单元格来重新选择。
 - 点击”执行”按钮开始升级，升级结束后设备会自动重启。
 
- ![img](RK_Linux_Compile/win_3128_tool_download.png)
+ ![img](RK_Linux_Compile.assets/win_3128_tool_download.png)
 
 ### 1.2.4 各分区镜像功能
 
@@ -2253,6 +2251,12 @@ kernel/
 0x00002000 计算后是4MB
 
 0x00004000 计算后是8MB
+
+为什么以块(512字节)为单位，以flash为例:
+
+![image-20200316192054362](RK_Linux_Compile.assets/512byte.png)
+
+
 
 > 计算技巧： 在16进制下除 0x800 ， 结果再转10进制
 >
