@@ -15,8 +15,6 @@ kernel/
 ├── kernel.img
 ├── resource.img
 
-
-
 4.3 KERNEL  编译步骤
 进入工程目录根目录执行以下命令自动完成 Kernel 的编译及打包：
 ./build.sh kernel
@@ -37,12 +35,6 @@ rockchip_linux_defconfig
 CONFIG_CRC7=y
 # CONFIG_XZ_DEC_X86 is not set
 ```
-
-
-
-
-
-
 
 ```
 cw@SYS3:~/sdk/312x_i/kernel$ cat drivers/he
