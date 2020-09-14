@@ -303,9 +303,7 @@ Version.mk
 
 [root@buildroot:/]# 这个代表是recovery模式，该模式下不能自己加载驱动。
 
-如何从recovery模式切换为正常模式：
-
-misc烧写一个空的.Z:\sdk\312x_i\device\rockchip\rockimg\blank-misc.im
+如何从recovery模式切换为正常模式：misc烧写一个空的.Z:\sdk\312x_i\device\rockchip\rockimg\blank-misc.im
 
 [root@rk312x:/]#这个是正常模式
 
