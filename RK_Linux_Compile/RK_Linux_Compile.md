@@ -299,9 +299,27 @@ mk-toolchain.sh
 rkflash.sh
 Version.mk
 ```
+### 1.2.5  recovery模式和普通模式
+
+[root@buildroot:/]# 这个代表是recovery模式，该模式下不能自己加载驱动。
+
+如何从recovery模式切换为正常模式：
+
+misc烧写一个空的.Z:\sdk\312x_i\device\rockchip\rockimg\blank-misc.im
+
+[root@rk312x:/]#这个是正常模式
+
 ## 2 编译
 
 ### 2.1 编译Buildroot  source脚本只用来编译rootfs
+
+- 声明buildroot环境变量
+
+source envsetup.sh  #选择开发板，如rk3128
+
+- 声明kernel、uboot等的环境变量
+
+  ./build.sh device/rockchip/rv1126_rv1109/BoardConfig-tb.mk  这样切换单板
 
 ```
 檵 14:18:28
@@ -574,6 +592,8 @@ load addr is 0x68400000! // trust的运行地址会被追加在打包头信息�
 ```
 ./build.sh updateimg
 ```
+
+
 
 ## 3  buildroot 与source envsetup.sh
 
