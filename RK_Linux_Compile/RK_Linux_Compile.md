@@ -2624,13 +2624,13 @@ Make update image failed!
 
 
 
-# 12   系统启动流程 
+## 12   系统启动流程 
 
 Bootloader很小，一般在几十KB甚至几百KB，负责做最基本的系统初始化，并把Kernel从存储设备（EMMC/NAND）中拷贝到内存（DDR）中，kernel一般几MB到十几MB、负责控制所有的硬件和系统的调度，根文件系统和system属于用户空间的应用，根文件系统一般只有几MB，负责初始化一个最基本的上层运行环境，为system挂载打基础，system里面是主要的应用，大小几百MB设置几GB，主要的应用和库都包含在里面
 
 
 
-#13 busybox
+##13 busybox
 
 - BR2_PACKAGE_BUSYBOX_CONFIG.
 
@@ -2727,7 +2727,7 @@ cw@SYS3:~/sdk/312x_i/buildroot/output/rockchip_rk3128$
 cw@SYS3:~/sdk/312x_i/buildroot/output/rockchip_rk3128$ 
 ```
 
-# 14 字体问题
+## 14 字体问题
 
 1、查找内核下面的
 
@@ -2762,7 +2762,7 @@ ISO 8859-1，正式编号为ISO/IEC 8859-1:1998，又称Latin-1或“西欧语�
 
 ![1](F:\github\Docs\RK_Linux_Compile.assets/1.png)
 
-# 15 kernel
+## 15 kernel
 
 ```shell
 cd kernel
@@ -2782,7 +2782,7 @@ rm .config
 
 
 
-## 15.1 新加设备树
+### 15.1 新加设备树
 
 - 设备树文件路径
 
@@ -2917,7 +2917,7 @@ index cff7bb2..ee248ce 100755
 
 
 
-# 16 TRUST
+## 16 TRUST
 
 ARM TrustZone [1]技术是所有 Cortex-A 类处理器的基本功能，是通过 ARM 架构安全扩展引入的。这些扩展可在 
 
