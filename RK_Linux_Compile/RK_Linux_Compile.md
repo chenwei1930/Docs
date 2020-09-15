@@ -2955,7 +2955,7 @@ ARM TrustZone [1]技术是所有 Cortex-A 类处理器的基本功能，是通�
 
 目前 Rockchip 平台上的 64 位 SoC 平台上使用的是 ARM Trusted Firmware + OP-TEE OS 的组合；32 位 SoC 平 
 
-台上使用的是 OP-TEE OS。 
+台上使用的是 OP-TEE OS。  
 
 
 
@@ -2980,6 +2980,17 @@ OP-TEE OS 运行在 DRAM 起始偏移 132M~148M 之间（结束地址依各平�
 ## 16.2 生命周期 
 
 Trust 自上电初始化之后就**始终常驻于内存之中，完成着自己的使命。**
+
+##  17 专业名词
+
+DMC（Dynamic Memory Controller） DVFS，即 DDR 变频。
+
+Linux4.4 内核将频率、电压相关的配置放在了 devicetree 中，我们将这些配置信息组成的节点，称之
+为OPP Table。OPP Table 节点包含描述频率和电压的 OPP 节点、leaakge 相关配置属性、PVTM 相关
+配置属性等。OPP 的详细配置说明，可以参考如下文档：
+
+Documentation/devicetree/bindings/opp/opp.txt
+Documentation/power/opp.txt
 
 
 
