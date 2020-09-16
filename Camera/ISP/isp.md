@@ -8,7 +8,7 @@ ISP(Image Signal Processor)，即图像信号处理器，用于处理图像信�
 
 如下图所示，ISP 内部包含 CPU、SUP IP、IF 等设备，事实上，可以认为 ISP 是一个 SOC，可以运行各种算法程序，实时处理图像信号。
 
-[![2](resources/149883197212f9eeNd_s.png)](https://www.colorspace.com.cn/wiki/uploads/201706/149883197212f9eeNd.png)ISP 架构
+[![2](isp.assets/149883197212f9eeNd_s.png)](https://www.colorspace.com.cn/wiki/uploads/201706/149883197212f9eeNd.png)ISP 架构
 
 
 
@@ -27,7 +27,7 @@ SUB IP 是各种功能模块的通称，对图像进行各自专业的处理。�
 ## 主要功能特性
 
 ISP 作为图像处理的核心器件，拥有十分重要的功能，下图展示了 ISP 处理图像数据的基本流程。
-[![1](resources/1498832000j1pwqtOQ_s.jpg)](https://www.colorspace.com.cn/wiki/uploads/201706/1498832000j1pwqtOQ.jpg)ISP 处理流程
+[![1](isp.assets/1498832000j1pwqtOQ_s.jpg)](https://www.colorspace.com.cn/wiki/uploads/201706/1498832000j1pwqtOQ.jpg)ISP 处理流程
 
 
 
@@ -107,7 +107,7 @@ ISP 作为图像处理的核心器件，拥有十分重要的功能，下图展�
 
 ![img](data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==)
 
-[![1](resources/1498832031UDziJrqL_s.png)](https://www.colorspace.com.cn/wiki/uploads/201706/1498832031UDziJrqL.png)外置 ISP 架构图
+[![1](isp.assets/1498832031UDziJrqL_s.png)](https://www.colorspace.com.cn/wiki/uploads/201706/1498832031UDziJrqL.png)外置 ISP 架构图
 
 
 
@@ -143,7 +143,7 @@ ISP 作为图像处理的核心器件，拥有十分重要的功能，下图展�
 
 ![img](data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==)
 
-[![1](resources/1498832050d92w1GFc_s.png)](https://www.colorspace.com.cn/wiki/uploads/201706/1498832050d92w1GFc.png)内置 ISP 架构图
+[![1](isp.assets/1498832050d92w1GFc_s.png)](https://www.colorspace.com.cn/wiki/uploads/201706/1498832050d92w1GFc.png)内置 ISP 架构图
 
 
 
@@ -171,7 +171,7 @@ ISP 作为图像处理的核心器件，拥有十分重要的功能，下图展�
 
 
 
-[![1](resources/1498832066ewwJA8p5_s.jpg)](https://www.colorspace.com.cn/wiki/uploads/201706/1498832066ewwJA8p5.jpg)
+[![1](isp.assets/1498832066ewwJA8p5_s.jpg)](https://www.colorspace.com.cn/wiki/uploads/201706/1498832066ewwJA8p5.jpg)
 
 
 
