@@ -397,6 +397,14 @@ Rpmax的取值：参考周公的I2C总线规范中文版P33图39与P35图44
 
 
 
+## 6 参数说明
+
+### 6.1  摄像头IIC的读写地址
+
+一般来说IIC的读写地址是7位的，再加1位读写标志位（一般写0读1，也有相反的）。一共8位，组成写地址和读地址。
+
+
+
 ```
 GC032A Device Address:
 serial bus write address = 0x42, serial bus read address = 0x43
@@ -424,7 +432,7 @@ SCO31GS  serial bus write address = 0X60, serial bus read address = 0X61
 #define SC031GS_7BIT_ADDRESS         (0x30)
 ```
 
-调试中
+SCO329调试中
 
 ```
 SCO329 读0x62 写0x63
@@ -433,4 +441,19 @@ SCO329 读0x62 写0x63
 
 #define SC0329_7BIT_ADDRESS         (0x31)
 ```
+
+
+
+BF20A6调试中
+
+````
+SCO329 读0xdc 写0xdd
+write address = 0xdc = 11011100b  右移动一位 0110 1110b= 0x6E
+read address = 0xdd = 11011101b   右移动一位 0110 1110b= 0x6E
+
+Note: Two-wire serial interface device address of BF20A6 is 7’b1101110 (0X6e), it doesn’t include W/R
+bit.
+````
+
+
 
