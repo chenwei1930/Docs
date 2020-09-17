@@ -100,8 +100,6 @@ cw@SYS3:~/sdk/312x_i$
 
 
 
-
-
 ## 1.2 烧写工具
 
 请用SDK里面AndroidTool.exe ，不建议复制出来，SDK里面已经配置好了各子项名称路径，你可以直接选用。如
@@ -114,6 +112,8 @@ Windows工具：[AndroidTool](http://www.t-firefly.com/doc/download/page/id/4.ht
 ![image-20200309223410774](RK_Linux_Compile.assets/image-20200309223410774.png)
 
 ### 1.2.1 启动模式介绍
+
+启动模式，固定思议，每家芯片厂商都自定义了自己的运行模式名字。比如Maskrom是Rockchip 定义芯片准备烧录分区的状态模式之一。
 
 Rockchip 平台硬件运行的几种模式如表所示，只有当设备处于 Maskrom，及 Loader
 模式下，才能够烧写固件，或对板上固件进行更新操作。
@@ -181,7 +181,7 @@ CONFIG_PWRKEY_DNL_TRIGGER_NUM
 如果没有烧录过系统的芯片，上电就是maskrom模式
 或者reboot 命令重启，开机马上按'ctrl+c'进入uboot命令选择界面，help查看帮助，‘rbrom’进入Maskrom
 或者reboot 命令重启， ctrl+b：进入 maskrom 烧写模式；
-
+或者reboot loader重启， 等待，按ctrl+c；
 2、按上图图片，直接烧写
 ```
 
@@ -228,7 +228,9 @@ reboot重启Ctrl+C进入uboot命令行输入  rockusb 0 mmc 0就会进入loder�
 
 ![img](RK_Linux_Compile.assets/win_tool_upgrade_v2.58.png)
 
-#### 1.2.3.2 烧写分区映像
+#### 1.2.3.2 烧写分区镜像
+
+分区的概念，其实就像window的C盘、D盘、E盘。嵌入式在各个分区存入指定数据，如果只修改了一个分区的数据，并且对其他分区的依赖关系没有改变。可以只烧录单个分区。
 
 烧写分区映像的步骤如下：
 
@@ -312,7 +314,6 @@ Version.mk
 **df 命令：**
 
 linux中df命令的功能是用来检查linux服务器的文件系统的磁盘空间占用情况。可以利用该命令来获取硬盘被占用了多少空间，目前还剩下多少空间等信息。
-
 
 
 “df -h”这条命令再熟悉不过。以更易读的方式显示目前磁盘空间和使用情况。
@@ -2667,8 +2668,6 @@ Make update image failed!
 ## 12   系统启动流程 
 
 Bootloader很小，一般在几十KB甚至几百KB，负责做最基本的系统初始化，并把Kernel从存储设备（EMMC/NAND）中拷贝到内存（DDR）中，kernel一般几MB到十几MB、负责控制所有的硬件和系统的调度，根文件系统和system属于用户空间的应用，根文件系统一般只有几MB，负责初始化一个最基本的上层运行环境，为system挂载打基础，system里面是主要的应用，大小几百MB设置几GB，主要的应用和库都包含在里面
-
-
 
 ##13 busybox
 
