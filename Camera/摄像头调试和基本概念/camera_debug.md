@@ -24,7 +24,7 @@
 | data             | 数据管脚。此数据脚可以输出的格式有YUV、RGB、JPEG等。         |
 | VSYNC（或FSYNC） | 帧同步信号管脚。一个VYSNC信号结束表示一帧（即一个画面）的数据已经输出完毕 |
 | HSYNC(或LREF)    | 行同步信号管脚。一个HSYNC信号结束表示一行的数据已经输出完毕。 |
-| PCLK             | 像素时钟同步信号管脚。一个PCLK信号结束表示一个像素点的数据已经输出完毕。 |
+| PCLK             | 像素时钟同步信号管脚。一个PCLK信号结束表示一个像素点的数据已经输出完毕。软件上执行stream on开始输出流，才会有PCLK时钟 |
 
 **电源总线**
 
@@ -53,9 +53,9 @@
 ● SXGA(1280x1024)又称130万像素
 ● XGA(1024x768)又称80万像素
 ●SVGA(800x600)又称50万像素
-●VGA(640x480)又称30万像素(35万是指648X488)
+●VGA(640x480)又称30万像素(35万是指648X488)  **常用**
 ●CIF(352x288)又称10万像素
-●SIF/QVGA(320x240)
+●SIF/QVGA(320x240) **常用**
 ●QCIF(176x144)
 ●QSIF/QQVGA(160x120)
 
@@ -100,9 +100,23 @@ RGB24，420是最常用的两种图像格式。
   通用串行总线USB：即插即用的接口标准，支持热插拔。USB1.1速率可达12Mbit/s,USB2.0可达480Mbit/s
   IEEE1394(火线)接口(亦称ilink):其传输速率可达100M~400Mbit/s。
 
+**坏点**
+
+坏点（Dead Pixel）：数码相机是通过，数码相机的成像元件（一般指CCD或者是CMOS（较少））上的几百万个感光单元感光成像的，其中某个感光单元受到损坏，或工作不正常，不能成像，就成为一个坏点。坏点一般是不可修复的。强调新购机进行测试如果有坏点，必须要求更换。
+
+
+
+![QQ截图20200923143908](resources/bad.png)
+
 **曝光与噪点**
 
-曝光是用来计算从景物到达相机的光通量大小的物理量。图像传感器只有获得正确的曝光，才能得到高质量的照片。曝光过度，图像看起来太亮曝光不足，则图像看起来太暗。到达传感器的光通量的大小主要由两方面因素决定：曝光时间的长短以及光圈的大小。噪点严重的原图与进行降噪处理后的对比，可以通过长时间曝光降低噪点。长时间曝光也会产生噪点，是因为感光元件的温度升。**曝光时间过长，会导致每一帧所用的时间过长，造成图像卡顿**。因此曝光时间越长，一帧图像上的跑步者运动的过程就越长，因此被拍摄的跑步者就会变模糊。如果曝光时间很短，一帧图像中的跑步者在这个曝光时间内运动的过程也会很短，图像也就越清晰。高速摄影也是这个原理
+曝光是用来计算从景物到达相机的光通量大小的物理量。图像传感器只有获得正确的曝光，才能得到高质量的照片。曝光过度，图像看起来太亮曝光不足，则图像看起来太暗。到达传感器的光通量的大小主要由两方面因素决定：曝光时间的长短以及光圈的大小。噪点严重的原图与进行降噪处理后的对比，可以通过长时间曝光降低噪点。长时间曝光也会产生噪点，是因为感光元件的温度升。**曝光时间过长，会导致每一帧所用的时间过长，造成图像卡顿**。因此曝光时间越长，一帧图像上的跑步者运动的过程就越长，因此被拍摄的跑步者就会变模糊。如果曝光时间很短，一帧图像中的跑步者在这个曝光时间内运动的过程也会很短，图像也就越清晰。高速摄影也是这个原理。
+
+
+
+燥点（hot pixel）：CCD和CMOS感光元件都存在有热稳定性的问题，就是对成象的质量和温度有关，如果机机的温度升高，噪音信号过强，会在画面上不应该有的地方形成杂色的斑点，这这些点就是我们所讲的燥点。各个品牌各种型号的相机对燥点的控制能力也不尽相同，同一型号怕相机也有一定的个体差异，也有些相机有降燥功能。但燥点问题是现在所有DC都没能完全克服的问题（调高感光度(ISO)，特别是长时间曝光、或相机温度升高时）。 
+
+
 
 ![img](camera_debug/Hot_Pixel.jpeg)
 
@@ -171,9 +185,13 @@ CCIR601或656的格式
 
 ## 3 rk2206拍照命令
 
+![1](resources/1.png)
+
+
+
 如下命令创建文件cif.out,cif.jpeg，并抓图数据保存到cif.out,cif.jpeg。
 
-````
+````shell
 file.setpath A:
 file.mf cif.out
 file.mf cif.jpeg
@@ -182,15 +200,57 @@ vicap_test dev_set --set-dev=vicap_0 --set-workmode=block --set-blocks=6 --set-f
 vicap_test dev_streamon
 ````
 
+```shell
+
+file.setpath A:
+file.mf cif.out
+file.mf cif.jpeg
+vicap_test dev_create
+vicap_test dev_set --set-dev=vicap_0 --set-workmode=block --set-blocks=6 --set-format=fourcc=RGGB,width=640,height=480 --stream-buf=8 --stream-count=1 --stream-mode=photo --skip-count=20
+vicap_test dev_streamon
+```
+
+
+
 如果要修改照片的输出格式，比如修改为BG8
 
+```shell
+vicap_test dev_set --set-dev=vicap_0 --set-workmode=block --set-blocks=6 --set-format=fourcc=RAW8,width=640,height=480 --stream-buf=8 --stream-mode=photo --skip-count=20
+
+
+
+vicap_test dev_set --set-dev=vicap_0 --set-workmode=block --set-blocks=6 --set-format=fourcc=RGGB,width=640,height=480 --stream-buf=8 --stream-mode=photo --skip-count=20
 ```
-vicap_test dev_set --set-dev=vicap_0 --set-workmode=block --set-blocks=6 --set-format=fourcc=BG8,width=640,height=480 --stream-buf=8 --stream-mode=photo --skip-count=20
+
+```shell
+YUYV
+
+vicap_test dev_set --set-dev=vicap_0 --set-workmode=block --set-blocks=6 --set-format=fourcc=YUYV,width=640,height=480 --stream-buf=8 --stream-mode=photo --skip-count=20
+
+
+vicap_test dev_set --set-dev=vicap_0 --set-workmode=block --set-blocks=6 --set-format=fourcc=GREY,width=640,height=480 --stream-buf=8 --stream-mode=photo --skip-count=20
+
+vicap_test dev_set --set-dev=vicap_0 --set-workmode=block --set-blocks=6 --set-format=fourcc=RGGB,width=640,height=480 --stream-buf=8 --stream-mode=photo --skip-count=20
+
+
+vicap_test dev_set --set-dev=vicap_0 --set-workmode=block --set-blocks=6 --set-format=fourcc=GRBG,width=640,height=480 --stream-buf=8 --stream-mode=photo --skip-count=20
+
+
+vicap_test dev_set --set-dev=vicap_0 --set-workmode=block --set-blocks=6 --set-format=fourcc=GBRG,width=640,height=480 --stream-buf=8 --stream-mode=photo --skip-count=18
+vicap_test dev_streamon
+
+
+vicap_test dev_set --set-dev=vicap_0 --set-workmode=block --set-blocks=6 --set-format=fourcc=RGGB,width=640,height=480 --stream-buf=8 --stream-mode=photo --skip-count=18
+vicap_test dev_streamon
 ```
+
+
+
+
 
 查看BG8下的帧率
 
-```
+```shell
 vicap_test dev_set --set-dev=vicap_0 --set-workmode=block --set-blocks=6 --set-format=fourcc=BG8,width=640,height=480 --stream-buf=8 --stream-mode=photo --skip-count=20
 ```
 
@@ -322,7 +382,7 @@ iic读：
 - 摄像头ID寄存器用于识别摄像头
 - 初始化寄存器数组（设置了曝光、输出尺寸、图像模式、测试模式等、不同硬件接口不同的配置）
 - stream on寄存器启动时钟(PCLK才有波形)
-- stream off寄存器关闭时钟
+- stream off寄存器关闭时钟(PCLK无波形)
 
 ```shell
 RK2206>I2cDev_ReadData ret1[sensor_0]:Info: GC2145 pid:0x0!
@@ -456,4 +516,127 @@ bit.
 ````
 
 
+
+## 7 vicap
+
+
+601/5000
+
+The Video Capture视频捕获，通过DVP从Camera接收数据，并将数据传输到
+系统主存通过AXI总线。
+VICAP的功能如下：
+支持BT601 YCbCr 422 8bit输入
+支持BT656 YCbCr 422 8位输入
+支持UYVY / VYUY / YUYV / YVYU可配置
+支持RAW 8/10/12位输入
+支持JPEG输入
+支持窗口裁剪
+写入内存时支持虚拟步幅
+支持Y和UV的不同存储地址
+支持422/420/400输出
+支持一帧/一帧乒乓/块乒乓模式
+支持pixel_clk，hsync，vsync极性可配置
+
+本章用于说明VICAP如何工作的操作行为。 如果是YUV422或从外部设备接收到ccir656信号，VICAP将其转换为YUV422 / 420数据，
+并将数据分离为Y和UV数据，然后通过AXI总线将其存储到不同的内存中分别。
+
+### 7.1 框图
+
+![QQ截图20200923143044](resources/QQ截图20200923143044.png)
+
+### 7.2 帧信号与行信号的触发模式
+
+- 支持Vsync高触发或低触发
+
+- 支持href高触发或低触发
+
+![QQ截图20200923150834](resources/QQ截图20200923150834.png)
+
+
+- 支持565和raw data
+
+![QQ截图20200923151103](resources/QQ截图20200923151103.png)
+
+### 7.3 工作模式
+
+VICAP模块可以在三种模式下工作：一帧停止模式，帧乒乓模式，帧阻塞模式。
+
+- One frame stop mode一帧停止模式
+  在此模式下，将参数WORK_MODE配置为一帧停止模式。一经捕获帧后，VICAP将自动停止并设置FRAME_STATUS的状态。 VICAP将
+  在用户清除FRAME_STATUS之前，不要捕获传感器数据。 Y / UV的地址是依次为FRAME0_ADDR或FRAME1_ADDR。
+
+  
+
+- Frame Ping-Pong mode帧乒乓模式
+
+捕获一帧（F1）后，VICAP将开始自动捕获下一帧（F2），并且主机必须分配frame1的新地址指针并清除frame1状态，因此
+VICAP将自动捕获第三帧（通过新的F1地址），并且不停止并对于以下帧，依此类推。但是，如果主机未更新帧缓冲区地址，则
+VICAP将使用以下帧数据覆盖存储在存储器中的帧前数据。
+
+
+-  Block Ping-Pong mode阻塞乒乓模式
+在此模式下，VICAP将以块为单位工作。块的行数取决于BLOCK_LINE_NUM的配置。依次接收块0和块1。什么时候block0 / 1完成后，将设置BLOCK_STATUS，用户应清除及时BLOCK_STATUS。当下一个块0/1开始接收时，如果BLOCK_STATUS_0 / 1未清除，当前帧的其余部分将被丢弃。
+
+- Storage存储
+
+YUV模式和RAW模式之间的区别在于YUV模式或CCIR656中的区别模式，则数据将存储在Y数据缓冲区和UV数据缓冲区中，并且如果the only y mode模式是选择的UV数据不会被存储。
+
+在RAW或JPEG模式下，RGB数据将为存储在同一缓冲区中。
+在YUV模式或RAW8模式下，Y，U或V在内存中的都是1个字节表示；
+在Raw10 / 12或JPEG模式下，宽度为半字。
+
+- CROP 裁剪
+
+参数START_Y和START_X定义了作物起点的坐标。 裁切后的帧大小遵循SET_WIDTH和SET_HEIGHT的值。
+
+
+
+## 8 举例错误情况
+
+###   mclk配置错会怎么样
+
+以比亚迪BF20A6摄像头为例，工作时mcl 单片机提供12MHZ,
+
+ 如果我抬高mclk到24MHZ的图片那么就会出现错位的情况。 原因应该是mclk抬高了，行场信号有错位。
+
+
+
+、![9320e3913c0d45408d41ada68a46c0d](resources/9320e3913c0d45408d41ada68a46c0d.png)
+
+```
+RK2206>[INFO]: BF20A6: Info: BF20A6 detected successfully !!!  chip id:0x20a6 
+[A.VICAP][000022.420940][  36C][DBG]: BF20A6:(rt_bf20a6_detect_sensor) exit 
+[A.VICAP][000022.427070][  35C][DBG]: BF20A6:(rk_bf20a6_init) exit 
+[A.VICAP][000022.433705][  35C][DBG]: BF20A6:(rk_bf20a6_control) exit 
+[A.VICAP][000022.439585][  36C][vicap_0]:init subdev succe!
+[A.VICAP][000022.442902][  35C][vicap_0]:len of input fmts:20
+[A.VICAP][000022.448117][  36C][vicap_0]:input pixelcode:0x3001,mbus_code:0x2008
+[A.VICAP][000022.457141][  36C][vicap_0]:input pixelcode:0x3001,mbus_code:0x2009
+[A.VICAP][000022.464113][  35C][vicap_0]:input pixelcode:0x3001,mbus_code:0x2006
+[A.VICAP][000022.471088][  35C][vicap_0]:input pixelcode:0x3001,mbus_code:0x2007
+[A.VICAP][000022.478057][  34C][vicap_0]:input pixelcode:0x3001,mbus_code:0x3001
+[A.VICAP][000022.485029][  36C][vicap_0]:the input format is:0x3001
+[A.VICAP][000022.488355][  36C][vicap_0]:y len per block:0xc800
+[A.VICAP][000022.494308][  35C][vicap_0]:the plane[0] size:0xc800, the total size of buf:0xc800
+[A.VICAP][000022.503429][  36C][vicap_0]:the plane[1] size:0x6400, the total size of buf:0x12c00
+[A.VICAP][000022.511660][  35C][vicap_0]:dma status: 0
+[A.VICAP][000022.516578][  36C]ratio:1,bpp:8
+[A.VICAP][000022.521245][  36C][DBG]: BF20A6:(rk_bf20a6_control) enter 
+[A.VICAP][000022.527911][  35C][DBG]: BF20A6:(bf20a6_stream_on) enter 
+[A.VICAP][000022.534127][  36C][vicap_0]:vicap was triggered err,intstat:0x206
+[a][000022.581071][DBG]: BF20A6:Success: bf20a6 init table has ok witre [DBG]: BF20A6:(bf20a6_stream_on) exit 
+[A.VICAP][000022.593827][  36C][DBG]: BF20A6:(rk_bf20a6_control) exit 
+[A.VICAP][000022.599873][  37C][vicap_0]:vicap was triggered err,intstat:0xa
+[a][000022.786970][vicap_0]:vicap was triggered err,intstat:0x4000
+[a][000022.792181][VICAP-TEST]:has skipped 18 frames
+[A.VICAP][000025.209390][  35C][vicap_0]:dma status: 0
+[a][000025.500189][DBG]: BF20A6:(rk_bf20a6_control) enter 
+[A.VICAP][000025.506428][  36C][DBG]: BF20A6:(bf20a6_stream_off) enter 
+[A.VICAP][000025.512619][  35C][DBG]: BF20A6:(bf20a6_stream_off) exit 
+[A.VICAP][000025.518835][  35C][DBG]: BF20A6:(rk_bf20a6_control) exit 
+[A.VICAP][000025.524963][  36C]create file clus = 0clus = 0, i = 16, name = CIF     YUV
+[A.VICAP][000027.444931][  36C]delete thread classId = -1, objectid = 7, name = VICAPTestTask, remain = 5507776.
+[A.VICAP][000027.452969][  36C]
+RK2206>
+```
 

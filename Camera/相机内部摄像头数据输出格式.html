@@ -1,0 +1,402 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0065)http://www.360doc.com/content/19/1223/09/33093582_881511187.shtml -->
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta content="360doc" name="classification"><link rel="alternate" media="only screen and (max-width: 640px)" href="http://www.360doc.cn/article/33093582_881511187.html"><meta content="相机内部摄像头数据输出格式" name="keywords"><meta content="相机内部摄像头数据输出格式" name="description"><meta name="mobile-agent" content="format=html5;url=http://www.360doc.cn/article/33093582_881511187.html"><meta content="相机内部摄像头数据输出格式。Sensor的感光原理是通过一个一个的感光点对光进行采样和量化，但在Sensor中，每一个感光点只能感光RGB三基色中的一种颜色（这个颜色可以理解为像素的一个颜色分量，并不是最终的图像显示的颜色，最终图像显示的颜色是由RGB三个颜色分量组合构成，根据RGB三个颜色分量的值不同，组合成不同的颜色）。RGB RAW格式的Sensor是将每个感光点感应到的RGB数值直接传送给Host，由Host来进行插值和特效处理。" name="360docabstract"><meta content="www.360doc.com" name="author"><title>
+相机内部摄像头数据输出格式
+</title>
+<script src="./相机内部摄像头数据输出格式_files/hm.js"></script><script src="./相机内部摄像头数据输出格式_files/360query18.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+     function setDragEnd() { };
+     function NewHighlight() { };
+     function delAllDiv() { };
+     if (window.location.toString().indexOf("shtml?") > 0) {
+         self.location = window.location.toString().replace(window.location.search.toString(), "");
+     }
+     function doccheckart(json) {
+         if (json[0].result == "1") {
+             self.location = "http://www.360doc.com/noarticle.aspx";
+         }
+     }
+
+     function doccheckarts(json) {
+         if (json[0].result == "1") {
+             var artidlist = json[0].artid;
+             if (artidlist != "") {
+                 if (artidlist.indexOf(',') > -1) {
+                     artidlist = artidlist.split(',');
+                 } else {
+                     artidlist = [artidlist];
+                 }
+                 $.each(artidlist, function (index, value) {
+                     $('#artid_' + value).remove();
+                 });
+             }
+         }
+         //console.log(json[0]);
+     }
+    </script>
+<script src="./相机内部摄像头数据输出格式_files/addStatistics.js" type="text/javascript"></script>
+<script type="text/javascript">
+        function getCookie(name) //获取cookie值
+        {
+            var arr = document.cookie.match(new RegExp("(^| )" + name + "=([^;]*)(;|$)"));
+            if (arr != null)
+                return unescape(arr[2]);
+            return null;
+        }
+        var patt1 = new RegExp("[0-9]*_[0-9]*");
+        var url = patt1.exec(location.href);
+        if (navigator.userAgent.toLowerCase().indexOf("micromessenger") > -1) {
+            window.location.href = "http://www.360doc31.net/wxarticlenew/" + url.toString().split("_")[1] + ".html";
+
+        }
+        else if (navigator.userAgent.indexOf("iPhone") > 0 || navigator.userAgent.indexOf("Android") > 0 || navigator.userAgent.indexOf("iPod") > 0) {  //手机端跳转
+
+            if (url != "") {
+                self.location = "http://www.360doc.cn/article/" + url + ".html";
+            }
+        }
+
+        if ( 881511187 !=  881511187) {
+            if (getCookie("360doc1") != null) {
+                $.ajax({
+                    url: "http://www.360doc.com/ajax/getuserid.ashx",
+                    async: false,
+                    cache: false,
+                    dataType: "json",
+                    success: function (result) {
+
+                        if (33093582 != result.userid) {
+
+                            self.location = "http://www.360doc.com/content/19/1223/09/33093582_881511187.shtml";
+                        }
+                    }
+                });
+            }
+            else {
+                self.location = "http://www.360doc.com/content/19/1223/09/33093582_881511187.shtml";
+            }
+        }
+
+
+        if ( 0 !=  881511187&&"0" != "" &&"0" != "0" &&"0" != 1) {
+            $.ajax({
+                url: "http://www.360doc.com/ajax/getuserid.ashx",
+                cache: false,
+                dataType: "json",
+                success: function (result) {
+                    if (result.userid != 33093582) {
+                        location = "";
+                    }
+                }
+            });
+        }
+    </script>
+<script src="./相机内部摄像头数据输出格式_files/showarticlefollow20160329.js" type="text/javascript" charset="utf-8"></script>
+<script src="./相机内部摄像头数据输出格式_files/jQuery.md5.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="./相机内部摄像头数据输出格式_files/docgjio.js" type="text/javascript" charset="utf-8"></script>
+<script src="./相机内部摄像头数据输出格式_files/clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function () {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?d86954201130d615136257dde062a503";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+<link rel="stylesheet" type="text/css" href="./相机内部摄像头数据输出格式_files/wzhead-cleaned.css"><link rel="stylesheet" type="text/css" href="./相机内部摄像头数据输出格式_files/newArticle20160509.css"><link href="./相机内部摄像头数据输出格式_files/newheader.css" rel="stylesheet" type="text/css"><link rel="stylesheet" type="text/css" href="./相机内部摄像头数据输出格式_files/report.css">
+<script src="./相机内部摄像头数据输出格式_files/report.js" type="text/javascript" charset="utf-8"></script>
+<script src="./相机内部摄像头数据输出格式_files/share.js"></script><style type="text/css" id="QIHOO_FEED_CSS">#QIHOO__WEB__SO__1598603242622_90 info-div,#QIHOO__WEB__SO__1598603242622_90 newsfeed,#QIHOO__WEB__SO__1598603242622_90 newsfeed-header,#QIHOO__WEB__SO__1598603242622_90 newsfeed-main,#QIHOO__WEB__SO__1598603242622_90 newsfeed-menu{display:block}#QIHOO__WEB__SO__1598603242622_90 info-span{display:inline}#QIHOO__WEB__SO__1598603242622_90 .feed-toolbar{overflow:hidden}#QIHOO__WEB__SO__1598603242622_90 .feed-toolbar .toolbar__closeBtn{float:right;width:54px;height:18px;background:url('//p0.ssl.qhimg.com/d/inn/69518715/close.jpg');cursor:pointer}#QIHOO__WEB__SO__1598603242622_90 a{text-decoration:none}#QIHOO__WEB__SO__1598603242622_90 .feed__wrapper{overflow:hidden}#QIHOO__WEB__SO__1598603242622_90 .feed__wrapper .visited .feed__link .largeImage__title,#QIHOO__WEB__SO__1598603242622_90 .feed__wrapper .visited .feed__link .multiImage__title,#QIHOO__WEB__SO__1598603242622_90 .feed__wrapper .visited .feed__link .singleImageText__title,#QIHOO__WEB__SO__1598603242622_90 .feed__wrapper .visited .feed__link .singleImage__title{color:#9e9e9e}#QIHOO__WEB__SO__1598603242622_90 .feed__item{overflow:hidden}#QIHOO__WEB__SO__1598603242622_90 .feed__item .feed__link{display:block;overflow:hidden;cursor:pointer}#QIHOO__WEB__SO__1598603242622_90 .img{background-size:cover;position:relative;background-repeat:no-repeat}#QIHOO__WEB__SO__1598603242622_90 .img .adTag{background:#666;background:rgba(0,0,0,0.5);color:#fff;font-size:12px;position:absolute;top:0;right:0;border-right:1px solid #bbb}#QIHOO__WEB__SO__1598603242622_90 ::-webkit-scrollbar{width:8px;height:8px}#QIHOO__WEB__SO__1598603242622_90 ::-webkit-scrollbar-thumb{background:rgba(37,36,36,0.57);border-radius:10px}#QIHOO__WEB__SO__1598603242622_90 ::-webkit-scrollbar-track{background-color:#f5f5f5;border-radius:10px}#QIHOO__WEB__SO__1598603242622_90 .textual{position:relative;background-color:#fff;width:auto;height:auto;padding:4px 4px 4px 4px;height:auto}#QIHOO__WEB__SO__1598603242622_90 .textual .feed__link{position:relative;display:block;overflow:visible}#QIHOO__WEB__SO__1598603242622_90 .textual .feed__link:hover .textual__title{color:#0f659c}#QIHOO__WEB__SO__1598603242622_90 .textual .textual__body{position:relative}#QIHOO__WEB__SO__1598603242622_90 .textual .textual__body .adTag{background:#666;color:#fff;font-size:12px;position:absolute;top:0;right:0;border-right:none;height:20px;line-height:20px}#QIHOO__WEB__SO__1598603242622_90 .textual .textual__body .textual__title{display:block;height:20px;line-height:20px;padding:0px 25px 0px 10px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#707070;font-size:14px;font-weight:bold;font-family:"Microsoft Yahei"}</style><script type="text/javascript" src="./相机内部摄像头数据输出格式_files/HighlightStickyforOther170510.js"></script><link href="about:blank" rel="styleSheet" type="text/css"></head>
+<body onmouseup="setDragEnd()" onclick="delAllDiv(event)">
+<span id="LayerLogin"></span>
+<div style="position: absolute; width: 100%; z-index: 1000;">
+<div class="header" style="background-color: #ffffff;">
+<div class="header_1">
+<a href="http://www.360doc.com/index.html">
+<img src="./相机内部摄像头数据输出格式_files/nlogo.jpg" class="f_left"></a>
+<div class="mylibrary">
+<a id="userInfoUrl" href="http://www.360doc.com/login.aspx?reurl=http://www.360doc.com/content/19/1223/09/33093582_881511187.shtml" class="a1" onclick="artStatistics(&#39;20-1-1&#39;);">
+<div class="h_user" onclick="artStatistics(&#39;20-1-2&#39;);event.stopPropagation();">
+<img id="divuserinfonew" src="./相机内部摄像头数据输出格式_files/dingtu.gif"><span></span>
+</div>
+我的图书馆
+</a>
+</div>
+<div class="headmail f_left" style="display: none;" onclick="artStatistics(&#39;20-1-10&#39;);">
+<p class="h_icon1" id="newMsg"></p>
+<span class="h_border"></span>
+<ul class="hm_list" id="msgtips">
+<li id="msgicon"><a href="http://www.360doc.com/mymsg.aspx?app=2">查看信箱</a></li>
+<li id="sysmsgicon"><a href="http://www.360doc.com/mymsg.aspx?app=9">系统消息</a></li>
+<li id="sysicon"><a href="http://www.360doc.com/mymsg.aspx?app=4">官方通知</a></li>
+<li class="hm_color2" style="background-color: #f4f4f4"><a href="http://www.360doc.com/mymsg.aspx?app=6">设置</a></li>
+</ul>
+</div>
+<div class="headtalker f_left" style="display: none;" onclick="artStatistics(&#39;20-1-11&#39;);">
+<p class="h_icon1" id="newDialog"></p>
+<span class="h_border"></span>
+<ul class="hm_list">
+<li id="li1chat"><a href="javascript:void(0)" onclick="initchatnew()">开始对话</a></li>
+<li id="li2chat" style="display: none;"><a href="javascript:void(0)" style="color: #141414;">有<span>11</span>人和你对话，<span onclick="initchatnew()" style="color: #4578b4">查看</span>&nbsp;<span onclick="clearinfochat()" style="color: #4578b4">忽略</span></a></li>
+<li><a href="http://www.360doc.com/mycontacts.aspx?app=8">历史对话记录</a></li>
+<li class="hm_color2" style="background-color: #f4f4f4"><a href="http://www.360doc.com/mycontacts.aspx?app=7">通知设置</a></li>
+</ul>
+</div>
+<a href="http://www.360doc.com/advice.html" target="_blank" class="head_talk f_right">留言交流</a>
+<div class="headsearch f_right">
+<div class="zcomdiv">
+<input type="text" class="headsearch_inp f_left" value="搜文章 找馆友">
+<span class="headsearch_btn f_right" id="searchlinkid"></span>
+</div>
+<div class="headsearch_select">
+<p class="hs_title">请选择搜索范围</p>
+<a href="javascript:goSearch();" class="cur">含&nbsp;<span></span>&nbsp;的文章</a>
+<a href="javascript:goSearch();">含&nbsp;<span></span>&nbsp;的书籍</a>
+<a href="javascript:goSearch();">含&nbsp;<span></span>&nbsp;的随笔</a>
+<a href="javascript:goSearch();">昵称/兴趣为&nbsp;<span></span>&nbsp;的馆友</a>
+</div>
+</div>
+</div>
+</div>
+<div class="arti_type_shadow"></div>
+</div>
+<div class="atfixednav" style="display: none;">
+<div class="anbg"></div>
+<div class="d1" onclick="$(&#39;#contextmenudivmouseup&#39;).hide();">
+<a href="http://www.360doc.com/" title="首页" class="f_left atbtn_home" onclick="artStatistics(&#39;20-26-1&#39;);">
+<canvas id="atbtn_home" width="30" height="30"></canvas>
+<i class="atnavicons"></i>
+</a>
+<p class="at_crumb wordnobreak_">
+<a href="http://www.360doc.com/userhome/33093582" id="savernickname3" target="_blank" onclick="artStatistics(&#39;20-26-2&#39;);" title="小经济学家">小经济学家</a> / <a href="http://www.360doc.com/userhome.aspx?userid=33093582&amp;cid=1295" target="_blank" onclick="artStatistics(&quot;20-26-3&quot;);" title="精华">精华</a> / <a href="javascript:void(0)" title="相机内部摄像头数据输出格式" onclick="artStatistics(&#39;20-26-4&#39;);window.location.href=window.location.href">相机内部摄像头数据输出格式</a>
+</p>
+<span class="s1 ic10" id="fixedWord" style="display:none" title="转word"><a href="javascript:void(0)" onclick="WordObj.init();addStatisticsNew(&#39;20-37-3-131&#39;);" class="atnavicons"><b>转word</b></a></span>
+<span class="s1 ic8" id="fixedFullScreen" style="" title="全屏"><a href="javascript:void(0)" onclick="FullScreenObj.init();addStatisticsNew(&#39;20-30-1-119&#39;);" class="atnavicons"><b>全屏</b></a></span>
+<span class="s1 ic7" id="fixedPrint" style="" title="打印"><a href="javascript:void(0)" onclick="PrintObj.init();addStatisticsNew(&#39;20-31-1-121&#39;);" class="atnavicons"><b>打印</b></a></span>
+<span class="s1 ic6" id="fixedEditArt" style="display:none" title="修改"><a href="javascript:void(0)" onclick="document.getElementById(&#39;updateartbtnlink&#39;).click();artStatistics(&#39;20-26-15&#39;);" class="atnavicons"><b>修改</b></a></span>
+<span class="s1 ic2" id="fixedResaveArt" style="" title="转藏"><a href="javascript:void(0)" onclick="SaveArt();artStatistics(&#39;20-26-6&#39;);" class="atnavicons"><b id="resavenum_bar">转藏</b></a><i id="incresave" style="display:none;">+1</i></span>
+<a class="a4" href="javascript:CopyMainContentObj.init();" id="copyMainContent"></a>
+</div>
+</div>
+<div style="height: 68px; _height: 0px; width: 100%;"></div>
+<div class="clear360doc"></div>
+<div class="doc360article_content" style="width: 1015px;">
+<div style="height: 90px; padding-top: 13px;" id="adarttopgoogle"><a class="bevip__icon2 ad_closer" href="javascript:void(0)" onclick="DelAdObj.delAd(&#39;adarttopgoogle&#39;); addStatisticsNew(&#39;20-32-1-74&#39;);"></a><iframe id="ifradarttopgoogle" style="width: 970px; height: 90px; border: 0;" frameborder="0" scrolling="no" src="./相机内部摄像头数据输出格式_files/adgooglearttop.html"></iframe></div>
+<p class="clearboth"></p>
+<div class="a_left" style="width: 685px;">
+<div class="docsharelist" style="visibility: visible; margin-left: -66px;">
+<p class="dp1">分享</p>
+<div class="bdsharebuttonbox dp2 bdshare-button-style0-16" data-bd-bind="1598603242747">
+<a class="a1" href="javascript:void(0);" onclick="shareWeixin();artStatistics(&#39;20-8-17&#39;);shareStatic.addStatic();">
+</a>
+<a class="a2" href="javascript:void(0);" onclick="artStatistics(&#39;20-8-18&#39;);shareTo(&#39;qzone&#39;);shareStatic.addStatic();">
+</a>
+<a class="a3" href="javascript:void(0);" onclick="artStatistics(&#39;20-8-19&#39;);shareTo(&#39;qq&#39;);shareStatic.addStatic();">
+</a>
+<a class="a4" href="javascript:void(0);" onclick="artStatistics(&#39;20-8-21&#39;);shareTo(&#39;sina&#39;);shareStatic.addStatic();">
+</a>
+<a class="a5" href="javascript:void(0);" onclick="showdivemail1();artStatistics(&#39;20-8-22&#39;);shareStatic.addStatic();" title="推荐给朋友">
+</a>
+</div>
+<p class="dp3" onclick="$(this).prev(&#39;div&#39;).css(&#39;height&#39;,&#39;auto&#39;).next(&#39;p&#39;).remove();artStatistics(&#39;20-8-20&#39;);"><a href="javascript:void(0);">更多</a></p>
+</div>
+<div id="bgchange" style="width: 659px;">
+<div class="fontsize_bgcolor_controler">
+<div class="a_bgcolor">
+<img src="./相机内部摄像头数据输出格式_files/bgcolor.jpg">
+<div class="a_colorlist">
+<span class="a_color1" onclick="artStatistics(&#39;20-11-1&#39;);addStatisticsFullScreen(1,null,6)">
+<img src="./相机内部摄像头数据输出格式_files/yes.gif"></span>
+<span class="a_color2" onclick="artStatistics(&#39;20-11-2&#39;);addStatisticsFullScreen(1,null,5)">
+<img src="./相机内部摄像头数据输出格式_files/yes.gif"></span>
+<span class="a_color3" onclick="artStatistics(&#39;20-11-3&#39;);addStatisticsFullScreen(1,null,4)">
+<img src="./相机内部摄像头数据输出格式_files/yes.gif"></span>
+<span class="a_color4" onclick="artStatistics(&#39;20-11-4&#39;);addStatisticsFullScreen(1,null,3)">
+<img src="./相机内部摄像头数据输出格式_files/yes.gif"></span>
+<span class="a_color5" onclick="artStatistics(&#39;20-11-5&#39;);addStatisticsFullScreen(1,null,2)">
+<img src="./相机内部摄像头数据输出格式_files/yes.gif"></span>
+<span class="a_color6 cur" onclick="artStatistics(&#39;20-11-6&#39;);addStatisticsFullScreen(1,null,1)">
+<img src="./相机内部摄像头数据输出格式_files/yes.gif"></span>
+</div>
+</div>
+<div class="a_fontsize">
+<img src="./相机内部摄像头数据输出格式_files/fontSize.jpg">
+<div class="fschange">
+<label>
+<input type="radio" name="font_Size" id="" value="18" onclick="artStatistics(&#39;20-10-1&#39;); addStatisticsFullScreen(1, 1, null)">大
+</label>
+&nbsp;
+<label>
+<input type="radio" name="font_Size" id="" value="16" onclick="artStatistics(&#39;20-10-2&#39;); addStatisticsFullScreen(1, 2, null)" checked="checked">中
+</label>
+&nbsp;
+<label>
+<input type="radio" name="font_Size" id="" value="14" onclick="artStatistics(&#39;20-10-3&#39;); addStatisticsFullScreen(1, 3, null)">小
+</label>
+</div>
+</div>
+</div>
+<div id="printArticle">
+<h2 id="titiletext">相机内部摄像头数据输出格式</h2>
+<div class="article_data">
+<div class="article_data_left">
+2019-12-23
+<span class="a_username" id="topnickname">&nbsp;<a href="http://www.360doc.com/userhome/33093582" id="savernickname" target="_blank" onclick="artStatistics(&#39;20-7-1&#39;);">小经济学家</a>
+</span>
+<span id="articleinfo">
+<span id="docsource" class="a_from" style="display: none;">&nbsp;<a href="https://blog.csdn.net/ABC13222880223/article/details/88932772" target="_blank" onclick="artStatistics(&#39;20-12&#39;);">来源</a></span><span id="360doc_Readnum">&nbsp;&nbsp;阅&nbsp;166&nbsp;</span><span id="360docResaveCount" style="display: none;"><span onclick="ShowSaverUser();artStatistics(&#39;20-13&#39;);" id="360doc_saverNum" style="cursor: pointer;"></span>
+<span id="360doc_saverUser">
+<div style="position: absolute; height: 305px; width: 144px; left: 0px; z-index: 2;" id="sameArtOuter">
+<div onclick="event.cancelBubble=true;" style="overflow-y: auto; height: 300px; overflow-x: hidden; z-index: 100; right: 0px; margin-top: -10px;" id="sameArt">
+</div>
+</div>
+</span>
+</span>
+</span>
+</div>
+<div id="resavelayer1" class="bdsharebuttonbox article_data_right bdshare-button-style0-16" data-bd-bind="1598603242747"><div class="zcommond" id="zcommondID"><span class="newbtn_forward" onclick="SaveArt();artStatistics(&#39;20-3-1&#39;);"><i></i></span><span class="newbtn_fullscreen" onclick="FullScreenObj.init(); addStatisticsNew(&#39;20-30-1-33&#39;);"><i></i></span><span class="newbtn_print" onclick="PrintObj.init(); addStatisticsNew(&#39;20-31-1-69&#39;);"><i></i></span><span class="newbtn_share" style="display: none;"><i></i><a href="javascript:void(0);" onclick="artStatistics(&#39;20-8-2&#39;);setTimeout(function(){$(&#39;#fenxiangLayer&#39;).slideToggle(0);},10);"></a><div class="sharelist_new" id="fenxiangLayer"><a class="slbg0" href="javascript:void(0);" onclick="shareWeixin();artStatistics(&#39;20-8-5&#39;);shareStatic.addStatic();">微信</a><a class="slbg1" href="javascript:void(0);" data-cmd="qzone" onclick="artStatistics(&#39;20-8- 7&#39;);shareStatic.addStatic();">QQ空间</a><a class="slbg2" href="javascript:void(0);" data-cmd="sqq" onclick="artStatistics(&#39;20-8-9&#39;);shareStatic.addStatic ();">QQ好友</a><a class="slbg3" href="javascript:void(0);" data-cmd="tsina" onclick="artStatistics(&#39;20-8-11&#39;);shareStatic.addStatic();">新浪微博</a><a class="slbg5" href="javascript:void(0);" onclick="showdivemail1();artStatistics(&#39;20-8- 15&#39;);shareStatic.addStatic();">推荐给朋友</a></div></span><span class="newbtn_word" id="newbtn_word" onclick="WordObj.init();addStatisticsNew(&#39;20-37-3-130&#39;)" style="display:none"><i></i></span></div><div style="position:  absolute;display:none;z-index:1;right:-217px;top:30px;" id="fuzhitishidiv"></div></div>
+</div>
+<div id="articlecontent" class="article_container" onmousedown="newhighlight = true;" onmouseup="NewHighlight(event);">
+<div class="article_showall">
+<div>
+<a href="javascript:void(0);" onclick="$(&#39;body&#39;).removeClass(&#39;articleMaxH&#39;)" datatype="360doczkqw">展开全文</a>
+</div>
+</div>
+<table style="width: 656px;">
+<tbody>
+<tr>
+<td id="artContent" style="max-width: 656px">
+<div style="width: 656px; margin: 0; padding: 0; height: 0;"></div>
+<p>参考：<a href="https://blog.csdn.net/u011425939/article/details/53437000" rel="nofollow">https://blog.csdn.net/u011425939/article/details/53437000</a></p>
+<p style="text-indent:33px;">对于彩色图像，需要采集多种最基本的颜色，如rgb三种颜色，最简单的方法就是用滤镜的方法，红色的滤镜透过红色的波长，绿色的滤镜透过绿色的波长，蓝色的滤镜透过蓝色的波长。如果要采集rgb三个基本色，则需要三块滤镜，这样价格昂贵，且不好制造，因为三块滤镜都必须保证每一个像素点都对齐。当用bayer格式的时候，很好的解决了这个问题。bayer&nbsp;格式图片在一块滤镜上设置的不同的颜色，通过分析人眼对颜色的感知发现，人眼对绿色比较敏感，所以一般bayer格式的图片绿色格式的像素是是r和g像素的和。</p>
+<p>先看看网上的一种说法“摄像头的数据输出格式一般分为<span style="color:#f33b45;"><strong>CCIR601、CCIR656、RAW RGB</strong></span>等格式”</p>
+<p>大嘴评述：这<span class="highlight_tr" id="highlight_4875">里的摄像头严格来说应该是传感器(sensor)</span>，个人觉得<strong>CCIR601和CCIR656更应该看做是一种标准和计算方式，而不应该是数据格式</strong>，这里我觉得有些误导，不必深究，具体关于CCIR601和CCIR656感兴趣的朋友请自行查阅资料，这里只做简单介绍。</p>
+<p><span style="color:#f33b45;"><strong>一、Sensor的感光原理：</strong></span></p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; <strong><span style="color:#7c79e5;">&nbsp;<span class="highlight_tr" id="highlight_4876">Sensor的感光原理是通过一个一个的感光点对光进行采样和量化，但在Sensor中，每一个感光点只能感光RGB三基色中的一种颜色</span>（</span><span style="color:#f33b45;">这个颜色可以理解为像素的一个颜色分量，并不是最终的图像显示的颜色，最终图像显示的颜色是由RGB三个颜色分量组合构成，根据RGB三个颜色分量的值不同，组合成不同的颜色</span><span style="color:#7c79e5;">）。所以，通常所说的30万像素或130万像素等，指的是有30万或130万个感光点，每一个感光点只能感光一种颜色</span></strong><span style="color:#7c79e5;">。</span></p>
+<p><strong><span style="color:#f33b45;">二、CCIR601或656的格式</span></strong></p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp;<span style="color:#f33b45;"><strong> <span class="highlight_tr" id="highlight_4877">要还原一个真正图像，需要每一个点都有RGB三种颜色</span></strong></span>，所以，对于CCIR601或656的格式，在Sensor模组的内部会有一个ISP模块，会将Sensor采集到的数据进行插值和特效处理，例如：<strong>如果一个感光点感应的颜色是R，那么，ISP模块就会根据这个感光点周围的G、B感光点的数值来计算出此点的G、B值，那么，这一点的RGB值就被还原了</strong>，然后在编码成601或656的格式传送给Host。</p>
+<p><span style="color:#f33b45;"><strong>三、RGB RAW格式</strong></span></p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; R<span class="highlight_tr" id="highlight_4878">GB RAW格式的Sensor是将每个感光点感应到的RGB数值直接传送给Host，由Host来进行</span><strong><span class="highlight_tr" id="highlight_4878">插值</span></strong><span class="highlight_tr" id="highlight_4878">和特效处理。由此可见RGB RAW DATA才是真正的原始数</span>据。<strong><span style="color:#f33b45;">RGB RAW DATA是指原始的数据，单个pixle只能感应一种颜色（RGB中的一种）。</span></strong></p>
+<p><span style="color:#f33b45;"><strong>四、 Bayer格式</strong></span></p>
+<p>&nbsp; &nbsp; &nbsp; <strong>&nbsp;如果这个原始数据的排列格式是 RGRG/GBGB排列的，我们叫做 Bayer pattern（这个最最常见）</strong>。所以 Bayer RGB是属于 RGB RAW data的，但是 <span style="color:#7c79e5;"><strong>RGB RAW data不一定是bayer pattern，不同厂家的sensor,其RGB RAW DATA排列是不同的， 不过对于我们来说不必过于关心扫描格式，反正厂家都会提供API.</strong></span></p>
+<p>&nbsp; &nbsp; &nbsp; <span style="color:#f33b45;"><strong>Bayer格式是相机内部的原始图片,&nbsp;一般后缀名为.raw。很多软件都可以查看,&nbsp;比如PS。我们相机拍照下来存储在存储卡上的.jpeg或其它格式的图片,&nbsp;都是从.raw格式转化过来的。如下图，为bayer色彩滤波阵列，由一半的G，1/4的R，1/4的B组成。</strong></span><span style="color:#7c79e5;"><strong>一般bayer格式的图片绿色像素是r和g像素的和。</strong></span></p>
+<p>&nbsp;</p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;<img alt="" src="./相机内部摄像头数据输出格式_files/178622869_1_20191223090752925"></p>
+<p>Bayer数据，其一般格式为：<br>
+奇数扫描行输出&nbsp;RGRG……<br>
+偶数扫描行输出&nbsp;GBGB……</p>
+<p>　　根据人眼对彩色的响应带宽不高的大面积着色特点，每个像素没有必要同时输出3种颜色。因此，数据采样时，</p>
+<p>奇数扫描行的第1，2，3，4，…象素分别采样和输出R，G，R，G，…数据；</p>
+<p>偶数扫描行的第1，2，3，4，…象素分别采样和输出G，B，G，B，…数据。</p>
+<p style="text-indent:33px;"><span style="color:#7c79e5;"><strong>在实际处理时，每个</strong>像素<strong>的R，G，B信号由</strong>像素<strong>本身输出的某一种颜色信号和相邻</strong>像<strong>素输出的其他颜色信号构成</strong>。</span>这种采样方式在基本不降低图像质量的同时，可以将采样频率降低60％以上。</p>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<table>
+<tbody>
+<tr>
+<td>
+<ul></ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div></div>
+<span></span>
+<a></a>
+<p style="margin: 0; padding: 0;"></p>
+<p class="clearboth"></p>
+<div class="zcomdiv" style="text-align:right;padding-bottom: 6px;">
+<span class="newbtn_fullscreen" onclick="FullScreenObj.init();addStatisticsNew(&#39;20-30-1-34&#39;);" style="margin-right: 0;"><i></i></span>
+<span class="newbtn_print" onclick="PrintObj.init();addStatisticsNew(&#39;20-31-1-70&#39;);"><i></i></span>
+</div>
+<div id="oranuserinfo" style="display: none;  border: 0;padding: 0; margin: 0;overflow: visible;" class="yc_user zcomdiv new_yc_user">
+</div>
+<div id="divreward" style="display: none; width: 659px;">
+<div class="arti_reward new_arti_reward">
+<a id="btnreward" href="javascript:void(0);" class="a1" onclick="rewardlist.showRewardAlert();">赞赏</a>
+<div id="rewarduserslist" class="arti_rlist">
+<a href="javascript:void(0);" class="ara1">
+<img src="./相机内部摄像头数据输出格式_files/wx.jpg" title="游客"></a>
+<a href="javascript:void(0);" class="ara1">
+<img src="./相机内部摄像头数据输出格式_files/wx.jpg" title="游客"></a>
+<a href="javascript:void(0);" class="ara1">
+<img src="./相机内部摄像头数据输出格式_files/wx.jpg" title="游客"></a>
+<a href="javascript:void(0);" class="ara1">
+<img src="./相机内部摄像头数据输出格式_files/wx.jpg" title="游客"></a>
+<span id="spantotalrewardcount" class="ara1_morelist stopbubble">
+<div class="d1"><span id="totalormore" style="color: black;">共</span><span id="totalrewardcount">11</span>人赞赏</div>
+<div id="morerewarduserslist" class="d2" style="display: none;"></div>
+</span>
+</div>
+</div>
+</div>
+<div id="divtort"><div style="color:#999;text-align:left;line-height:22px;background:#f7f7f7;padding: 10px 20px;margin-bottom: -7px;margin-top:10px;">本站是提供个人知识管理的网络存储空间，所有内容均由用户发布，不代表本站观点。如发现有害或侵权内容，请<span style="color:#155d9a;cursor:pointer;white-space: nowrap;" onclick="reportLayer.isLogin();artStatistics(&#39;20-18&#39;);">点击这里</span> 或 拨打24小时举报电话：4000070609 与我们联系。</div></div>
+<div id="divresaveunder" class="bdsharebuttonbox bottombtn bdshare-button-style0-16" style="margin-top: 23px;" data-bd-bind="1598603242747">
+<div class="zcommond" style="overflow: visible;">
+<a href="javascript:void(0);" class="btn_collect" onclick="SaveArt();artStatistics(&#39;20-3-2&#39;);">转藏到我的图书馆</a>
+<a id="flowimg3" href="javascript:void(0);" class="btn_good" onclick="Showflowerlayer(&#39;sendedLayer1&#39;);">献花（<span id="articleflowernum">0</span>）
+<span id="flowernumadd" style="display: none;">+1</span>
+</a>
+<span class="span1 f_left" onclick="setTimeout(function(){$(&#39;.bottombtn .sharelist_new&#39;).slideToggle(0);},10);artStatistics(&#39;20-8-3&#39;);pushUserInterestRedis(4)" onmouseover="this.style.color=&#39;#0f659c&#39;" onmouseout="this.style.color=&#39;&#39;">分享：</span>
+<a class="sharewx f_left" href="javascript:void(0);" onclick="shareWeixin();artStatistics(&#39;20-8-6&#39;);shareStatic.addStatic();pushUserInterestRedis(4)">微信</a>
+<div class="s2 f_left" onclick="setTimeout(function(){$(&#39;.bottombtn .sharelist_new&#39;).slideToggle(0);},10);artStatistics(&#39;20-8-4&#39;);"><span></span></div>
+</div>
+<div class="sharelist_new" id="fenxiangLayer2">
+<a class="slbg1" href="javascript:void(0);" onclick="shareTo(&#39;qzone&#39;);artStatistics(&#39;20-8-8&#39;);shareStatic.addStatic();">QQ空间</a>
+<a class="slbg2" href="javascript:void(0);" onclick="shareTo(&#39;qq&#39;);artStatistics(&#39;20-8-10&#39;);shareStatic.addStatic();">QQ好友</a>
+<a class="slbg3" href="javascript:void(0);" onclick="shareTo(&#39;sina&#39;);artStatistics(&#39;20-8-12&#39;);shareStatic.addStatic();">新浪微博</a>
+<a class="slbg5" href="javascript:void(0);" onclick="showdivemail1();artStatistics(&#39;20-8-16&#39;);shareStatic.addStatic();">推荐给朋友</a>
+</div>
+</div>
+<div class="bottom_controler">
+<p class="bottom_cleft">
+来自：
+<span class="a_username" style="width: auto;">
+<a href="http://www.360doc.com/userhome/33093582" id="savernickname2" target="_blank" onclick="artStatistics(&#39;20-7-2&#39;);">小经济学家</a>
+</span>
+&gt;
+<span id="cname" class="a_from"><a href="http://www.360doc.com/userhome.aspx?userid=33093582&amp;cid=1295" target="_blank" onclick="artStatistics(&quot;20-6&quot;);">《精华》</a></span>
+</p>
+<div class="bottom_cright">
+<a href="javascript:void(0);" class="a2" onclick="reportLayer.isLogin();artStatistics(&#39;20-18&#39;);">举报</a>
+</div>
+</div>
+<div class="prev_next">
+<p class="p1" style="display: block;"><span style="color: #E6352B;">推<span style="visibility: hidden;">一</span>荐</span>：<a href="http://www.360doc.com/pages/Wallet/bonus.html" target="_blank">发原创得奖金，“原创奖励计划”来了！</a>&nbsp;&nbsp;<span style="color: #707070">|</span>&nbsp;&nbsp;<a href="http://www.360doc.com/pages/activity/activity47.html" target="_blank">品味北京的文化之美，有奖征文一起去记录！</a>
+</p>
+</div>
+<div class="prev_next">
+<p id="lastart" class="p1" style="display: block;"> 上一篇：<a onclick="artStatistics(&quot;20-9-5&quot;);" href="http://www.360doc.com/content/19/1223/09/33093582_881510178.shtml" target="_blank">摄像头sensor的数据输出格式。</a></p>
+<p id="nextart" class="p2" style="display: block;"> 下一篇：<a onclick="artStatistics(&quot;20-9-6&quot;);" href="http://www.360doc.com/content/19/1223/09/33093582_881513111.shtml" target="_blank">摄像头sensor的数据输出格式。</a></p>
+</div>
+<script src="./相机内部摄像头数据输出格式_files/feed_ts.js"></script>
+<div class="prev_next" style="margin-left: -13px; line-height: normal; position: relative;" id="adprev_next"><newsfeed id="QIHOO__WEB__SO__1598603242622_90" style="display: block; position: relative; margin: 0px; padding: 0px; overflow: hidden; border: none; text-align: left; width: 500px;"><newsfeed-header class="feed-tab"></newsfeed-header><newsfeed-main style="overflow: hidden; position: relative; font-size: 50px;"><info-div class="feed__wrapper" data-impressnum="0.16197583250461123"><info-div></info-div><info-div class="feed__item textual clk" data-pv="http://max-l.mediav.com/rtb?type=2&amp;v=CGQSEDE0OGUzOWRhZWE4Mzg2ZjkYuI6PASDE5AwoAWIXODI4NzA4MjMzMzgyODA5MjkwNjAwMjBwAYgBAJoBEDE0OGUzOWRhZWE4MzhhZjmiARAxNDhlMzlkYWVhODM4NmY5&amp;k=2GJA9gAAAAA=&amp;ver=1&amp;exp=EQBDEgBDMQBDBQBECQBECQFEBAJENgJERQJE&amp;w=AAAAAF9Iv-sAAAAAAAaJ7fod62DPMlcnSvJa-g&amp;i=lWk3p0yXB9AF,http://s3.nzbdw.com/s?type=1&amp;r=20&amp;tid=MmZjYWUzZjYzNWNkZWMxYzExMjQxNWU4NDFlYWUyZ 
+</div>
+<ul class="youlike" style="margin-top: -18px; position: relative; z-index: 1;" id="divyoulikeadbody">
+<div style="width: 676px; height: 280px; border: 0;" id="divyoulikead"><iframe id="youlikead" style="width: 676px; height: 280px; border: 0;" frameborder="0" scrolling="no" src="./相机内部摄像头数据输出格式_files/adbaiduyoulike.html"></iframe></div>
+</ul>
+<script type="text/javascript">
+
+</script>
+<div class="clearboth"></div>
+<div class="new_plbox zcomdiv">
+<p class="p1 f_left"><span id="refNumSpan">0</span>条评论</p>
+<div class="new_huifubt f_left">
+<textarea name="SendRefTB" id="SendRefTB" value="写评论...">写评论...</textarea>
+<p>
+<a id="ImgSendPL" href="javascript:void(0);" onclick="SubmitReflection();">发表</a>
+</p>
+</div>
+</div>
+<p style="margin: 0; text-align: right;padding: 7px 19px 0 0;color: #999;">请遵守用户&nbsp;<a href="http://www.360doc.com/agreement.html" target="_blank">评论公约</a></p>
+<ul class="replylist" id="reflectionListUL">
+</ul>
+<div class="reply_pager" id="pageBarDIV">
+</div>
+<a href="javascript:void(0)" class="reply_more" onclick="setSpread()" style="display: none;">查看更多评论
+<img src="./相机内部摄像头数据输出格式_files/reply_btn.gif"></a>
+<div class="str_border" style="border: 

@@ -1,0 +1,131 @@
+﻿
+
+body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, input, textarea,.header p, blockquote, th, td {margin: 0;padding: 0;font-family: '微软雅黑','宋体', '黑体', Arial, Helvetica, sans-serif;}
+
+fieldset, img {border: 0;margin: 0;padding: 0;}
+input, textarea {outline: none;-webkit-tap-highlight-color: transparent;}
+input:focus, textarea:focus {outline: none;}
+
+textarea {resize: none;}
+.header{width: 100%;height: 68px;border-bottom: solid 1px #f2f2f2; min-width: 1000px;position:relative; z-index:3;}
+
+.header_1{ margin: 0 auto; height: 68px; position:relative;width: 1000px;}
+.header_1 a{color: #333;text-decoration: none;}
+.f_left{float: left; _display: inline;}
+.f_right{float: right; _display: inline;}
+a{text-decoration: none;outline: none;}
+.mylibrary{width: 123px; height: 34px; line-height:34px;display: block;text-align: right; margin-top: 18px; position: relative;z-index: 3;padding-right: 14px;float: left;margin-left: 34px;}
+.mylibrary a.a1{color: #000;font-size: 16px;}
+.mylibrary{margin-left: 18px;}
+.h_user{width: 34px; height: 34px; overflow: hidden;float: left;}
+.h_user img{width: 34px; height: 34px;border-radius: 50%;-webkit-border-radius: 50%;}
+.headtalker .hm_list{ width: 92px;}
+.hm_list{position: absolute;right: -1px;top: 24px;border: solid 1px #d2d2d2; z-index: 2;background:#fff;width: 86px; display: none;text-align: left;}
+.h_cur .hm_list{ display: block;}
+.hm_width2{width: 190px !important;}
+.hm_list li{ padding: 4px 8px; line-height: 15px;}
+.hm_list li a{ color: #2d609f;}
+.hm_account{text-align: left; top: 33px;left: 44px; }
+/*.hm_account li a{color: #000;}*/
+.headmail,.headtalker{width: 34px;height: 24px;border: solid 1px #fff;margin: 24px 0 0 12px;border-bottom: none;position: relative; z-index: 2;margin-left: 14px;margin-left: 5px;}
+.headmail .h_icon1{width: 14px; height: 10px;overflow: hidden;background: url(http://pubimage.360doc.com/HomeIndex/Msg/ring_mail.gif) no-repeat 0 0; margin: 7px auto 0;}
+.headtalker .h_icon1{width: 18px; height: 13px;overflow: hidden;background: url(http://pubimage.360doc.com/HomeIndex/Msg/ring_msg.gif) no-repeat 0 0; margin: 5px auto 0;}
+.h_border{position: absolute;z-index: 3;height: 0;line-height: 0;font-size: 0;width: 34px;top: 24px;right: 0;border-bottom: solid 1px #fff;}
+ol, ul, li {list-style: none}
+.indexallbg,.headsearch,.headsearch_btn,.head_talk,.btn_gotop .span1,.index_app2d,.hs_title{background-image: url(http://pubimage.360doc.com/index7/indexallbg.gif?t=2017);background-repeat: no-repeat;}
+.head_talk{width: 74px; height: 20px;line-height: 20px;text-align: right;color: #333;font-size: 12px;font-weight: bold;text-decoration: none;background-position: -484px 4px; margin: 25px  0 0;float: right;}
+.head_talk:hover,.mylibrary a.a1:hover{color: #005599;}
+.hm_color,.hm_color2{background: #eaeaea;}
+.headsearch{height: 36px; margin-top: 18px;position: relative; margin-right: 36px; position: relative; z-index: 2;background-position: 0 -36px;width: 382px;background-position: 0 -36px;width: 382px;float: right;}
+.headsearch{width: 231px;background-position: 0 0; margin-right: 10px;}
+.zcomdiv{width: 100%; height: auto;overflow: hidden;}
+.headsearch_inp{border: 0px none;color: #999;font-size: 14px; margin: 8px 0 0 10px;width: 330px;}
+.headsearch_inp{ width: 180px;}
+.headsearch_btn{width: 33px;height: 33px;background-position: -321px 0; margin: 1px 6px 0 0; cursor: pointer;float: right;}
+.headsearch_select{width: 99.2%;height: auto;overflow: hidden;position: absolute;left: 0;top:35px ;border: solid 1px #cacaca;border-top: none;background:#fff ; display: none;text-align: left;}
+.hs_title{color: #2560a3;height: 22px;line-height: 22px;text-indent: 10px;background-position:99px -281px ;float: left;width: 100%;padding: 0;margin: 0;}
+.headsearch_select a{ display: block;height: auto;overflow: hidden;padding: 4px 10px;background: #fffff7;line-height: 17px;color: #666; margin: 0;}
+.headsearch_select a.cur{background: #fef9d1;}
+.headsearch_select a span{color: #c20201;word-break: break-all;}
+.myselect{background: url(http://pubimage.360doc.com/index7/indexallbg.gif?t=2017) no-repeat 128px -307px;}
+.h_cur{border-color: #d2d2d2;}
+.h_cur .hm_list{ display: block;}
+.arti_type_shadow{position: absolute;width: 100%;height: 6px;left: 0;background-image: url(http://pubimage.360doc.com/index7/woshiyinying.png);background-repeat: repeat-x; display: none;}
+/**/
+.weixinbox {width: 488px;height: 392px;background-color: #fff;-webkit-border-radius: 4px;-moz-border-radius: 4px;border-radius: 4px;
+border: 4px solid #8e8e8e;}
+a.cengcloser{font-size: 20px;position: absolute;line-height: 20px;height: 20px;width: 20px;text-align: center;right: 14px;top: 5px;color: #333;text-decoration: none;}
+a.cengcloser:hover{color: #5d9e1e;text-decoration: none;}
+.cengbj {background-image: url(http://pubimage.360doc.com/cengbj.gif);background-repeat: repeat-x;height: 33px;}
+.cengleft {color: #4d4d4d;float: left;font-weight: bold;line-height: 32px;padding-left: 16px;}
+a.rbtn_confirm_s,a.rbtn_cancel_s{text-decoration:none;display:inline-block;width:62px;height:26px;text-align:center;line-height:26px;color:#fff!important;font-size:14px;background:#5d9e1e;border:solid 1px #efefef;border-radius:3px}a.rbtn_cancel_s{background:#f1f1f1;color:#7e7e7e!important}
+a.rbtn_cancel_s:hover{background:#eee;color:#333;text-decoration:none!important}
+/**/
+.headmail p.ring{background: url(http://pubimage.360doc.com/HomeIndex/Msg/ring_mail_w.gif) no-repeat 0 0;}
+.headtalker p.ring{background: url(http://pubimage.360doc.com/HomeIndex/Msg/ring_msg_w.gif) no-repeat 0 0;}
+/*vip*/
+.user_vip_s{display: inline-block;width: 22px;height: 12px;background: url(http://pubimage.360doc.com/index7/lv_b1.png) no-repeat;vertical-align: text-top;position: relative;overflow: hidden;}
+.user_vip_b{display: inline-block;width: 25px;height: 15px;background: url(http://pubimage.360doc.com/index7/lv_m1.png) no-repeat;vertical-align: text-top;position: relative;overflow: hidden;}
+.user_vip_b:before{content: '';width: 6px;height: 40px;background: #fff;position: absolute;left: -14px;top: -10px;transform: rotate(45deg);opacity: 0.9;-ms-transform: rotate(45deg);animation: vipicon1 4s linear infinite;
+-moz-animation: vipicon1 4s linear infinite;	/* Firefox */
+-webkit-animation: vipicon1 4s linear infinite;	/* Safari 和 Chrome */
+-o-animation: vipicon1 4s linear infinite;}
+.user_vip_s:before{content: '';width: 4px;height: 40px;background: #fff;position: absolute;left: -14px;top: -10px;transform: rotate(45deg);opacity: 0.9;-ms-transform: rotate(45deg);animation: vipicon1 4s linear infinite;
+-moz-animation: vipicon1 4s linear infinite;	/* Firefox */
+-webkit-animation: vipicon1 4s linear infinite;	/* Safari 和 Chrome */
+-o-animation: vipicon1 4s linear infinite;}
+@keyframes vipicon1{from{left:-14px}
+to{left:500px}
+}@-moz-keyframes vipicon1{from{left:-14px}
+to{left:500px}
+}@-webkit-keyframes vipicon1{from{left:-14px}
+to{left:500px}
+}@-o-keyframes vipicon1{from{left:-14px}
+to{left:500px}
+}
+.user_vip_s a,.user_vip_b a{display: block;width: 100% !important;height: 100% !important;margin: 0 !important;padding: 0 !important;}
+.user_vip_sx{background-image: url(http://pubimage.360doc.com/index7/lv_bx1.png);}
+.user_vip_bx{background-image: url(http://pubimage.360doc.com/index7/lv_mx1.png);}
+.user_vip_bx:before{content: none;animation: none;}
+.user_vip_sx:before{content: none;animation: none;}
+.user_lv_s1{background-position:0 0 ;}
+.user_lv_s2{background-position:0 -12px ;}
+.user_lv_s3{background-position:0 -24px ;}
+.user_lv_s4{background-position:0 -36px ;}
+.user_lv_s5{background-position:0 -48px ;}
+.user_lv_s6{background-position:0 -60px ;}
+.user_lv_s7{background-position:0 -72px ;}
+.user_lv_s8{background-position:0 -84px ;}
+.user_lv_s9{background-position:0 -96px ;}
+.user_lv_s10{background-position:0 -108px ;width: 26px;}
+
+.user_lv_b1{background-position:0 0;}
+.user_lv_b2{background-position:0 -15px ;}
+.user_lv_b3{background-position:0 -30px ;}
+.user_lv_b4{background-position:0 -45px ;}
+.user_lv_b5{background-position:0 -60px ;}
+.user_lv_b6{background-position:0 -75px ;}
+.user_lv_b7{background-position:0 -90px ;}
+.user_lv_b8{background-position:0 -105px ;}
+.user_lv_b9{background-position:0 -120px ;}
+.user_lv_b10{background-position:0 -135px ;}
+/*20200604*/
+.husercard{width: 330px;height: auto;border: solid 1px #e4e4e4;overflow: hidden;position: absolute;border-radius:2px;background: #fff;text-align:left;box-shadow: 1px 2px 4px #ddd;z-index: 20;left: -30px;top:51px;display:none;}
+.husercard .ha1{display: block;width: 290px;height: 52px;margin: 20px 0 0 20px;}
+.husercard .ha1 img{width: 52px;height: 52px;float: left;border-radius: 50%;-webkit-border-radius: 50%;}
+.husercard .ha1 p{float: right;height: 52px;line-height: 52px;font-size: 18px;color: #000;text-overflow: ellipsis;overflow: hidden;white-space: nowrap;width: 218px;}
+.husercard .ha1 p a{color:inherit;font-size: 18px;}
+.hvipstate{height: auto;overflow: hidden;border-bottom: solid 1px #e4e4e4;width: 298px;margin: 18px auto 0;padding: 0 16px 24px;}
+.hvipstate .d1{height: 27px;width: auto;}
+.hvipstate .d1 p{float: left;line-height:27px;color: #555555;font-size:14px;width: 224px;}
+.hvipstate .d1 p span{font-size: 12px;color: #c93838;margin-left: 10px;}
+.hvipstate .d1 a{width: 70px;float: right;height: 25px;border: solid 1px #bf924b;text-align: center;font-size: 12px;border-radius: 20px;line-height: 25px;color: #bf924b;position:relative}
+.hvipstate .d1 a i{width: 14px;height: 14px;position: absolute;right: 9px;top: -3px;background: url(http://pubimage.360doc.com/study/ns_hongdian.gif) no-repeat;}
+.hvipstate .d1 a:hover{background: #f6f6f6;}
+.hvipstate .p2{height: 18px;line-height: 18px;font-size: 12px;color: #a0a0a0;}
+.husercard .hcardlinks{width: 238px;height: auto;overflow: hidden;margin: 14px 0 0 26px;line-height: 35px;font-size: 0;padding-bottom: 11px;}
+.husercard .hcardlinks a{display: inline-block;font-size: 14px;color: #373737;margin-right: 30px;}
+.husercard .ha1 p .user_vip_b{margin:6px 0 0 4px}
+.husercard .ha1 p i{display: inline-block;width: 21px;height: 12px;background: url(http://pubimage.360doc.com/index7/viptimeout.png) no-repeat;margin: 8px 0 0 6px;vertical-align: text-top;}
+.husercard .hcardlinks a:hover{color: #547fb5;}
+/*end*/
