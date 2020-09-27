@@ -73,8 +73,6 @@ VICAP将自动捕获第三帧（按新的F1地址），而无需任何停止和�
 
 块0/1完成后，将设置块状态，用户应清除及时阻止状态。当下一个block0/1开始接收时，如果块状态0/1未清除，当前帧的其余部分将被丢弃。保管部YUV模式和RAW模式的区别在于YUV模式或CCIR656模式，数据将存储在Y数据缓冲区和UV数据缓冲区中，如果唯一的Y模式是所选的紫外线数据将不存储；在原始或JPEG模式下，RGB数据将存储在同一缓冲区中。另外，在YUV模式或RAW8模式下，Y，U的宽度或者V数据是内存中的一个字节；在Raw10/12或JPEG模式下，宽度是半字。作物参数START_Y和START_X定义裁剪起点的坐标。以及裁剪后的帧大小遵循“设置宽度”和“设置高度”的值。
 
-
-
 # 3 BT.601和BT.656
 
 转载[Mr_Wing5](https://me.csdn.net/jiayu5100687) 最后发布于2018-08-16 14:32:35 阅读数 5418 收藏
@@ -398,3 +396,159 @@ F和V比特值的变化对应的行数见下表：
   在实际的使用中，有的视频处理芯片要求16bit的视频数据线，但是还是内嵌同步（EAV/SAV）的模式，这种模式按照BT656的规范，严格来说不是BT656模式，但是在使用中，习惯上页称为YUV 16bit 656模式；或者说，这个模式和BT1120规范类似。下图是16bit和8bit线宽下转换的示意图。
 
 ![img](camera_soft.assets/20180816142940294.png)
+
+
+
+# 4 11
+
+
+
+关于vicap驱动和摄像头驱动
+
+
+
+camera层驱动
+
+​    |
+
+gc0308、gc032a
+
+
+
+ src\kernel\oal\devinfo.c
+
+```
+
+DEV_INFO dev_info_table[DEV_CLASS_MAX_NUM] =
+{
+#ifdef CONFIG_DRIVER_VICAP
+    0, rk_rkos_vicap_create, rk_rkos_vicap_delete, "vicap",
+#endif
+#ifdef CONFIG_DRIVER_CAMERA
+    0, rk_rkos_camera_create, rk_rkos_camera_delete, "camera",
+#endif
+}
+设备ID
+ include\kernel\devid.h
+#ifdef CONFIG_DRIVER_VICAP
+    DEV_CLASS_VICAP,
+#endif
+
+#ifdef CONFIG_DRIVER_CAMERA
+    DEV_CLASS_CAMERA,
+#endif
+
+```
+
+ src\driver\camera\camera.c
+
+```
+HDC rk_rkos_camera_create(uint8_t dev_id, void *arg);
+```
+
+ include\driver\camera.h
+
+声明了驱动rk_camera_ops的结构体。每个摄像头驱动用CONFIG_DRIVER_GC0307这种Kconfig管理，编译指定一个摄像头的驱动c文件。该摄像头驱动的.c文件包含该头文件实现了这个结构体，就可以实现与上层应用的解耦合。 
+
+```
+struct rk_camera_ops; //声明与定义
+struct rk_camera_device
+{
+    rk_device parent;
+    char name[RK_CAMERA_DEVICE_NAME_SIZE];
+    struct rk_camera_info info;
+    const struct rk_camera_ops *ops;
+    char i2c_name[RK_CAMERA_I2C_NAME_SIZE];
+    rk_i2c_bus_device *i2c_bus;
+#if defined(__RK_OS__)
+    uint8_t class_id;
+    uint8_t object_id;
+#endif
+};
+```
+
+src\driver\camera\drv_gc0307.c
+
+```
+#elif defined(__RK_OS__)
+#include "driver/camera.h"
+#endif
+
+const static struct rk_camera_ops rk_gc0307_ops =
+{
+    rk_gc0307_init,
+    rk_gc0307_open,
+    rk_gc0307_close,
+    rk_gc0307_control,
+};
+int rk_camera_init(void)
+{ ····
+    camera->ops = &rk_gc0307_ops;
+····
+}
+
+```
+
+\\10.10.10.190\cw\story\8_2206\src\driver\camera\drv_gc032a.c
+
+```
+const static struct rk_camera_ops rk_gc032a_ops =
+{
+    rk_gc032a_init,
+    rk_gc032a_open,
+    rk_gc032a_close,
+    rk_gc032a_control,
+};\
+int rk_camera_init(void)
+{ ····
+    camera->ops = &rk_gc0307_ops;
+····
+}
+    camera->ops = &rk_gc032a_ops;
+```
+
+视频捕获单元: *VICAP*(Video capture) 
+
+ include\driver\vicap.h
+
+```
+struct rk_vicap_ops
+{
+    ret_err_t (*init)(struct rk_vicap_device *dev);
+    ret_err_t (*open)(struct rk_vicap_device *dev, uint16_t oflag);
+    ret_err_t (*close)(struct rk_vicap_device *dev);
+    ret_err_t (*control)(struct rk_vicap_device *dev, dt_cmd_t cmd, void *arg);
+    ret_err_t (*rx_indicate)(struct rk_vicap_device *dev, ret_size_t size);
+};
+```
+
+ src\driver\vicap\vicap.c 视频捕获单位（设备树里面创建）
+
+```
+HDC rk_rkos_vicap_create(uint8_t dev_id, void *arg)
+{
+    struct rk_vicap_device *vicapdev = (struct rk_vicap_device *)arg;
+    rk_device *dev = &vicapdev->parent;
+
+    dev->dev_class_id = DEV_CLASS_VICAP;
+    dev->dev_object_id = dev_id;
+    dev->suspend = RK_NULL;
+    dev->resume = RK_NULL;
+    dev->open = rk_rkos_device_open;
+    dev->close = rk_rkos_device_close;
+    dev->control = rk_rkos_vicap_control;
+    dev->priv_data = arg;
+    return dev;
+}
+```
+
+cw@SYS3:~/story/8_2206$ ls src/driver/vicap/
+adapter  drv_vicap.c  vicap.c 
+
+
+
+```
+src\driver\vicap\drv_vicap.c 寄存器读写
+src\driver\vicap\vicap.c 设备创建删除注册
+```
+
