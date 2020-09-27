@@ -4,6 +4,26 @@
 
 ISP(Image Signal Processor)，即图像信号处理器，用于处理图像信号传感器输出的图像信号。它在相机系统中占有核心主导的地位，是构成相机的重要设备。
 
+
+
+# 目录
+
+ISP的主要内部构成：ISP内部包含 CPU、SUP IP（各种功能模块的通称）、IF 等设备
+
+ISP的控制结构：1、ISP逻辑   2、运行在其上的firmware
+
+ISP上的Firmware包含三部分：
+
+AP对ISP的操控方式：外置：I2C/SPI。 内置：MEM MAP、MEM SHARE
+
+ISP架构方案：内置、外置
+
+ISP 处理流程：
+
+Bayer、黑电平补偿 （black level compensation）、镜头矫正（lens shading correction）、坏像素矫正（bad pixel correction）、颜色插值 （demosaic）、Bayer 噪声去除、 白平衡（AWB） 矫正、 色彩矫正（color correction）、gamma 矫正、色彩空间转换（RGB 转换为 YUV）、在YUV 色彩空间上彩噪去除与边缘加强、色彩与对比度加强，中间还要进行自动曝光控制等， 然后输出 YUV（或者RGB） 格式的数据， 再通过 I/O 接口传输到 CPU 中处理。
+
+
+
 ##  1 主要内部构成
 
 如下图所示，ISP 内部包含 CPU、SUP IP、IF 等设备，事实上，可以认为 ISP 是一个 SOC，可以运行各种算法程序，实时处理图像信号。
@@ -94,6 +114,22 @@ ISP 作为图像处理的核心器件，拥有十分重要的功能，下图展�
 3.MEM SHARE
 
 ​    这也是内置 ISP 的做法。AP 这边分配内存，然后将内存地址传给 ISP，二者实际上共享同一块内存。因此 AP 对这段共享内存的操作会实时反馈到 ISP 端。
+
+# ISP上的Firmware包含三部分
+
+ISP 的Firmware包含三部分，一部分是ISP 控制单元和基础算法库，一部分是AE/AWB/AF 算法库，一部分是sensor 库。Firmware 设计的基本思想是单独提供3A算法库，由ISP控制单元调度基础算法库和3A 算法库，同时sensor 库分别向ISP 基础算法库和3A 算法库注册函数回调，以实现差异化的sensor 适配。ISP firmware 架构如图所示。
+
+不同的sensor 都以回调函数的形式，向ISP 算法库注册控制函数。ISP 控制单元调度基础算法库和3A 算法库时，将通过这些回调函数获取初始化参数，并控制sensor，如调节曝光时间、模拟增益、数字增益，控制lens 步进聚焦或旋转光圈等。
+
+
+
+![img](isp.assets/3a.png)
+
+
+
+
+
+
 
 ## ISP 架构方案
 
