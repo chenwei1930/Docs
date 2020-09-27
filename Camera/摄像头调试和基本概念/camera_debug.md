@@ -1,3 +1,11 @@
+
+
+
+
+
+
+/
+
 ## 1. 硬件接口
 
 使用前，请获得摄像头模组资料，查看摄像头内部芯片电路与外部的接口连接情况
@@ -10,12 +18,12 @@
 
 **输入**
 
-| 引脚             |                                                              |
-| ---------------- | ------------------------------------------------------------ |
-| RESET            | 复位管脚。有些摄像头没有这个硬件复位脚。此方式为硬复位模式，camera的各个IO口恢复到出厂默认状态。只有在XCLK开启后，将RESET置为低，硬复位才有效，否则复位无效。 |
-| XCLK（或EXTCLK） | camera的工作时钟管脚，此管脚为主机提供camera的工作时钟。     |
-| PWDN             | 使能管脚。两种配置方式，一种为standby，一种是normal work，设置为standby的时候，一切对camera的操作都是无效的，包括复位。所以在RESET之前，一定要将PWDN管脚设置为normal模式，否则RESET无效。 |
-| IIC（SCK,SDA）   | 主机和camera通信总线. 读和写操作                             |
+| 引脚                     |                                                              |
+| ------------------------ | ------------------------------------------------------------ |
+| RESET                    | 复位管脚。有些摄像头没有这个硬件复位脚。此方式为硬复位模式，camera的各个IO口恢复到出厂默认状态。只有在XCLK开启后，将RESET置为低，硬复位才有效，否则复位无效。 |
+| XCLK（或EXTCLK）(或mclk) | camera的工作时钟管脚（如12MHz master clock 单片机提供给摄像头的时钟），此管脚为主机提供camera的工作时钟。 |
+| PWDN                     | 使能管脚。两种配置方式，一种为standby，一种是normal work，设置为standby的时候，一切对camera的操作都是无效的，包括复位。所以在RESET之前，一定要将PWDN管脚设置为normal模式，否则RESET无效。 |
+| IIC（SCK,SDA）           | 主机和camera通信总线. 读和写操作                             |
 
 **输出**
 
@@ -133,6 +141,8 @@ RGB24，420是最常用的两种图像格式。
 
 ![img](camera_debug/white_balance_1.jpg)
 
+
+
 **增益**
 
 增益是摄像机传感器接收到原始景物的光后，在光电转换过程中，对原始的光进行调大或调小的过程。如果这时是增益调大了，**我们的图象就会比实际的亮，相反就会更暗**。如果传感器很小或质量不是很好，增益后就有很多的噪点。
@@ -167,7 +177,7 @@ VBLANK: 显示器扫描线完成最后一行后,需要重返左上角,这个过�
 
 ### 2. 2 摄像头技术原理
 
-摄像头的数据输出格式一般分为**CCIR601、CCIR656、RAW RGB**等格式”
+摄像头的数据输出格式一般分为**CCIR601、CCIR656、RAW RGB**等格式。
 
 大嘴评述：这里的摄像头严格来说应该是传感器(sensor)，个人觉得**CCIR601和CCIR656更应该看做是一种标准和计算方式，而不应该是数据格式**，这里我觉得有些误导，不必深究，具体关于CCIR601和CCIR656感兴趣的朋友请自行查阅资料，这里只做简单介绍。
 
@@ -185,6 +195,12 @@ CCIR601或656的格式
 
 ## 3 rk2206拍照命令
 
+
+
+
+
+raw8的其中格式
+
 ![1](resources/1.png)
 
 
@@ -200,6 +216,8 @@ vicap_test dev_set --set-dev=vicap_0 --set-workmode=block --set-blocks=6 --set-f
 vicap_test dev_streamon
 ````
 
+用rggb格式
+
 ```shell
 
 file.setpath A:
@@ -207,6 +225,17 @@ file.mf cif.out
 file.mf cif.jpeg
 vicap_test dev_create
 vicap_test dev_set --set-dev=vicap_0 --set-workmode=block --set-blocks=6 --set-format=fourcc=RGGB,width=640,height=480 --stream-buf=8 --stream-count=1 --stream-mode=photo --skip-count=20
+vicap_test dev_streamon
+```
+
+
+
+```
+file.setpath A:
+file.mf cif.out
+file.mf cif.jpeg
+vicap_test dev_create
+vicap_test dev_set --set-dev=vicap_0 --set-workmode=block --set-blocks=6 --set-format=fourcc=BGGR,width=640,height=480 --stream-buf=8 --stream-count=1 --stream-mode=photo --skip-count=20
 vicap_test dev_streamon
 ```
 
@@ -236,11 +265,11 @@ vicap_test dev_set --set-dev=vicap_0 --set-workmode=block --set-blocks=6 --set-f
 vicap_test dev_set --set-dev=vicap_0 --set-workmode=block --set-blocks=6 --set-format=fourcc=GRBG,width=640,height=480 --stream-buf=8 --stream-mode=photo --skip-count=20
 
 
-vicap_test dev_set --set-dev=vicap_0 --set-workmode=block --set-blocks=6 --set-format=fourcc=GBRG,width=640,height=480 --stream-buf=8 --stream-mode=photo --skip-count=18
+vicap_test dev_set --set-dev=vicap_0 --set-workmode=block --set-blocks=6 --set-format=fourcc=BA81,width=640,height=480 --stream-buf=8 --stream-mode=photo --skip-count=18
 vicap_test dev_streamon
 
 
-vicap_test dev_set --set-dev=vicap_0 --set-workmode=block --set-blocks=6 --set-format=fourcc=RGGB,width=640,height=480 --stream-buf=8 --stream-mode=photo --skip-count=18
+vicap_test dev_set --set-dev=vicap_0 --set-workmode=block --set-blocks=6 --set-format=fourcc=GRBG,width=640,height=480 --stream-buf=8 --stream-mode=photo --skip-count=18
 vicap_test dev_streamon
 ```
 
@@ -253,6 +282,24 @@ vicap_test dev_streamon
 ```shell
 vicap_test dev_set --set-dev=vicap_0 --set-workmode=block --set-blocks=6 --set-format=fourcc=BG8,width=640,height=480 --stream-buf=8 --stream-mode=photo --skip-count=20
 ```
+
+
+
+
+
+
+
+
+
+```
+嗯 可能刚才没说清楚：
+1、如果sensor物理上输出的是UYVY，那sensor驱动里，pixelcode是要配置成raw8的mediabus，vicap，也要设置成raw8的mediabus；
+2、如果sensor物理上输出的是NV12/NV16，那sensor驱动里，pixelcode要配置成对应的yuv的mediabus，vicap也是；
+3、如果sensor物理上输出的是raw8，那sensor驱动和vicap也是要对应的raw8的mediabus
+
+```
+
+
 
 ## 4. 摄像头调式步骤
 
@@ -599,8 +646,6 @@ YUV模式和RAW模式之间的区别在于YUV模式或CCIR656中的区别模式�
 
  如果我抬高mclk到24MHZ的图片那么就会出现错位的情况。 原因应该是mclk抬高了，行场信号有错位。
 
-
-
 、![9320e3913c0d45408d41ada68a46c0d](resources/9320e3913c0d45408d41ada68a46c0d.png)
 
 ```
@@ -639,4 +684,148 @@ RK2206>[INFO]: BF20A6: Info: BF20A6 detected successfully !!!  chip id:0x20a6
 [A.VICAP][000027.452969][  36C]
 RK2206>
 ```
+
+### 黑点： raw这个
+
+对于raw图片。软件显示也没做插值 
+
+![image-20200924163153535](resources/image-20200924163153535.png)
+
+### 检
+
+
+
+### 查
+
+```
+黄江龙 17:28:53
+嗯 可能刚才没说清楚：
+1、如果sensor物理上输出的是UYVY，那sensor驱动里，pixelcode是要配置成raw8的mediabus，vicap，也要设置成raw8的mediabus；
+2、如果sensor物理上输出的是NV12/NV16，那sensor驱动里，pixelcode要配置成对应的yuv的mediabus，vicap也是；
+3、如果sensor物理上输出的是raw8，那sensor驱动和vicap也是要对应的raw8的mediabus
+
+黄江龙 17:30:05
+所以 你现在要采集UYVY的话，sensor和vicap命令都要设置为raw8的mediabus；
+sensor驱动的media pixelcode运行起来，vicap是不会去改的，
+
+檵 17:34:12
+现在摄像头物理是YUYV，我senseor驱动 BGGR/GBRG8/GRBG/RGGB任一中，如MEDIA_BUS_FMT_SBGGR8_1X8;   然后vicap命令必须对应是 --set-format=fourcc=BGGR
+```
+
+[a][000040.399630]DVP_LAST_LINE[0x43000068]:0x1e0
+[a][000040.393914]DVP_LAST_PIX[0x4300006c]:0x500
+
+0x1e0:      0xeo = 224
+
+0x500:    
+
+
+
+![r2](resources/r2.png)
+
+
+
+![r1](resources/r1.png)
+
+**YUVY格式（属于YUV422）**
+
+![img](resources/202410157.png)
+    YUYV为YUV422采样的存储格式中的一种，相邻的两个Y共用其相邻的两个Cb、Cr，分析，对于像素点Y'00、Y'01 而言，其Cb、Cr的值均为 Cb00、Cr00，其
+他的像素点的YUV取值依次类推。
+
+**（2） UYVY 格式 （属于YUV422）**
+
+UYVY格式也是YUV422采样的存储格式中的一种，只不过与YUYV不同的是UV的排列顺序不一样而已，还原其每个像素点的YUV值的方法与上面一样。
+
+ ![img](resources/20131210141502484)
+
+YUV与像素的关系：
+
+YUV是利用一个亮度（Y）、两个色差(U,V)来代替传统的RGB三原色来压缩图像。
+
+传统的RGB三原色使用红绿蓝三原色表示一个像素，每种原色占用一个字节（8bit），因此一个像素用RGB表示则需要8x3=24bit。
+
+如果使用YUV表示这个像素，假设YUV的采样率为：4：2：0，即每一个像素对于亮度Y的采样频率为1，对于色差U和V，则是每相邻的两个像素各取一个U和V。对于单个的像素来说，色差U和V的采样频率为亮度的一半。如有三个相邻的像素，如果用RGB三原色表示，则共需要占用：8btytex3 原色x3像素=72bits；如果采用YUV（4：2：0）表示，则只需要占用：8x3（Y）+ 8x3x0.5（U）+8x3x0.5（V）= 36bits。只需原来一半的空间，就可以表示原来的图像，数据率压缩了一倍，而图像的效果基本没发生变化。
+
+ 
+
+
+
+
+
+一般描述一幅图像的参数时我们会考虑以下几点：
+
+1、宽：一行有多少个像素点。
+
+2、高：一列有多少个像素点。
+
+3、YUV格式还是RGB格式？
+
+4、一行多少个字节？5、图像大小是多少？6、图像的分辨率是多少？
+
+
+
+ 
+
+1920x1080像素的YUV422的图像，大小是1920X1080X2=4147200（十进制），也就是3.95M大小。
+
+
+
+在内存种中这样排列：Y0U0Y1V0 Y2U1Y3V1…
+
+第一个像素的YUV值为：Y0 U0 V0
+
+第二个像素的YUV值为： Y1 U0 V0
+
+第三个像素的YUV值为： Y2 U1 V1
+
+
+
+
+
+（1） YUV 4:4:4
+
+YUV三个信道的抽样率相同，因此在生成的图像里，每个象素的三个分量信息完整（每个分量通常8比特），经过8比特量化之后，未经压缩的每个像素占用3个字节。
+
+下面的四个像素为: [Y0 U0 V0] [Y1 U1 V1] [Y2 U2 V2] [Y3 U3 V3]
+
+存放的码流为: Y0 U0 V0 Y1 U1 V1 Y2 U2 V2 Y3 U3 V3
+
+（2） YUV 4:2:2
+
+每个色差信道的抽样率是亮度信道的一半，所以水平方向的色度抽样率只是4:4:4的一半。对非压缩的8比特量化的图像来说，每个由两个水平方向相邻的像素组成的宏像素需要占用4字节内存（亮度2个字节,两个色度各1个字节）。。
+
+下面的四个像素为: [Y0 U0 V0] [Y1 U1 V1] [Y2 U2 V2] [Y3 U3 V3]
+
+存放的码流为: Y0 U0 Y1 V1 Y2 U2 Y3 V3
+
+映射出像素点为：[Y0 U0 V1] [Y1 U0 V1] [Y2 U2 V3] [Y3 U2 V3]
+
+（3） YUV 4:1:1
+
+4:1:1的色度抽样，是在水平方向上对色度进行4:1抽样。对于低端用户和消费类产品这仍然是可以接受的。对非压缩的8比特量化的视频来说，每个由4个水平方向相邻的像素组成的宏像素需要占用6字节内存（亮度4个字节,两个色度各1个字节）。
+
+下面的四个像素为: [Y0 U0 V0] [Y1 U1 V1] [Y2 U2 V2] [Y3 U3 V3]
+
+存放的码流为: Y0 U0 Y1 Y2 V2 Y3
+
+映射出像素点为：[Y0 U0 V2] [Y1 U0 V2] [Y2 U0 V2] [Y3 U0 V2]
+
+（4）YUV4:2:0
+
+4:2:0并不意味着只有Y,Cb而没有Cr分量。它指得是对每行扫描线来说，只有一种色度分量以2:1的抽样率存储。相邻的扫描行存储不同的色度分量， 也就是说，如果一行是4:2:0的话，下一行就是4:0:2，再下一行是4:2:0…以此类推。对每个色度分量来说，水平方向和竖直方向的抽样率都是 2:1，所以可以说色度的抽样率是4:1。对非压缩的8比特量化的视频来说，每个由2x2个2行2列相邻的像素组成的宏像素需要占用6字节内存（亮度4个字节,两个色度各1个字节）。
+
+下面八个像素为：[Y0 U0 V0] [Y1 U1 V1] [Y2 U2 V2][Y3 U3 V3][Y5U5 V5] [Y6 U6 V6] [Y7U7 V7] [Y8 U8 V8]
+
+存放的码流为：Y0 U0 Y1 Y2 U2 Y3
+
+Y5V5 Y6 Y7 V7 Y8
+
+映射出的像素点为：[Y0 U0 V5] [Y1 U0 V5] [Y2 U2 V7] [Y3 U2 V7]
+
+[Y5U0 V5] [Y6 U0 V5] [Y7U2 V7] [Y8 U2 V7]
+
+
+
+
 
