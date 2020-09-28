@@ -252,8 +252,6 @@ boot: Android 的初始文件映像，即ramdisk，负责初始化并加载 syst
 recovery:急救模式映像，对应的是recovery.img
 system: Android 的 system 分区映像，ext4 文件系统格式，对应的是system.img
 
-
-
 分析编译的镜像：
 
 - boot.ing 是编译内核kernel生成的，
@@ -309,7 +307,7 @@ Version.mk
 
 [root@rk312x:/]#这个是正常模式
 
-## 1.2.6 查看烧录后的硬盘空间
+### 1.2.6 查看烧录后的硬盘空间
 
 **df 命令：**
 
@@ -317,13 +315,13 @@ linux中df命令的功能是用来检查linux服务器的文件系统的磁盘�
 
 “df -h”这条命令再熟悉不过。以更易读的方式显示目前磁盘空间和使用情况。
 
-## 2 编译
+## 2 各分区详细编译
 
 强调一点，buildroot 编译完修改output目录。重编make编译不到的。buildroot是检测不到代码的改动的，所以他是依靠各个编译阶段的标志文件，所以如果你编译后不删除特定编译阶段的文件，就会认为该阶段的编译步骤已经执行，不再重复该编译步骤。
 
-### 2.1 编译Buildroot  source脚本只用来编译rootfs
+### 2.1 环境变量 2个
 
-- 声明buildroot环境变量
+- 声明buildroot环境变量，在编译buildroot前
 
 source envsetup.sh  #选择开发板，如rk3128
 
@@ -454,7 +452,6 @@ index 4232fac868..06a4728bc3 100644
  #include "qt_app.config"
 +#include "video_gst_rtsp.config"
 
-
 make rkwifibt-dirclean //清除掉之前的
 make rkwifibt-rebuild //重新编译
 再make 即可（实际就是等价于与./build.sh rootfs）。还要./mkfirmware.sh
@@ -480,6 +477,13 @@ kernel$ cp defconfig arch/arm/configs/rockchip_linux_defconfig
 //这条命令下生产了defconfig文件arch/arm/configs/rockchip_linux_defconfig
 ```
 
+由于内核是经常编译的分区，经常检查是否刚才重新编译的内核，可以在开机信息dmesg中搜索交叉编译器编译时间
+
+```
+[root@RV1126_RV1109:/]# dmesg | grep gcc
+[    0.000000] Linux version 4.19.111 (cw@SYS3) (gcc version 6.3.1 20170404 (Linaro GCC 6.3-2017.05)) #10 SMP PREEMPT Mon Sep 28 09:10:28 CST 2020
+```
+
 原理分析
 
 ```
@@ -491,9 +495,8 @@ arch是说明用的是32位的机器，如RK3126、RK2128、RK3128
 cw@SYS3:~/sdk/3328/kernel$make menuconfig ARCH=arm
 注意kernel对于32位，make menuconfig和make savedefconfig都必须加上ARCH=arm， menuconfig配置后save在拷贝到arch/arm/configs/rockchip_linux_defconfig。
 
-
 如果不加 ARCH=arm的话，默认是64位，这时候，这时候你git diff下发现rockchip_linux_defconfig会有很大的改动。加 ARCH=arm的话，就是32位机器，你git diff下发现rockchip_linux_defconfig就是刚才菜单的那些修改。
-你看下下面文件搜索就会明白
+你看下下面文件搜索就会明白。 
 cw@SYS3:~/sdk/3126i/kernel$ ag -g "rockchip_linux_defconfig"
 arch/arm/configs/rockchip_linux_defconfig
 arch/arm64/configs/rockchip_linux_defconfig
