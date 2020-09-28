@@ -153,7 +153,7 @@ MaskRom 模式是设备变砖的最后一条防线。强行进入 MaskRom 涉及
 
 ### 1.2.2 烧写方法
 
-#### hotkey ##
+hotkey
 
 为了用户开发方便，rockchip 定义了一些快捷键用于调试或触发某些操作。快捷键主要通过串口输入实
 现：
@@ -606,15 +606,11 @@ load addr is 0x68400000! // trust的运行地址会被追加在打包头信息�
 ./build.sh updateimg
 ```
 
-
-
 ### 2.4.3 sdk 更新后重编
 
 ```
 ./build.sh app-rebuild
 ```
-
-
 
 ## 3  buildroot 与source envsetup.sh
 
@@ -2960,17 +2956,9 @@ index cff7bb2..ee248ce 100755
 
 ## 16 TRUST
 
-ARM TrustZone [1]技术是所有 Cortex-A 类处理器的基本功能，是通过 ARM 架构安全扩展引入的。这些扩展可在 
+ARM TrustZone [1]技术是所有 Cortex-A 类处理器的基本功能，是通过 ARM 架构安全扩展引入的。这些扩展可在 供应商、平台和应用程序中提供一致的程序员模型，同时提供真实的硬件支持的安全环境。
 
-供应商、平台和应用程序中提供一致的程序员模型，同时提供真实的硬件支持的安全环境。
-
-
-
-目前 Rockchip 平台上的 64 位 SoC 平台上使用的是 ARM Trusted Firmware + OP-TEE OS 的组合；32 位 SoC 平 
-
-台上使用的是 OP-TEE OS。  
-
-
+目前 Rockchip 平台上的 64 位 SoC 平台上使用的是 ARM Trusted Firmware + OP-TEE OS 的组合；32 位 SoC 平 台上使用的是 OP-TEE OS。  
 
 Rockchip 所有的平台都启用了 ARM TrustZone 技术，在整个 TrustZone 的架构中 U-Boot 属于Non-Secure World，所以无法访问任何安全的资源（如：某些安全 memory、安全 efuse...）。 Trustzone 是 ARM 公司为了解决可能遇到的软硬件安全问题提出的一种硬件解决方案。基于 Trustzone 这种硬件架构设计的软硬件，能在很大程度和范围内保证系统的安全性，使软硬件破解都变得相对很困难。
 
@@ -2982,7 +2970,7 @@ Android 系统的固件启动顺序：
 Maskrom -> Loader -> Trust -> U-Boot -> kernel -> Android
 ```
 
-## 16.1 运行内存 
+### 16.1 运行内存 
 
 ARM Trusted Firmware 运行在 DRAM 起始偏移 0M~2M 的空间，以 0x10000（64KB）作为程序入口地址。 
 
@@ -2990,11 +2978,11 @@ OP-TEE OS 运行在 DRAM 起始偏移 132M~148M 之间（结束地址依各平�
 
 作为入口地址。 
 
-## 16.2 生命周期 
+### 16.2 生命周期 
 
 Trust 自上电初始化之后就**始终常驻于内存之中，完成着自己的使命。**
 
-##  17 专业名词
+###  17 专业名词
 
 DMC（Dynamic Memory Controller） DVFS，即 DDR 变频。
 
@@ -3004,6 +2992,3 @@ Linux4.4 内核将频率、电压相关的配置放在了 devicetree 中，我�
 
 Documentation/devicetree/bindings/opp/opp.txt
 Documentation/power/opp.txt
-
-
-
