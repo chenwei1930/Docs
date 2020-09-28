@@ -507,7 +507,15 @@ int rk_camera_init(void)
     camera->ops = &rk_gc032a_ops;
 ```
 
-视频捕获单元: *VICAP*(Video capture) 
+视频捕获单元: *VICAP*(Video capture)
+
+ cw@SYS3:~/story/8_2206$ ls src/driver/vicap/
+adapter  drv_vicap.c  vicap.c 
+
+```
+src\driver\vicap\drv_vicap.c 寄存器读写
+src\driver\vicap\vicap.c 设备创建删除注册
+```
 
  include\driver\vicap.h
 
@@ -542,13 +550,11 @@ HDC rk_rkos_vicap_create(uint8_t dev_id, void *arg)
 }
 ```
 
-cw@SYS3:~/story/8_2206$ ls src/driver/vicap/
-adapter  drv_vicap.c  vicap.c 
+
 
 
 
 ```
-src\driver\vicap\drv_vicap.c 寄存器读写
-src\driver\vicap\vicap.c 设备创建删除注册
+
 ```
 
