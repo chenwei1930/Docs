@@ -26,7 +26,7 @@
 | HSYNC(或LREF)    | 行同步信号管脚。一个HSYNC信号结束表示一行的数据已经输出完毕。 |
 | PCLK             | 像素时钟同步信号管脚。一个PCLK信号结束表示一个像素点的数据已经输出完毕。软件上执行stream on开始输出流，才会有PCLK时钟 |
 
-**电源总线**
+**电源总线** sensor一般是有三路电源
 
 | 引脚  |                                       |
 | ----- | ------------------------------------- |
@@ -43,6 +43,42 @@
 
 ![image-20200817160321115](camera_debug/image-20200817160321115.png)
 
+
+
+### 1.2 IIC上拉电阻
+
+这个就要看你使用的单片机**是否有标准的IIC标准接口了**，如果你使用了标准的IIC接口，这个接口在使能的时候，引脚进入漏极开路模式，不过有一些单片机内部的上拉电阻可以使能，这样就省去了外部的上拉电阻，我用过AVR的，就是使能的内部的上拉电阻。但是如果是使用单片机的引脚模拟IIC协议的话，这个就得另说了，得看你的单片机引脚是否支持漏极开路模式或者上拉模式，不过一般推拉模式的输出引脚用在IIC里可能会有问题具体也没用过。
+
+如下图RK2206上的DVP摄像头上面，I2C两根线都接了4.7k的电阻
+
+![image-20200905103612425](camera_debug/image-20200905103612425.png)
+
+I2C的上拉电阻可以是1.5K，2.2K，4.7K， 电阻的大小对时序有一定影响，对信号的上升时间和下降时间也有影响，一般接1.5K或2.2K
+
+I2C上拉电阻确定有一个计算公式：
+Rmin＝{Vdd(min)-o.4V}/3mA
+Rmax=(T/0.874) *c,  T=1us 100KHz, T=0.3us 400KHz
+C是Bus capacitance
+
+Rp最大值由总线最大容限（Cbmax)决定,Rp最小值由Vio与上拉驱动电流（最大取3mA)决定；
+于是 Rpmin=5V/3mA≈1.7K(@Vio=5V)或者2.8V/3mA≈1K(@Vio=2.8V)
+Rpmax的取值：参考周公的I2C总线规范中文版P33图39与P35图44
+总的来说：电源电压限制了上拉电阻的最小值 ； 负载电容（总线电容）限制了上拉电阻的最大值
+
+补充：在I2c总线可以串连300欧姆电阻RS可以用于防止SDA和SCL线的高电压毛刺
+
+   : I2c从设备的数量受总线电容,<=400pF的限制
+
+**做过I2C碰到过各种问题，多**半是上拉电阻或者控制器时钟的问题。没上拉电阻或者上拉电阻过大，都会导致不稳定而出现寻址不到的问题。控制器时钟主频的话，主频667M八分频就可以
+
+>  I2C时钟线和数据线为什么要接上拉电阻？
+
+因为 I2C 的 IO 是开漏的，所以需要上拉电
+
+因为允许把多个I2C总线器件连接到总线上，连接到I2C总线上的器件是漏极开路或集电极开路的，可以实现线与功能。同时，因为接了上拉电阻，在总线空闲期间，SDA和SCL都是高电平，可以防止外部干扰造成误启动I2C总线。
+按照I2C的规范来讲，SDA和SCL都是需要上拉电阻的。当然如果你主控芯片的两个管脚具有内部上拉并且满足你的速率要求，也是可以省略外部上拉的。
+“如果加上拉电阻，阻值根据什么来确定”
+根据主控的管脚驱动能力、负载数量、走线长度、传输速率等因素共同决定。对于产品设计而言可以先选取经验参数、而后通过小批量实测波形来确定的。
 
 ## 2. 摄像头
 
@@ -211,11 +247,7 @@ ISP的主要作用是对**前端图像传感器输出**的信号做后期处理�
 
 ## 3 rk2206拍照命令
 
-
-
-
-
-raw8的其中格式
+raw8的其中格式。下图前4中是8位采集格式
 
 ![1](resources/1.png)
 
@@ -232,7 +264,7 @@ vicap_test dev_set --set-dev=vicap_0 --set-workmode=block --set-blocks=6 --set-f
 vicap_test dev_streamon
 ````
 
-用rggb格式
+用rggb采集8位数据
 
 ```shell
 
@@ -288,8 +320,6 @@ vicap_test dev_streamon
 vicap_test dev_set --set-dev=vicap_0 --set-workmode=block --set-blocks=6 --set-format=fourcc=GRBG,width=640,height=480 --stream-buf=8 --stream-mode=photo --skip-count=18
 vicap_test dev_streamon
 ```
-
-
 
 
 
@@ -432,7 +462,7 @@ iic读：
 [A.14.00][000008.779389][sensor_0]:Info: GC2145 detected successfully !!!
 ```
 
-### 2  第二步不出图情况
+### 3  第二步不出图情况
 
 通过上面的步骤 说明软件的第一步读出摄像头ID已经成功；
 
@@ -479,54 +509,21 @@ RK2206>I2cDev_ReadData ret1[sensor_0]:Info: GC2145 pid:0x0!
 
 ![xlck](camera_debug/xlck.png)
 
-## 5 一些常识
-
-在Camera中推荐使用NV21和YV12，因为这两种格式支持所有的相机设备。
-
-### 5.1 为什么IIC接上拉电阻
-
-这个就要看你使用的单片机**是否有标准的IIC标准接口了**，如果你使用了标准的IIC接口，这个接口在使能的时候，引脚进入漏极开路模式，不过有一些单片机内部的上拉电阻可以使能，这样就省去了外部的上拉电阻，我用过AVR的，就是使能的内部的上拉电阻。但是如果是使用单片机的引脚模拟IIC协议的话，这个就得另说了，得看你的单片机引脚是否支持漏极开路模式或者上拉模式，不过一般推拉模式的输出引脚用在IIC里可能会有问题具体也没用过。
-
-如下图RK2206上的DVP摄像头上面，I2C两根线都接了4.7k的电阻
-
-![image-20200905103612425](camera_debug/image-20200905103612425.png)
-
-I2C的上拉电阻可以是1.5K，2.2K，4.7K， 电阻的大小对时序有一定影响，对信号的上升时间和下降时间也有影响，一般接1.5K或2.2K
-
-I2C上拉电阻确定有一个计算公式：
-Rmin＝{Vdd(min)-o.4V}/3mA
-Rmax=(T/0.874) *c,  T=1us 100KHz, T=0.3us 400KHz
-C是Bus capacitance
-
-Rp最大值由总线最大容限（Cbmax)决定,Rp最小值由Vio与上拉驱动电流（最大取3mA)决定；
-于是 Rpmin=5V/3mA≈1.7K(@Vio=5V)或者2.8V/3mA≈1K(@Vio=2.8V)
-Rpmax的取值：参考周公的I2C总线规范中文版P33图39与P35图44
-总的来说：电源电压限制了上拉电阻的最小值 ； 负载电容（总线电容）限制了上拉电阻的最大值
-
-补充：在I2c总线可以串连300欧姆电阻RS可以用于防止SDA和SCL线的高电压毛刺
-
-   : I2c从设备的数量受总线电容,<=400pF的限制
-
-**做过I2C碰到过各种问题，多**半是上拉电阻或者控制器时钟的问题。没上拉电阻或者上拉电阻过大，都会导致不稳定而出现寻址不到的问题。控制器时钟主频的话，主频667M八分频就可以
-
->  I2C时钟线和数据线为什么要接上拉电阻？
-
-因为 I2C 的 IO 是开漏的，所以需要上拉电
-
-因为允许把多个I2C总线器件连接到总线上，连接到I2C总线上的器件是漏极开路或集电极开路的，可以实现线与功能。同时，因为接了上拉电阻，在总线空闲期间，SDA和SCL都是高电平，可以防止外部干扰造成误启动I2C总线。
-按照I2C的规范来讲，SDA和SCL都是需要上拉电阻的。当然如果你主控芯片的两个管脚具有内部上拉并且满足你的速率要求，也是可以省略外部上拉的。
-“如果加上拉电阻，阻值根据什么来确定”
-根据主控的管脚驱动能力、负载数量、走线长度、传输速率等因素共同决定。对于产品设计而言可以先选取经验参数、而后通过小批量实测波形来确定的。阻。、、、、
-
-
+## 
 
 ## 6 参数说明
 
-### 6.1  摄像头IIC的读写地址
+### 6.1  摄像头IIC设备地址
 
-一般来说IIC的读写地址是7位的，再加1位读写标志位（一般写0读1，也有相反的）。一共8位，组成写地址和读地址。
+- 摄像头IIC设备地址是7位。
 
+摄像头手册对于IIC设备地址不同厂家有些写8位，有些写7位。对于这些8位的，你需要手动右移动一位，也就是只取高7位。最后一位是读或写。
 
+一般来说IIC的读写地址是7位的，再加1位读写标志位（写0读1）。一共8位，组成写地址和读地址。
+
+下面举例不同的摄像头
+
+GC032A
 
 ```
 GC032A Device Address:
@@ -537,7 +534,7 @@ serial bus write address = 0x42, serial bus read address = 0x43
 #define GC032A_7BIT_ADDRESS  (0x21)
 ```
 
-
+GC0308
 
 ```
 GC0308 Device Address:
@@ -547,6 +544,8 @@ serial bus write address = 0x42, serial bus read address = 0x43
 0x43 = 01000011 右移一位。 00100001 = 0x21
 #define GC032A_7BIT_ADDRESS  (0x21)
 ```
+
+SCO31GS
 
 ```
 SCO31GS  serial bus write address = 0X60, serial bus read address = 0X61
@@ -565,8 +564,6 @@ SCO329 读0x62 写0x63
 #define SC0329_7BIT_ADDRESS         (0x31)
 ```
 
-
-
 BF20A6调试中
 
 ````
@@ -578,7 +575,48 @@ Note: Two-wire serial interface device address of BF20A6 is 7’b1101110 (0X6e),
 bit.
 ````
 
+###  6.3  MCLK
 
+ mclk配置错会怎么样,以比亚迪BF20A6摄像头为例，工作时MCLK单片机提供12MHZ。如果我抬高MCLK到24MHZ的图片也许会出现错位的情况。 原因应该是mclk抬高了，行场信号有错位。
+
+<img src="resources/9320e3913c0d45408d41ada68a46c0d.png" alt="9320e3913c0d45408d41ada68a46c0d" style="zoom:33%;" />
+
+```c
+RK2206>[INFO]: BF20A6: Info: BF20A6 detected successfully !!!  chip id:0x20a6 
+[A.VICAP][000022.420940][  36C][DBG]: BF20A6:(rt_bf20a6_detect_sensor) exit 
+[A.VICAP][000022.427070][  35C][DBG]: BF20A6:(rk_bf20a6_init) exit 
+[A.VICAP][000022.433705][  35C][DBG]: BF20A6:(rk_bf20a6_control) exit 
+[A.VICAP][000022.439585][  36C][vicap_0]:init subdev succe!
+[A.VICAP][000022.442902][  35C][vicap_0]:len of input fmts:20
+[A.VICAP][000022.448117][  36C][vicap_0]:input pixelcode:0x3001,mbus_code:0x2008
+[A.VICAP][000022.457141][  36C][vicap_0]:input pixelcode:0x3001,mbus_code:0x2009
+[A.VICAP][000022.464113][  35C][vicap_0]:input pixelcode:0x3001,mbus_code:0x2006
+[A.VICAP][000022.471088][  35C][vicap_0]:input pixelcode:0x3001,mbus_code:0x2007
+[A.VICAP][000022.478057][  34C][vicap_0]:input pixelcode:0x3001,mbus_code:0x3001
+[A.VICAP][000022.485029][  36C][vicap_0]:the input format is:0x3001
+[A.VICAP][000022.488355][  36C][vicap_0]:y len per block:0xc800
+[A.VICAP][000022.494308][  35C][vicap_0]:the plane[0] size:0xc800, the total size of buf:0xc800
+[A.VICAP][000022.503429][  36C][vicap_0]:the plane[1] size:0x6400, the total size of buf:0x12c00
+[A.VICAP][000022.511660][  35C][vicap_0]:dma status: 0
+[A.VICAP][000022.516578][  36C]ratio:1,bpp:8
+[A.VICAP][000022.521245][  36C][DBG]: BF20A6:(rk_bf20a6_control) enter 
+[A.VICAP][000022.527911][  35C][DBG]: BF20A6:(bf20a6_stream_on) enter 
+[A.VICAP][000022.534127][  36C][vicap_0]:vicap was triggered err,intstat:0x206
+[a][000022.581071][DBG]: BF20A6:Success: bf20a6 init table has ok witre [DBG]: BF20A6:(bf20a6_stream_on) exit 
+[A.VICAP][000022.593827][  36C][DBG]: BF20A6:(rk_bf20a6_control) exit 
+[A.VICAP][000022.599873][  37C][vicap_0]:vicap was triggered err,intstat:0xa
+[a][000022.786970][vicap_0]:vicap was triggered err,intstat:0x4000
+[a][000022.792181][VICAP-TEST]:has skipped 18 frames
+[A.VICAP][000025.209390][  35C][vicap_0]:dma status: 0
+[a][000025.500189][DBG]: BF20A6:(rk_bf20a6_control) enter 
+[A.VICAP][000025.506428][  36C][DBG]: BF20A6:(bf20a6_stream_off) enter 
+[A.VICAP][000025.512619][  35C][DBG]: BF20A6:(bf20a6_stream_off) exit 
+[A.VICAP][000025.518835][  35C][DBG]: BF20A6:(rk_bf20a6_control) exit 
+[A.VICAP][000025.524963][  36C]create file clus = 0clus = 0, i = 16, name = CIF     YUV
+[A.VICAP][000027.444931][  36C]delete thread classId = -1, objectid = 7, name = VICAPTestTask, remain = 5507776.
+[A.VICAP][000027.452969][  36C]
+RK2206>
+```
 
 ## 7 vicap
 
@@ -652,54 +690,7 @@ YUV模式和RAW模式之间的区别在于YUV模式或CCIR656中的区别模式�
 
 参数START_Y和START_X定义了作物起点的坐标。 裁切后的帧大小遵循SET_WIDTH和SET_HEIGHT的值。
 
-
-
 ## 8 举例错误情况
-
-###   mclk配置错会怎么样
-
-以比亚迪BF20A6摄像头为例，工作时mcl 单片机提供12MHZ,
-
- 如果我抬高mclk到24MHZ的图片那么就会出现错位的情况。 原因应该是mclk抬高了，行场信号有错位。
-
-、![9320e3913c0d45408d41ada68a46c0d](resources/9320e3913c0d45408d41ada68a46c0d.png)
-
-```
-RK2206>[INFO]: BF20A6: Info: BF20A6 detected successfully !!!  chip id:0x20a6 
-[A.VICAP][000022.420940][  36C][DBG]: BF20A6:(rt_bf20a6_detect_sensor) exit 
-[A.VICAP][000022.427070][  35C][DBG]: BF20A6:(rk_bf20a6_init) exit 
-[A.VICAP][000022.433705][  35C][DBG]: BF20A6:(rk_bf20a6_control) exit 
-[A.VICAP][000022.439585][  36C][vicap_0]:init subdev succe!
-[A.VICAP][000022.442902][  35C][vicap_0]:len of input fmts:20
-[A.VICAP][000022.448117][  36C][vicap_0]:input pixelcode:0x3001,mbus_code:0x2008
-[A.VICAP][000022.457141][  36C][vicap_0]:input pixelcode:0x3001,mbus_code:0x2009
-[A.VICAP][000022.464113][  35C][vicap_0]:input pixelcode:0x3001,mbus_code:0x2006
-[A.VICAP][000022.471088][  35C][vicap_0]:input pixelcode:0x3001,mbus_code:0x2007
-[A.VICAP][000022.478057][  34C][vicap_0]:input pixelcode:0x3001,mbus_code:0x3001
-[A.VICAP][000022.485029][  36C][vicap_0]:the input format is:0x3001
-[A.VICAP][000022.488355][  36C][vicap_0]:y len per block:0xc800
-[A.VICAP][000022.494308][  35C][vicap_0]:the plane[0] size:0xc800, the total size of buf:0xc800
-[A.VICAP][000022.503429][  36C][vicap_0]:the plane[1] size:0x6400, the total size of buf:0x12c00
-[A.VICAP][000022.511660][  35C][vicap_0]:dma status: 0
-[A.VICAP][000022.516578][  36C]ratio:1,bpp:8
-[A.VICAP][000022.521245][  36C][DBG]: BF20A6:(rk_bf20a6_control) enter 
-[A.VICAP][000022.527911][  35C][DBG]: BF20A6:(bf20a6_stream_on) enter 
-[A.VICAP][000022.534127][  36C][vicap_0]:vicap was triggered err,intstat:0x206
-[a][000022.581071][DBG]: BF20A6:Success: bf20a6 init table has ok witre [DBG]: BF20A6:(bf20a6_stream_on) exit 
-[A.VICAP][000022.593827][  36C][DBG]: BF20A6:(rk_bf20a6_control) exit 
-[A.VICAP][000022.599873][  37C][vicap_0]:vicap was triggered err,intstat:0xa
-[a][000022.786970][vicap_0]:vicap was triggered err,intstat:0x4000
-[a][000022.792181][VICAP-TEST]:has skipped 18 frames
-[A.VICAP][000025.209390][  35C][vicap_0]:dma status: 0
-[a][000025.500189][DBG]: BF20A6:(rk_bf20a6_control) enter 
-[A.VICAP][000025.506428][  36C][DBG]: BF20A6:(bf20a6_stream_off) enter 
-[A.VICAP][000025.512619][  35C][DBG]: BF20A6:(bf20a6_stream_off) exit 
-[A.VICAP][000025.518835][  35C][DBG]: BF20A6:(rk_bf20a6_control) exit 
-[A.VICAP][000025.524963][  36C]create file clus = 0clus = 0, i = 16, name = CIF     YUV
-[A.VICAP][000027.444931][  36C]delete thread classId = -1, objectid = 7, name = VICAPTestTask, remain = 5507776.
-[A.VICAP][000027.452969][  36C]
-RK2206>
-```
 
 
 
@@ -767,13 +758,7 @@ YUV是利用一个亮度（Y）、两个色差(U,V)来代替传统的RGB三原�
 
 4、一行多少个字节？5、图像大小是多少？6、图像的分辨率是多少？
 
-
-
- 
-
 1920x1080像素的YUV422的图像，大小是1920X1080X2=4147200（十进制），也就是3.95M大小。
-
-
 
 在内存种中这样排列：Y0U0Y1V0 Y2U1Y3V1…
 
@@ -782,10 +767,6 @@ YUV是利用一个亮度（Y）、两个色差(U,V)来代替传统的RGB三原�
 第二个像素的YUV值为： Y1 U0 V0
 
 第三个像素的YUV值为： Y2 U1 V1
-
-
-
-
 
 （1） YUV 4:4:4
 
@@ -828,8 +809,4 @@ Y5V5 Y6 Y7 V7 Y8
 映射出的像素点为：[Y0 U0 V5] [Y1 U0 V5] [Y2 U2 V7] [Y3 U2 V7]
 
 [Y5U0 V5] [Y6 U0 V5] [Y7U2 V7] [Y8 U2 V7]
-
-
-
-
 
