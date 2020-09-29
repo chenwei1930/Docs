@@ -329,7 +329,25 @@ source envsetup.sh  #选择开发板，如rk3128
 
   ./build.sh device/rockchip/rv1126_rv1109/BoardConfig-tb.mk  这样切换单板
 
+声明环境变量之后，如果要不用脚本编译，查看当前分区的编译命令： ./build.sh  -h 分区。会打印出单独编译所需命令，其实就是把脚本要执行的命令打印出来。
+
+```shell
+cw@SYS3:~/sdk/rv1109$ ./build.sh  -h kernel
+###Current SDK Default [ kernel ] Build Command###
+cd kernel
+make ARCH=arm rv1126_defconfig 
+make ARCH=arm rv1126-evb-ddr3-v13.img -j12
+
+cw@SYS3:~/sdk/rv1109$ ./build.sh  -h rootfs
+###Current SDK Default [ rootfs ] Build Command###
+source envsetup.sh rockchip_rv1126_rv1109
+make
+cw@SYS3:~/sdk/rv1109$ 
 ```
+
+
+
+```shell
 檵 14:18:28
 我们source之后一般还需要./build.sh device/rockchip/rv1126_rv1109/BoardConfig-tb.mk  这样切换单板吗
 
@@ -342,7 +360,7 @@ source 只是选buildroot的配置，其他的kernel uboot什么的，需要切�
 
 #### 2.1.1 source
 
-```
+```shell
 source envsetup.sh  #选择开发板，如rk3128
 ```
 
