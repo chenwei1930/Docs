@@ -493,6 +493,7 @@ scripts/kconfig/conf  --savedefconfig=defconfig Kconfig
 kernel$ cp defconfig arch/arm/configs/rockchip_linux_defconfig
 
 //这条命令下生产了defconfig文件arch/arm/configs/rockchip_linux_defconfig
+rv1126_defconfig
 ```
 
 由于内核是经常编译的分区，经常检查是否刚才重新编译的内核，可以在开机信息dmesg中搜索交叉编译器编译时间
@@ -1939,9 +1940,17 @@ $make
 新增一个包无需全部重新编译，但是如果新增的是一个库，且别其他文件所引用，则需一起重新编
 译，或者全部重编。
 
+---
+
+编译过程建议加上V=1
+
+---
+
+
+
 BuildRoot 如何单独编译某个一包？
 
-1. 如果修改了package源码，在编译前运行 make < package >-dirclean。
+1. 如果修改了package源码（实际源码），在编译前运行 make < package >-dirclean。
 
 
 ```
@@ -1949,11 +1958,12 @@ make <package> -dirclean //删除output/build/package 这个文件夹
 make                     //自动对这个包重新编译
 ```
 
-2. 如果只是修改output 目录下代码，只需要启动编译的步骤，编译前运行 make < package >-rebuild千万不要make <package> -dirclean ，这样会删除整个output/<package>/这个文件夹，修改全没了。
+2. 如果只是修改output 目录下代码（非源码！！！只是一份拷贝），只需要启动编译的步骤，编译前运行 make < package >-rebuild千万不要make <package> -dirclean ，这样会删除整个output/<package>/这个文件夹，修改全没了。
 
 ```
  make <package> -rebuild
- make 或 make <package>
+ 然后make （ make 或 make <package>）打包
+ 最后 ./mkfirmware.sh 
 ```
 
 ###7.4 拷贝文件到开发板根文件系统

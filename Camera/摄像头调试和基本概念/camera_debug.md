@@ -193,6 +193,16 @@ VBLANK: 显示器扫描线完成最后一行后,需要重返左上角,这个过�
 
 3A技术即自动对bai焦（AF）、自动曝光（duAE）和自动白平衡（AWB）。3A数字zhi成像技术利用了AF自动对焦算法dao、AE自动曝光算法及AWB自动白平衡算法来实现图像对比度最大、改善主体拍摄物过曝光或曝光不足情况、使画面在不同光线照射下的色差得到补偿，从而呈现较高画质的图像信息。采用了3A数字成像技术的摄像机能够很好的保障图像精准的色彩还原度，呈现完美的日夜监控效果。
 
+#### 增益
+
+摄像机的增益,等同于照相机的曝光补偿。 
+
+就是说,在光线不够的环境下拍摄,摄像机进光量不够,达不到明亮的画面效果。这时候,打开增益开关,摄像机里面的处理系统,会自动把画面的亮度提高到一定标准。 
+
+当然,增益带来的是画质的损失,也就是会或多或少增加噪点。 
+
+光线足够的环境,千万别开增益!
+
 #### **HDR模式**
 
 首先先来解读一下“HDR”这个词，英文全称“High-Dynamic Range”，翻译过来就是「高动态范围」，动态范围就是相机能够在按下快门之后记录下拍摄对象在最暗、最亮环境下的差异范围，连拍多种场景下的照片，通过算法将多张图片中每一场景下最好的部分合成一张照片输出，达到最佳的拍摄效果
@@ -243,7 +253,7 @@ Raw12:
 Raw12: 就是使用12bit表示上述的一个G/R/B/G，但是数据中是16bit的，高4位没用。
 ```
 
-#### 畸变
+#### Lens distortion畸变
 
 ![Lens distortion](camera_debug.assets/Lens distortion.jpg)
 
@@ -255,13 +265,18 @@ Raw12: 就是使用12bit表示上述的一个G/R/B/G，但是数据中是16bit�
 
 ![image-20201009164508055](camera_debug.assets/image-20201009164508055.png)
 
-#### LSC 镜头阴影校正
+#### Lens Shading
+
+Lens Shading 一般被称为暗角或渐晕效应，可细分为 Luma Shading（亮度均匀性）和 ColorShading（色彩均匀性）两种。
+Luma Shading 是由镜头的光学特性引起的。对于整个镜头，可将其视为一个凸透镜。由于凸透镜中心的聚光能力远大于其边缘，从而导致 Sensor 中心的光线强度大于四周。此种现象也称之为边缘光照度衰减。对于一个没有畸变的摄像头，图像四周的光照度衰减遵循 cos西塔的四次方 的衰减规律。Color Shading 的成因则相对复杂一些。不同类型的 IR-Cut（红外截止滤光片）的透过率各有不同，且当入射角  变化时不同波段的透过率也会有变化，所以会出现中心和四周颜色不统一的现象。另外一方面则是 Micro Lens（微透镜）的 CRA（主光线入射角）与镜头的 CRA 不匹配也会导致 Color Shading 现象。
+
+- LSC （镜头阴影校正）
 
 镜头阴影校正（Lens Shading Correction）  由于Lens的不同区域透光性能不一致，导致图像中心区域较亮，图像四周较暗。简单的处理方法是拍摄一张均匀光照的白纸，计算距离中心不同半径范围的亮度与中心亮度比值，作为矫正系数。
 
 ![image-20201009164305562](camera_debug.assets/image-20201009164305562.png)
 
-#### Color shading（延时）
+- Color shading（颜色阴影纠正）
 
 由于LENS在周边入射角度不足，导致顏色偏差的偏差的现象，一般表现中心和四周偏角不一致。
 
@@ -271,9 +286,11 @@ Raw12: 就是使用12bit表示上述的一个G/R/B/G，但是数据中是16bit�
 
   ![image-20201009164640346](camera_debug.assets/image-20201009164640346.png)
 
-#### 锐化
+#### 锐化 Image Edge Enhance (Sharpen)
 
-  锐化处理：通过增强图像的高频部分的内容，图像的视觉效果可以极大的得到改观。
+ Image Edge Enhance (Sharpen)
+
+ 锐化处理：通过增强图像的高频部分的内容，图像的视觉效果可以极大的得到改观。
 
   ![image-20201009164428101](camera_debug.assets/image-20201009164428101.png)
 
@@ -295,13 +312,51 @@ Raw12: 就是使用12bit表示上述的一个G/R/B/G，但是数据中是16bit�
 
 ####  Gamma矫正
 
-
-
 Gamma矫正是进行图像的存储显示进行标准化的一个处理过程，在不同的处理平台及显示设备，需要将图像数据进行gamma匹配才能得到原图希望表达的效果。(使用Gamma技术，有利于对图像的数据动态范围进行压缩减小图像数据量，该处理不会牺牲太多图像质量)
 
 ![image-20201009165820920](camera_debug.assets/image-20201009165820920.png)
 
 
+
+#### BLC
+
+暗电流：在没有光照射的状态下,在[太阳电池](https://baike.baidu.com/item/太阳电池/6281789)、[光敏二极管](https://baike.baidu.com/item/光敏二极管/1923309)、光导电元件、[光电管](https://baike.baidu.com/item/光电管/9005290)等的受光元件中流动的电流叫做暗电流。
+
+Sensor 电路中存在暗电流，导致在没有光线照射的时候，像素单位也有一定的输出电压，导致 A/D输出的数字信号不为 0。暗电流主要受到增益和温度影响，因此需要在不同 ISO 下分别进行标定。由于 BLC 是一个偏移量，其他模块在标定时都需要扣除该偏移量，否则无法得到正确的标定参数
+
+​    我们知道图像数据一般为0--255，但sensor在出厂的时候，厂家一般会设置图像数据输出范围如5-250等，反正最低电平不为零。因此我们就需要对图像数据范围进行调整，使其最小值为零，这就是黑电平校正。黑电平校正有两种方法：一种是直接在RAW data数据上减去一个值，可以RGB减的值一样，也可以不一样，目前大多数厂家如，安霸，海思等基本都是采用这一做法。一种是利用一次函数，这个比较麻烦，就不介绍了。
+
+#### 瑞芯微isp
+
+RK ISP2.0 Components and Pipeline Introduce
+Default Pixel Correction (DPC)
+Video HDR Process (HDR)
+Bayer image noise reduction (BNR)
+Green Imbalance Correction (GIC)
+Color Correction (CCM)
+Contrast Enhance (Dehaze)
+Lens Distortion Correction (LDC)
+Temporal noise reduction (TNR)
+Luminance noise reduction (YNR)
+Chroma noise reduction (UVNR)
+Image Edge Enhance (Sharpen)
+Q&A
+
+
+374/5000
+
+RK ISP2.0组件和管道介绍
+默认像素校正（DPC）
+视频HDR流程（HDR）
+拜耳图像降噪（BNR）
+绿色失衡校正（GIC）
+色彩校正（CCM）
+对比度增强（除雾）
+镜头畸变校正（LDC）
+暂时降噪（TNR）
+亮度降噪（YNR）
+降低色度噪声（UVNR）
+图像边缘增强（锐化）
 
 ### 2. 2 摄像头技术原理
 
