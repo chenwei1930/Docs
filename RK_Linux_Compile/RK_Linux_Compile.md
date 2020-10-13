@@ -315,6 +315,174 @@ linux中df命令的功能是用来检查linux服务器的文件系统的磁盘�
 
 “df -h”这条命令再熟悉不过。以更易读的方式显示目前磁盘空间和使用情况。
 
+### 1.2.7 uboot查看分区表
+
+```
+=> part list mmc 0
+
+Partition Map for MMC device 0  --   Partition Type: EFI
+
+Part    Start LBA       End LBA         Name
+        Attributes
+        Type GUID
+        Partition GUID
+  1     0x00004000      0x00005fff      "uboot"
+        attrs:  0x0000000000000000
+        type:   53140000-0000-4d5a-8000-02f3000004ea
+        guid:   15330000-0000-4b56-8000-7b4700006642
+  2     0x00006000      0x00007fff      "misc"
+        attrs:  0x0000000000000000
+        type:   7f470000-0000-4507-8000-729200007fee
+        guid:   be6b0000-0000-4a16-8000-25210000754c
+  3     0x00008000      0x00017fff      "boot"
+        attrs:  0x0000000000000000
+        type:   40600000-0000-4750-8000-3a81000063f7
+        guid:   b1170000-0000-483c-8000-537e00005ecd
+  4     0x00018000      0x00027fff      "recovery"
+        attrs:  0x0000000000000000
+        type:   fe460000-0000-4b26-8000-1d2700000eec
+        guid:   54770000-0000-4c33-8000-60c6000039af
+  5     0x00028000      0x00037fff      "backup"
+        attrs:  0x0000000000000000
+        type:   21140000-0000-496f-8000-12eb000053b4
+        guid:   117f0000-0000-4e5b-8000-6062000011d9
+  6     0x00038000      0x00237fff      "rootfs"
+        attrs:  0x0000000000000000
+        type:   11190000-0000-4902-8000-443700007739
+        guid:   614e0000-0000-4b53-8000-1d28000054a9
+  7     0x00238000      0x00277fff      "oem"
+        attrs:  0x0000000000000000
+        type:   36550000-0000-432d-8000-157200003562
+        guid:   755e0000-0000-4d7a-8000-7d31000030a5
+  8     0x00278000      0x00477fff      "userdata"
+        attrs:  0x0000000000000000
+        type:   f9010000-0000-4032-8000-160300003b17
+        guid:   ed220000-0000-4974-8000-423500005317
+  9     0x00478000      0x01d1efde      "media"
+        attrs:  0x0000000000000000
+        type:   c0070000-0000-4645-8000-105400002a40
+        guid:   1e690000-0000-4322-8000-472d00002c71
+```
+
+
+
+
+
+## 1.2.8 uboot自动遍历外部存储设备
+
+DISTRO格式
+打包格式：这是目前开源Linux的一种通用固件打包格式，将ramdisk、dtb、kernel打包成一个image，这个
+image文件通常以某种文件系统格式存在，例如ext2、fat等。因此当U-Boot加载这个image文件里的固件
+时，实际上是通过文件系统进行访问，与上述RK和Android格式的raw存储访问不同。
+启动方式：U-Boot会遍历所有用户定义的可启动介质（eMMC/Nand/Net/USB/SATA...），进行逐一扫描，试
+图去加载用户的distro格式的固件；
+
+v1109/u-boot/arch/arm/mach-rockchip/boot_rkimg.c
+
+````
+struct blk_desc *rockchip_get_bootdev(void)
+{
+	int dev_type;
+	int devnum;
+
+	if (dev_desc)
+		return dev_desc;
+
+	boot_devtype_init();
+	dev_type = get_bootdev_type();
+	devnum = env_get_ulong("devnum", 10, 0);
+
+	dev_desc = blk_get_devnum_by_type(dev_type, devnum);
+	if (!dev_desc) {
+		printf("%s: Can't find dev_desc!\n", __func__);
+		return NULL;
+	}
+
+#ifdef CONFIG_MMC
+	if (dev_type == IF_TYPE_MMC) {
+		struct mmc *mmc;
+		const char *timing[] = {
+			"Legacy", "High Speed", "High Speed", "SDR12",
+			"SDR25", "SDR50", "SDR104", "DDR50",
+			"DDR52", "HS200", "HS400", "HS400 Enhanced Strobe"};
+
+		mmc = find_mmc_device(devnum);
+		printf("MMC%d: %s, %dMhz\n", devnum,
+		       timing[mmc->timing], mmc->clock / 1000000);
+	}
+#endif
+
+	printf("PartType: %s\n", part_get_type(dev_desc));
+
+	return dev_desc;
+}
+````
+
+获得启动设备的类型
+
+```
+struct blk_desc *rockchip_get_bootdev(void)
+{
+	int dev_type;
+	int devnum;
+
+	if (dev_desc)
+		return dev_desc;
+
+	boot_devtype_init();
+	dev_type = get_bootdev_type();
+	devnum = env_get_ulong("devnum", 10, 0);
+
+	dev_desc = blk_get_devnum_by_type(dev_type, devnum);
+	if (!dev_desc) {
+		printf("%s: Can't find dev_desc!\n", __func__);
+		return NULL;
+	}
+
+#ifdef CONFIG_MMC
+	if (dev_type == IF_TYPE_MMC) {
+		struct mmc *mmc;
+		const char *timing[] = {
+			"Legacy", "High Speed", "High Speed", "SDR12",
+			"SDR25", "SDR50", "SDR104", "DDR50",
+			"DDR52", "HS200", "HS400", "HS400 Enhanced Strobe"};
+
+		mmc = find_mmc_device(devnum);
+		printf("MMC%d: %s, %dMhz\n", devnum,
+		       timing[mmc->timing], mmc->clock / 1000000);
+	}
+#endif
+
+	printf("PartType: %s\n", part_get_type(dev_desc));
+
+	return dev_desc;
+}
+
+/* Interface types: */
+enum if_type {
+	IF_TYPE_UNKNOWN = 0,
+	IF_TYPE_IDE,
+	IF_TYPE_SCSI,
+	IF_TYPE_ATAPI,
+	IF_TYPE_USB,
+	IF_TYPE_DOC,
+	IF_TYPE_MMC,
+	IF_TYPE_SD,
+	IF_TYPE_SATA,
+	IF_TYPE_HOST,
+	IF_TYPE_SYSTEMACE,
+	IF_TYPE_NVME,
+	IF_TYPE_RKNAND,
+	IF_TYPE_SPINAND,
+	IF_TYPE_SPINOR,
+	IF_TYPE_RAMDISK,
+	IF_TYPE_MTD,
+	IF_TYPE_COUNT,			/* Number of interface types */
+};
+```
+
+
+
 ## 2 各分区详细编译
 
 强调一点，buildroot 编译完修改output目录。重编make编译不到的。buildroot是检测不到代码的改动的，所以他是依靠各个编译阶段的标志文件，所以如果你编译后不删除特定编译阶段的文件，就会认为该阶段的编译步骤已经执行，不再重复该编译步骤。
@@ -1607,11 +1775,11 @@ Documentation:
 
 
 
-### 5.2 rockchp buildroot
+### 6.2 rockchp buildroot
 
 Buildroot 编译输出结果保存在 `output` 目录，具体目录由配置文件决定，本例保存在 `buildroot/output/rockchip_rk3288` 目录，后续可以在该目录执行 `make` 编译根文件系统。采用全自动编译方式时，默认会生成 `buildroot/output/rockchip_rk3288_recovery` 目录，这是 `recovery` 的编译输出目录。
 
-###  5.3 Buildroot编译输出
+###  6.3 Buildroot编译输出
 
 **buildroot的编译流程是先从dl/xxx.tar下解压出源码到output/build/xxx,然后它利用本身的配置文件(如果有的话)覆盖output/build/xxx下的配置文件,在开始编译连接完成后安装到output/相应文件夹下。**
 
@@ -1630,7 +1798,7 @@ cw@SYS3:~/sdk/3126i/buildroot/output/rockchip_rk3128$ du -h --max-depth=1
 - `staging/` 这个目录类似根文件系统的目录结构，包含编译生成的所有头文件和库，以及其他开发文件，不过他们没有裁剪，比较庞大，不适用于目标文件系统。
 - `target/` 包含完整的根文件系统，对比 `staging/`，它没有开发文件，不包含头文件，二进制文件也经过 `strip` 处理。 **包含几乎与目标根文件系统一样的目录，尚缺少的是设备文件/dev**（Buildroot不是运行在也不想运行在root权限下），因而这个目录也不能作为目标系统的根文件系统，你应该使用images/下的其中一个作为目标系统的根文件系统
 
-###  5.4  模块配置
+###  6.4  模块配置
 
 默认编译好的根文件系统不一定满足我们的需求，我们可能需要增加一些第三方包，或者修改包的配置选项，Buildroot 支持图形化方式去做选择配置：
 
@@ -1653,7 +1821,7 @@ make
 - 软件包会解压在 `output/build/` 目录下，然后进行编译。
 - 如果要修改软件包的源码，可以通过打补丁的方式进行修改，补丁集中放在 `package/` 目录，Buildroot 会在解压软件包时为其打上相应的补丁。
 
-###  5.6 Buildroot Overlay
+###  6.6 Buildroot Overlay
 
 文件系统覆盖是指在目标文件系统编译完成后将文件覆盖到文件系统目录。通过这种方式，我们可以简单的添加或修改一些文件：
 
@@ -1663,7 +1831,7 @@ make
 例：`buildroot/board/rockchip/rk3288/fs-overlay/etc/firmware` 将覆盖文件系统的 `/etc/firmware` 文件。
 
 
-###  5.7 什么是rootfs
+###  6.7 什么是rootfs
 
 Linux中的rootfs，就是那些文件夹和文件，包括什么根文件目录’/’系统相关的配置文件目录/etc存放系统启动相关配置的/etc/init存放系统相关的工具 /sbin存在用户的工具/usr/bin
 
@@ -1703,7 +1871,7 @@ data            init  linuxrc  mnt    proc  run            sys     timestamp    
 
 环境变量O = output
 
-### 5.8 官方
+### 6.8 官方
 
 ### Build tree: $(O)
 
