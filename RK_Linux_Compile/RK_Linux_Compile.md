@@ -420,44 +420,9 @@ struct blk_desc *rockchip_get_bootdev(void)
 
 获得启动设备的类型
 
+\\10.10.10.190\cw\sdk\rv1109\u-boot\include\blk.h
+
 ```
-struct blk_desc *rockchip_get_bootdev(void)
-{
-	int dev_type;
-	int devnum;
-
-	if (dev_desc)
-		return dev_desc;
-
-	boot_devtype_init();
-	dev_type = get_bootdev_type();
-	devnum = env_get_ulong("devnum", 10, 0);
-
-	dev_desc = blk_get_devnum_by_type(dev_type, devnum);
-	if (!dev_desc) {
-		printf("%s: Can't find dev_desc!\n", __func__);
-		return NULL;
-	}
-
-#ifdef CONFIG_MMC
-	if (dev_type == IF_TYPE_MMC) {
-		struct mmc *mmc;
-		const char *timing[] = {
-			"Legacy", "High Speed", "High Speed", "SDR12",
-			"SDR25", "SDR50", "SDR104", "DDR50",
-			"DDR52", "HS200", "HS400", "HS400 Enhanced Strobe"};
-
-		mmc = find_mmc_device(devnum);
-		printf("MMC%d: %s, %dMhz\n", devnum,
-		       timing[mmc->timing], mmc->clock / 1000000);
-	}
-#endif
-
-	printf("PartType: %s\n", part_get_type(dev_desc));
-
-	return dev_desc;
-}
-
 /* Interface types: */
 enum if_type {
 	IF_TYPE_UNKNOWN = 0,
@@ -480,8 +445,6 @@ enum if_type {
 	IF_TYPE_COUNT,			/* Number of interface types */
 };
 ```
-
-
 
 ## 2 各分区详细编译
 
