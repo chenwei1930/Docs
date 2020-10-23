@@ -2603,8 +2603,6 @@ Xvisor configuration (Using an in-tree defconfig file) --->
 ```
 
 
-
-
 ### 2.6.20 Text editors and viewers
 
 ```
