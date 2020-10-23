@@ -18,7 +18,7 @@ Buildroot是Linux平台上一个构建嵌入式Linux系统的框架。
 ## 2.Buildroot配置选项
 
 以Buildroot 2019.02.4，imx6ull配置为例，对配置选项进行注释。
-执行make menuconfig进入一级配置菜单：
+执行make menuconfig进入一级配置菜单('一共10个')：
 
 ```
 Target options --->
@@ -36,6 +36,8 @@ Legacy config options --->
 
 ### 2.1 Target options(目标选项)
 ```
+=== 一级配置菜单：Target options ---> ===
+
 Target options --->
 Target Architecture (ARM (little endian)) ---> //目标处理器的架构和大小端模式 [ARM (little endian)]
 Target Binary Format (ELF) ---> //目标二进制格式 [ELF]
@@ -67,8 +69,8 @@ Commands ---> //指定下载、解压命令参数选项
 (lzip -d -c) lzcat command //lz包解压缩查看
 () Tar options //bz2包解压缩查看
 (/home/hceng/imx6ul_buildroot/configs/imx6ulevk_defconfig) Location to save buildroot config //指定配置文件保存路径
-((TOPDIR)/dl) Download dir //指定文件下载保存路径 [./dl/]
-((BASE_DIR)/host) Host dir //指定主机编译所需工具安装目录 [./output/host]
+((TOPDIR)/dl) Download dir //指定文件下载保存路径 [./dl/] ★
+((BASE_DIR)/host) Host dir //指定主机编译所需工具安装目录 [./output/host] ★
 Mirrors and Download locations ---> //镜像和下载位置
 () Primary download site
 (http://sources.buildroot.net) Backup download site
@@ -79,13 +81,13 @@ Mirrors and Download locations ---> //镜像和下载位置
 (0) Number of jobs to run simultaneously (0 for auto) //指定编译时运行的CPU核心数 [0自动]
 [ ] Enable compiler cache //使能编译器缓存
 [ ] build packages with debugging symbols //启用带调试编译软件包
-[] strip target binaries //binaries和libraries在打包到target目录的时候会被strip命令裁减掉调试信息
+[] strip target binaries //binaries和libraries在打包到target目录的时候会被strip命令裁减掉调试信息   ★
 () executables that should not be stripped //剥离时跳过可执行文件
 () directories that should be skipped when stripping //剥离时跳过的目录
 gcc optimization level (optimize for size) ---> //GCC优化等级 [优化大小]
 [ ] Enable google-breakpad support //启动崩溃日志收集
 libraries (shared only) ---> //库类型 [只共享库]
-($(CONFIG_DIR)/local.mk) location of a package override file //包覆盖文件的位置
+($(CONFIG_DIR)/local.mk) location of a package override file //包覆盖文件的位置  ★
 () global patch directories //全局补丁目录
 Advanced --->
 [] paranoid check of library/header paths //检查库/头文件路径
@@ -99,20 +101,24 @@ Buffer-overflow Detection (FORTIFY_SOURCE) (None) ---> //缓冲区溢出检测(�
 ###2.3 Toolchain(工具链)
 
 ```
-Toolchain --->
+===一级配置菜单： Toolchain --->  ===
+
 Toolchain type (External toolchain) ---> //工具链类型 [外部工具链]
 *** Toolchain External Options *** //外部工具链选项
 Toolchain (Custom toolchain) ---> //工具链 [自定义工具链]
 Toolchain origin (Toolchain to be downloaded and installed) ---> //工具链来源 [工具链将被下载安装]
-(https://releases.linaro.org/……) Toolchain URL //工具链下载链接 ①
+  ( ) Toolchain to be downloaded and installed  
+  (X) Pre-installed toolchain                                              
+(https://releases.linaro.org/……) Toolchain URL //工具链下载链接 ①  ★
+
 (bin) Toolchain relative binary path //工具链二进制文件相对路径 [bin目录]
-($(ARCH)-linux-gnueabihf) Toolchain prefix //工具链前缀 [arm-linux-gnueabihf]
+($(ARCH)-linux-gnueabihf) Toolchain prefix //工具链前缀 [arm-linux-gnueabihf] ★
 External toolchain gcc version (6.x) ---> //外部工具链GCC版本 [6.x]
 External toolchain kernel headers series (4.6.x) ---> //外部工具链内核头文件系列 [4.6.x]
 External toolchain C library (glibc/eglibc) ---> //外部工具链C库 [glibc/eglibc] ②
-[*] Toolchain has SSP support? //工具链是否支持SSP? ③
-[*] Toolchain has RPC support? //工具链是否支持RPC? ④
-[*] Toolchain has C++ support? //工具链是否支持C++?
+[*] Toolchain has SSP support? //工具链是否支持SSP? ③ ★
+[*] Toolchain has RPC support? //工具链是否支持RPC? ④ ★
+[*] Toolchain has C++ support? //工具链是否支持C++? ★
 [*] Toolchain has Fortran support? //工具链是否支持Fortran? (一种编程语言)
 () Extra toolchain libraries to be copied to target //复制额外工具链库到目标
 [ ] Copy gdb server to the Target //复制GDB服务到目标
@@ -120,7 +126,7 @@ External toolchain C library (glibc/eglibc) ---> //外部工具链C库 [glibc/eg
 [ ] Build cross gdb for the host //为主机交叉编译GDB
 *** Toolchain Generic Options *** //工具链通用选项
 [ ] Copy gconv libraries //复制gconv库 (gconv库用于在不同的字符集之间进行转换)
-[*] Enable MMU support //使能MMU支持
+[*] Enable MMU support //使能MMU支持  ★
 () Target Optimizations //目标优化 (需设置前面的GCC优化等级)
 () Target linker options //目标链接器选项 (构建目标时传递给链接器的额外选项)
 [ ] Register toolchain within Eclipse Buildroot plug-in //在Eclipse Buildroot插件中注册工具链
@@ -136,42 +142,78 @@ musl:一个轻量级的C标准库，目前在buildroot里是实验阶段;
 对比参考：Comparison of C/POSIX standard library implementations for Linux
 
 ③：堆栈粉碎保护(Stack Smashing Protection)；
-④：远程过程调用(Remote Procedure Call)，主要用于NFS；2.4 System configuration(系统配置)
+④：远程过程调用(Remote Procedure Call)，主要用于NFS；
 
-```
+### 2.4 System configuration(系统配置)
+
 System configuration ---> 系统配置
+
+```shell
+==== 一级配置菜单： System configuration  --->  ====
+
 Root FS skeleton (default target skeleton) ---> //根文件系统框架 [典型目标框架]
-(ebf6ull) System hostname //系统主机名字(自取任意) [ebf6ull]
-(Welcome to ixm6ull Buildroot!) System banner //系统开机提示 [Welcome to ixm6ull Buildroot!]
-Passwords encoding (sha-256) ---> //密码编码 [sha-256]
-Init system (systemV) ---> //初始化系统方案 [systemV] ①
+-----------------------------
+(X) default target skeleton 
+( ) custom target skeleton     
+
+(RV1126_RV1109) System hostname //系统主机名字(自取任意) [RV1126_RV1109]  ★就是命令提示行的前缀
+(Welcome to RV1126_RV1109 Buildroot) System banner //系统开机提示 [Welcome to RV1126_RV1109 Buildroot] ★
+Passwords encoding (sha-256) ---> //密码编码 [sha-256]  ★
+Init system (BusyBox) ---> //初始化系统方案 [BusyBox] ①
+-----------------------------
+(X) BusyBox         
+( ) systemV  
+( ) systemd 
+( ) None    
+                           
 /dev management (Dynamic using devtmpfs + eudev) ---> //dev管理方案 [Dynamic using devtmpfs + eudev] ②
+-----------------------------
+ ( ) Static using device table         
+ ( ) Dynamic using devtmpfs only       
+ ( ) Dynamic using devtmpfs + mdev     
+ (X) Dynamic using devtmpfs + eudev    
+
 (system/device_table.txt) Path to the permission tables //权限表路径
+system/device_table.txt                
+
+
 [ ] support extended attributes in device tables //支持设备表中的扩展属性
 [ ] Use symlinks to /usr for /bin, /sbin and /lib //是否将/bin,/sbin,/lib链接到/usr
-[*] Enable root login with password //使能root登陆密码
-() Root password //设置root密码
-/bin/sh (bash) ---> //选择shell类型 [bash] ③
+[*] Enable root login with password    //使能root登陆密码         ★
+(rockchip) Root password               //设置root密码            ★
+/bin/sh (busybox default shell) --->   //选择shell类型 [bash] ③
+-----------------------------
+ (X) busybox' default shell  
+ ( ) bash                    
+ ( ) dash                    
+ ( ) mksh                    
+ ( ) zsh                     
+ ( ) none                    
+
 [*] Run a getty (login prompt) after boot ---> //启动后运行getty(登录提示)--->
-(ttymxc0) TTY port //设置TTY硬件端口
-Baudrate (keep kernel default) ---> //比特率 [与内核保持一致]
+-----------------------------
+(ttyFIQ0) TTY port //设置TTY硬件端口  ★
+   Baudrate (`1500000`) ---> // [设置波特率]
 (vt100) TERM environment variable //TERM环境变量 (终端类型xterm、vt100)
 () other options to pass to getty //传递给getty的其他选项
-[*] remount root filesystem read-write during boot //在引导期间安装根文件系统支持读和写
+
+
+[*] remount root filesystem read-write during boot //在引导期间安装根文件系统支持读和写  ★
 (eth0) Network interface to configure through DHCP //设置DHCP配置的网络接口 [eth0]
-(/bin:/sbin:/usr/bin:/usr/sbin) Set the system's default PATH //设置系统的默认路径
+(/bin:/sbin:/usr/bin:/usr/sbin) Set the systems default PATH //设置系统的默认路径
 [*] Purge unwanted locales //清除不需要的区域设置
 (C en_US) Locales to keep //要保留的语言环境
 () Generate locale data //生成区域设置数据
 [ ] Enable Native Language Support (NLS) //启用本地语言支持（NLS）
--*- Install timezone info //安装时区信息
+-*- Install timezone info //安装时区信息  ★
 (default) timezone list //时区清单 [典型]
 (Etc/UTC) default local time //用户表的路径
 () Path to the users tables
-(board/hceng/nxp-imx6ull/rootfs-overlay) Root filesystem overlay directories //根文件系统覆盖目录
-() Custom scripts to run before creating filesystem images //在创建文件系统映像之前运行的自定义脚本
-() Custom scripts to run inside the fakeroot environment //自定义脚本在fakeroot(模拟root权限)环境中运行
-(board/……) Custom scripts to run after creating filesystem images //创建文件系统映像后运行的自定义脚本 ④
+( 'board/rockchip/common/base board/rockchip/common/wifi board/rockchip/common/wifi board/rockchip/rv1126_rv1109/fs-overlay/ board/rockchip/rv1126_rv1109/fs-overlay-sysv/') Root filesystem overlay directories //根文件系统覆盖目录 ★
+ 
+('build/post.sh') Custom scripts to run before creating filesystem images //在创建文件系统映像之前运行的自定义脚本★
+() Custom scripts to run inside the fakeroot environment               //自定义脚本在fakeroot(模拟root权限)环境中运行
+(board/……) Custom scripts to run after creating filesystem images     //创建文件系统映像后运行的自定义脚本 ④★
 () Extra arguments passed to custom scripts //传递给自定义脚本的额外参数
 ```
 
@@ -186,7 +228,6 @@ BusyBox init:
 3.BusyBox init程序将在启动时读取/etc/inittab文件，以了解该做什么，默认inittab存储在./package/busybox/inittab;
 4.inittab除了安装几个重要的文件系统之外，还要启动/etc/init.d/rcS中的shell脚本，并启动一个getty程序(提供一个登录提示);
 
-
 systemV:
 1.使用传统sysvinit程序，之前大多数台式机Linux发行版都使用该方案，现在有些变为了Upstart或Systemd;
 2.在/ect目录下会生成init.d、rc0.d、rc1.d、rc2.d、rc3.d、rc4.d、rc5.d、rc6.d、rc.loacl;
@@ -195,7 +236,6 @@ rcN.d里面是链接向init.d里脚本的软链接，N表示运行级别，进�
 当所有的当前运行级别的脚本都运行完了之后，会运行rc.local;
 3.脚本的命名规则：以[S|K]+NN+其它，以S开头的是启动脚本，以K开头的是停止脚本，init进程会按照S或者K后面的数字的顺序来启动或停止服务;
 4.sysvinit还使用/etc/inittab文件(与BusyBox的语法略有不同)，默认inittab存储在./package/sysvinit/inittab;
-
 
 systemd:
 1.systemd是Linux的新一代init系统，以前的运行级别(runlevel)的概念被新的运行目标(target)所取代;
@@ -257,16 +297,15 @@ boot.vfat由"%FILES%"所表示内容组成(后面会得知是kernel+dtb);
 sdcard.img有四个分区，第一个是空，第二个是偏移1024字节(1k)后，内容为"%UBOOTBIN%"(u-boot)，第三个为偏移8M后，存放前面生成的boot.vfat(kernel+dtb)，最后存放rootfs.ext2。
 此时分区情况如下:
 
-
 分区类型和数值的对应关系可通过该文章查询:List of partition identifiers for PCs or Listing of MBR/EBR Partition Types
 此时将sd卡插入Windows电脑，可以发现只能识别存放boot.vfat(kernel+dtb)的分区，因为该分区为FAT32格式，Windows可以识别，而存放rootfs.ext2的分区为ext2/3/4，Windows是无法识别的，与生活常识是吻合的。
 另外，如果想在SD卡创建其它自定义分区，可以再加一个partition：
 
 ```
-    partition user {
-     partition-type = 0xC
-     size = 10M
-    }
+partition user {
+partition-type = 0xC
+size = 10M
+}
 ```
 
 再来看看post-image.sh是如何解析genimage.cfg.template:
@@ -381,11 +420,17 @@ main $@
 ```
 
 可以在main看到，FILES为dtb和kernel，UBOOTBIN为u-boot，再传入配置文件。
-最后使用genimage生成，genimage在后面2.9Host utilities(主机工具)部分需要勾选上，它的作用是给定根文件系统树，生成多个文件系统和闪存镜像的工具。2.5 Kernel(内核配置)
+最后使用genimage生成，genimage在后面2.9Host utilities(主机工具)部分需要勾选上，它的作用是给定根文件系统树，生成多个文件系统和闪存镜像的工具。
+
+### 2.5 Kernel(内核配置)
 
 ```
+=== 一级配置菜单：Kernel  ---> ===
+
 [*] Linux Kernel //使能编译内核
 *** Linux kernel in thumb mode may be broken with binutils >= 2.29 *** //binutils>=2.29可能会破坏thumb模式下的内核
+
+
 Kernel version (Custom Git repository) ---> //内核版本 [自定义Git仓库]
 (https://git.dev.tencent.com/……) URL of custom repository //自定义仓库网址 ①
 (origin/master) Custom repository version //自定义仓库版本
@@ -409,12 +454,13 @@ Linux Kernel Extensions ---> //Linux内核扩展
 [ ] ev3dev Linux drivers //ev3dev Linux驱动
 [ ] FB TFT drivers //FB TFT驱动
 [ ] Aufs Filesystem Module patch //Aufs文件系统模块补丁
+
 Linux Kernel Tools ---> //Linux内核工具
 [ ] cpupower //用于检查、调整CPU省电相关功能
 [ ] gpio //用于控制、监控GPIO,仅在4.8版本提供 ③
 [ ] iio //用于控制、监控iio设备,仅在4.7版本提供
 [ ] pci //用于测试特定PCI端点, 仅在4.20版本提供
-[ ] perf //用于Linux性能分析
+[ ] perf //用于Linux性能分析 ★
 [ ] selftests //用于内核自我测试
 [ ] tmon //用于用户访问系统相关的热信息
 ```
@@ -427,10 +473,16 @@ zImage:是vmlinux加上解压代码(用于自解压)经过gzip压缩后的文件
 bzImage:是vmlinux加上解压代码(用于自解压)经过gzip压缩后的文件，适用于大内核，常见于x86，“bz”表示 “big zImage”;
 uImage:是U-Boot专用的镜像文件，使用mkimage工具在zImage之前加上一个长度为0x40的头信息(tag)，在头信息内说明了该镜像文件的类型、加载位置、生成时间、大小等信息;
 参考资料：linux内核镜像格式
-③：使用新的ABI，弃用sysfs；2.6 Target packages(目标包配置)
+③：使用新的ABI，弃用sysfs；
+
+
+
+### 2.6 Target packages(目标包配置)
 目标包配置内容有点多，二级目录如下：
 
 ```
+==== 一级配置菜单：Target packages ===
+
 Target packages --->
 [*] BusyBox //使能编译BusyBox
 (package/busybox/busybox.config) BusyBox configuration file to use? //设置BusyBox配置文件路径
@@ -459,11 +511,14 @@ Security ---> //安全
 Shell and utilities ---> //Shell和程序
 System tools ---> //系统工具
 Text editors and viewers ---> //文版编辑和浏览
-接下来对每个二级目录的子目录注释。
-```
-### 2.6.1 Audio and video applications
 
 ```
+接下来对每个二级目录的子目录注释。
+
+#### 2.6.1 Audio and video applications
+
+```
+====Target packages====
 Audio and video applications --->
 [] alsa-utils ---> //ALSA声卡测试和音频编辑
 [ ] atest //ALSA Asoc驱动测试工具
@@ -517,9 +572,11 @@ a glibc toolchain w/ threads and wchar *
 [ ] ympd //MPD网页客户端
 ```
 
-### 2.6.2 Compressors and decompressors
+#### 2.6.2 Compressors and decompressors
 
 ```
+====Target packages====
+
 Compressors and decompressors --->
 [ ] brotli //通用无损压缩库
 -- bzip2 //免费的压缩工具
@@ -537,9 +594,10 @@ Compressors and decompressors --->
 [ ] zstd //Zstandard或zstd的简短版本
 ```
 
-### 2.6.3 Debugging, profiling and benchmark
+#### 2.6.3 Debugging, profiling and benchmark
 
 ```
+====Target packages====
 [ ] blktrace //对通用块层(block layer)的I/O跟踪机制，它能抓取详细的I/O请求，发送到用户空间
 [ ] bonnie++ //执行一系列简单的硬盘驱动器和文件系统性能测试
 [ ] cache-calibrator //用于分析计算机(缓存)内存系统并提取有用信息，以及作为负载生成器进行实时测试
@@ -593,9 +651,10 @@ Compressors and decompressors --->
 
 
 
-### 2.6.4 Development tools
+#### 2.6.4 Development tools
 
 ```
+====Target packages====
 [ ] binutils //安装binutils(BinaryUtilities)二进制工具的集合，比如ld、as
 [ ] bsdiff //创建补丁path或文件比较diff
 [ ] check //单元测试框架
@@ -625,9 +684,10 @@ Compressors and decompressors --->
 [ ] tree //递归显示目录列表的命令
 ```
 
-### 2.6.5 Filesystem and flash utilities
+#### 2.6.5 Filesystem and flash utilities
 
 ```
+====Target packages====
 [ ] abootimg //直接通过文件映像或/dev块设备操作Android Boot Images的工具
 [ ] aufs-util //aufs文件系统工具
 [ ] autofs //自动挂载/卸载文件系统的守护进程
@@ -672,11 +732,10 @@ Compressors and decompressors --->
 [ ] xfsprogs //XFS文件系统工具和库
 ```
 
-
-### 2.6.6 Fonts, cursors, icons, sounds and themes
-
+#### 2.6.6 Fonts, cursors, icons, sounds and themes
 
 ```
+====Target packages====
 *** Cursors *** //光标
 [ ] comix-cursors //X11鼠标主题里一个略卡通的鼠标光标
 [ ] obsidian-cursors //一个明亮、干净的鼠标光标集合
@@ -697,9 +756,10 @@ Compressors and decompressors --->
 *** Themes *** //主题
 ```
 
-### 2.6.7 Games
+#### 2.6.7 Games
 
 ```
+====Target packages====
 [ ] chocolate-doom //一个复古游戏
 [ ] flare-engine //Flare(Free Libre Action Roleplaying Engine)是一款简单的游戏引擎
 [ ] gnuchess //一个西洋棋游戏
@@ -714,9 +774,10 @@ gcc >= 4.8, NPTL, dynamic library *** //一款动作角色扮演游戏(ARPG)引�
 [ ] stella //一款多平台Atari 2600 VCS仿真器
 ```
 
-### 2.6.8 Graphic libraries and applications (graphic/text)
+#### 2.6.8 Graphic libraries and applications (graphic/text)
 
 ```
+====Target packages====
 * Graphic applications * //图形应用
 [ ] fswebcam //一个从V4L2获取图像的简洁的网络摄像头应用程序
 [ ] ghostscript //文件通过它到打印机打印出来
@@ -803,9 +864,10 @@ SQLite 3 support (No sqlite support) ---> //启用SQLite3支持(不支持sqlite)
 [ ] xkeyboard-config //X的键盘配置数据库
 ```
 
-### 2.6.9 Hardware handling
+#### 2.6.9 Hardware handling
 
 ```
+====Target packages====
 Firmware ---> //固件
 [ ] am33x-cm3 //Cortex-M3二进制文件用于在am335x上挂起和恢复
 [ ] armbian-firmware //特定用于Armbian的固件
@@ -959,9 +1021,10 @@ Firmware ---> //固件
 [ ] xorriso //可创建、加载、处理和写入具有Rock Ridge扩展名的ISO 9660系统映像
 [ ] xr819-xradio //SDIO WiFi芯片XR819的无线驱动程序
 ```
-### 2.6.10 Interpreter languages and scripting
+#### 2.6.10 Interpreter languages and scripting
 
 ```
+====Target packages====
 [ ] 4th //Forth编译器，可将Forth语言转成其他语言的字节码和独立可运行程序
 [ ] enscript //将ASCII文件转换为PostScript，HTML或RTF，生成文件或打印
 [ ] erlang //Erlang是一种编程语言，主要用于开发并发和分布式系统
@@ -1305,13 +1368,14 @@ get-terminal-size
 [ ] python-zope-interface //提供了面向对象编程语言中的接口(interface)实现
 [ ] ruby //面向对象的脚本语言
 [ ] tcl //Tool Command Language，一种简单的文本语言
-
 ```
 
 
-### 2.6.11 Libraries（待完善）
+#### 2.6.11 Libraries（待完善）
 
 ```
+====一级菜单 Target packages====
+====Libraries==========
 Audio/Sound ---> //音频&声卡
 -- alsa-lib ---> //Advanced Linux Sound Architecture(ALSA)，提供音频和MIDI功能
 [ ] aubio //一种用于从音频信号中提取属性信息的工具
@@ -1362,7 +1426,9 @@ Audio/Sound ---> //音频&声卡
 [ ] tremor (fixed point vorbis decoder) //Tremor是Ogg Vorbis解码器的定点实现。
 [ ] vo-aacenc //包含Advanced Audio Coding(AAC)音频编解码器的编码器实现
 [ ] webrtc-audio-processing //基于Google的WebRTC实现的AudioProcessing库
-Compression and decompression ---> //压缩和解压缩
+
+
+Compression and decompression ---> //压缩和解压缩 ★
 [ ] libarchive //用于读取和写入各种流存档格式
 [ ] libsquish //使用DXT标准(也称为S3TC)压缩图像
 [ ] libzip //用于读取，创建和修改zip存档
@@ -1372,7 +1438,8 @@ Compression and decompression ---> //压缩和解压缩
 [ ] szip //Szip是Extended-Rice无损压缩算法的实现
 -- zlib support //选择所需的Zlib库提供程序
 zlib variant (zlib) ---> //zlib:标准(解压缩)库 | zlib-ng:zlib的改进版
-Crypto ---> //加密
+
+Crypto ---> //加密  ★
 [ ] beecrypt //一个通用的加密库
 [ ] botan //C ++的加密库
 [ ] CA Certificates //包括CA证书的PEM文件，以允许基于SSL的程序检查SSL连接的真实性
@@ -1409,7 +1476,8 @@ openssl //实现安全套接字层(SSL v2/v3)和传输安全性(TLS v1)以及功
 [ ] trousers //TCG Software Stack(TSS)，用于符合TPM规范1.2版的受信任平台模块
 [ ] ustream-ssl //ustream SSL包装器
 [ ] wolfssl //一种轻量级，可移植，基于C语言的SSL/TLS库
-Database ---> //数据库
+
+Database ---> //数据库  ★
 [ ] berkeleydb //伯克利数据库，一个非常常见的数据库应用程序库
 [ ] cppdb //一个SQL连接库，旨在提供与平台和数据库无关的连接API，类似于JDBC，ODBC
 [ ] gdbm //一组使用可扩展哈希的数据库例程
@@ -1433,7 +1501,8 @@ mysql variant (oracle mysql) ---> //选择oracle mysql服务器或mariadb服务�
 [ ] Set the secure_delete pragma on by default //更改secure_delete编译指示的默认设置
 [ ] Disable fsync //关闭fsync()强制数据库立即存储，牺牲掉电以提高性能
 [ ] unixodbc //unixODBC Project的目标是开发和推广unixODBC，使其成为非Windows平台的ODBC标准
-Filesystem ---> //文件系统*
+
+Filesystem ---> //文件系统*  ★
 [ ] gamin //文件变更监视器
 -- libconfig //用于处理结构化配置文件的简单库
 -- libconfuse //用C编写的配置文件解析器库
@@ -1443,7 +1512,8 @@ Filesystem ---> //文件系统*
 [ ] libsysfs //一组基于sysfs的实用程序
 [ ] lockdev //用于锁定设备的库
 [ ] physfs //PhysicsFS，便携、灵活的文件I/O抽象
-Graphics ---> //图形
+
+Graphics ---> //图形  ★
 [ ] assimp //Open Asset Import Library(assimp)导入各种3D格式以统一,作为通用的3D模型转换器
 [ ] at-spi2-atk //包含将ATK桥接搭配At-spi2 Dbus服务的库
 [ ] at-spi2-core //是GNOME辅助功能项目的一部分
@@ -1557,7 +1627,8 @@ gstreamer support (none) ---> //gstreamer-0.10或1.x支持
 [ ] woff2 //对于WOFF2字体文件格式参考实现，通常用于Web字体
 [ ] zbar //QR和条码扫描仪
 [ ] zxing-cpp //条形码图像处理的Java实现库，提供编译C++端口
-Hardware handling ---> //硬件处理
+
+Hardware handling ---> //硬件处理  ★
     [ ] acsccid
     [ ] bcm2835
     [ ] c-periphery
@@ -1611,7 +1682,8 @@ Hardware handling ---> //硬件处理
     [ ] tslib
     [ ] urg
     [ ] wiringpi
-Javascript ---> //Javascript
+ 
+Javascript ---> //Javascript  ★
     [ ] angularjs
     [ ] bootstrap
     [ ] duktape
@@ -1620,7 +1692,8 @@ Javascript ---> //Javascript
     [ ] jQuery
     [ ] jsmin
     [ ] json-javascript
-JSON/XML ---> //JSON/XML
+    
+JSON/XML ---> //JSON/XML  ★
     [ ] benejson
     [ ] cJSON
     -- expat
@@ -1653,7 +1726,8 @@ JSON/XML ---> //JSON/XML
     [ ] xerces-c++
     [ ] yajl
     [ ] yaml-cpp
-Logging ---> //日志
+    
+Logging ---> //日志  ★
     [ ] eventlog
     [ ] glog
     [ ] liblog4c-localtime
@@ -1663,7 +1737,8 @@ Logging ---> //日志
     [ ] log4cxx
     [ ] opentracing-cpp
     [ ] zlog
-Multimedia ---> //多媒体
+    
+Multimedia ---> //多媒体 ★
     [ ] bitstream
     [ ] kvazaar
     [ ] libaacs
@@ -1695,7 +1770,8 @@ Multimedia ---> //多媒体
     [ ] mediastreamer
     [ ] x264
     [ ] x265
-Networking ---> //网络
+    
+Networking ---> //网络 ★
     [ ] agent++
     [ ] alljoyn
     [ ] alljoyn-base
@@ -1819,7 +1895,8 @@ Networking ---> //网络
     [ ] zeromq
     [ ] zmqpp
     [ ] zyre
-Other ---> //其它
+    
+Other ---> //其它 ★
     [ ] apr
     [ ] apr-util
     [ ] armadillo
@@ -1927,12 +2004,14 @@ Other ---> //其它
     [ ] sphinxbase
     [ ] tinycbor
     [ ] xapian
-Security ---> //安全
+    
+Security ---> //安全 ★
     [ ] libselinux
     [ ] libsemanage
     [ ] libsepol
     [ ] safeclib
-Text and terminal handling ---> //文字和终端处理
+
+Text and terminal handling ---> //文字和终端处理  ★
     [ ] augeas
     [ ] enchant
     [ ] fmt
@@ -1964,9 +2043,12 @@ Text and terminal handling ---> //文字和终端处理
     [ ] ustr
 ```
 
-### 2.6.12 Mail
+#### 2.6.12 Mail
 
 ```
+====Target packages====
+====Mail====
+
 [ ] dovecot //开源的IMAP和POP3电子邮件服务器
 [ ] exim //消息传输代理(MTA)
 [ ] fetchmail //将邮件从POP和IMAP移至本地计算机的客户端后台驻留程序
@@ -1975,9 +2057,12 @@ Text and terminal handling ---> //文字和终端处理
 [ ] msmtp //SMTP客户端
 [ ] mutt //一个基于文本的复杂邮件用户代理Mail User Agent(MUA)
 ```
-### 2.6.13 Miscellaneous
+#### 2.6.13 Miscellaneous
 
 ```
+====Target packages====
+====Miscellaneous====
+
 ​```
 [ ] aespipe //AES加密和解密数据块
 [ ] bc //一种任意精度的数字处理语言，其语法与C相似
@@ -2100,11 +2185,11 @@ write plugins ---> //写插件
 [ ] util-macros //包含M4被所有的使用宏的Xorg包
 ```
 
-
-
-### 2.6.14 Networking applications （待完善）
+#### 2.6.14 Networking applications （待完善）
 
 ```
+====Target packages     =====
+====Networking applications ====
 [ ] aircrack-ng
 [ ] aoetools
 [ ] apache
@@ -2376,10 +2461,13 @@ write plugins ---> //写插件
 [ ] znc
 ```
 
-
-### 2.6.15 Package managers
+#### 2.6.15 Package managers
 
 ```
+====Target packages     =====
+====Package managers ====
+
+
 * ------------------------------------------------------- *
 * Please note: *
 * - Buildroot does not generate binary packages, * //Buildroot不会生成二进制软件包
@@ -2399,14 +2487,19 @@ write plugins ---> //写插件
 [ ] rpm //RPM软件包管理器
 ```
 
-### 2.6.16 Real-Time
+#### 2.6.16 Real-Time
 
 ```
+==== Target packages    =====
+==== Real-Times          ====
+
 [ ] Xenomai Userspace //Linux实时时钟框架
 ```
-### 2.6.17 Security
+#### 2.6.17 Security
 
 ```
+====Target packages  =====
+====Security  ====
 [ ] checkpolicy //SELinux(Security-Enhanced Linux)策略编译器
 [ ] paxtest //PaX回归测试套件
 [ ] policycoreutils //SELinux策略程序的集合(包含load_policy、newrole、run_init、secon、semodule、sestatus等)
@@ -2418,9 +2511,11 @@ write plugins ---> //写插件
 [ ] semodule-utils //包含用于处理selinux模块的工具:semodule_deps、semodule_expand、semodule_link等
 [ ] setools //SELinux策略分析软件包：apol、sediff-SELinux、sedta、seinfoflow-SELinux等
 ```
-### 2.6.18 Shell and utilities
+####  2.6.18 Shell and utilities
 
 ```
+====Target packages  =====
+====Shell and utilities  ====
 * Shells * //命令解析器
 -- bash //标准的GNU Bourne shell
 [ ] dash //非常小的/bin/sh的POSIX兼容shell
@@ -2454,16 +2549,13 @@ write plugins ---> //写插件
 [ ] which //“which”命令程序
 [ ] xmlstarlet //命令行XML工具包
 [ ] xxhash //一种非常快速的哈希算法，运行速度受限RAM
-
-
-
 ```
 
-
-
-### 2.6.19 System tools
+#### 2.6.19 System tools
 
 ```
+====Target packages  =====
+====System tools  ====
 [ ] acl //POSIX访问控制列表，用于为文件和目录定义更细粒度的自由访问权限
 [ ] android-tools //包含fastboot和adb实用程序，可使用这些协议与目标设备进行交互
 [ ] atop //用于Linux的ASCII全屏性能监视器
@@ -2599,14 +2691,13 @@ Xvisor configuration (Using an in-tree defconfig file) --->
 (generic-v7) Defconfig name //要使用的Xvisor defconfig文件的名称
 [ ] Create U-Boot image of Xvisor //创建可从Das U-Boot加载的Xvisor映像文件
 [ ] Build test device-tree blobs //构建测试设备树blob
-
 ```
 
-
-### 2.6.20 Text editors and viewers
+#### 2.6.20 Text editors and viewers
 
 ```
-
+====Target packages  =====
+====Text editors and viewers  ====
 [ ] ed //面向行的文本编辑器，通常在脚本中使用，而不是直接调用
 [ ] joe //JOE是易于使用的，基于终端的全功能屏幕编辑器
 [ ] less //出色的文本文件查看器
@@ -2621,6 +2712,9 @@ Xvisor configuration (Using an in-tree defconfig file) --->
 ### 2.7 Filesystem images(文件系统)
 
 ```
+====Target packages  =====
+====Filesystem images ====
+
 Filesystem images --->
 [ ] axfs root filesystem //XFS格式根文件系统
 [ ] btrfs root filesystem //btrfs格式根文件系统
@@ -2646,42 +2740,41 @@ Compression method (no compression) ---> //压缩方式 [无压缩]
 [ ] ubi image containing an ubifs root filesystem //ubifs格式根文件系统包含ubi镜像
 [ ] ubifs root filesystem //ubifs格式根文件系统
 [ ] yaffs2 root filesystem //yaffs2格式根文件系统
-
 ```
 
 借此机会，把几个文件系统给记录一下。
 
-1.什么是文件系统
-文件系统，就是文件的储存方式。简单说，它就是一个门牌系统，为储存设备划分门牌号，每个文件分配一个门牌，然后就能按照门牌找到文件。
-没有文件系统的硬盘，就是一块荒地。如果有人住在那里，你只能说那里有人住，精确位置你说不出来。只有划分了路牌，你才能说出，这个人住在"人民路15号"，这样才能精确定位。文件系统就是路牌的划分方法。
-储存设备都需要指定文件系统，计算机才能读写。所谓"格式化"，就是为硬盘安装文件系统。不同的操作系统有不同的文件系统，Linux使用ext4，OSX使用HFS+，Windows使用NTFS，Solaris和Unix使用ZFS。如果计算机不认识某个文件系统，就会显示这块盘无法读写。
+- 1.什么是文件系统
+  文件系统，就是文件的储存方式。简单说，它就是一个门牌系统，为储存设备划分门牌号，每个文件分配一个门牌，然后就能按照门牌找到文件。
+  没有文件系统的硬盘，就是一块荒地。如果有人住在那里，你只能说那里有人住，精确位置你说不出来。只有划分了路牌，你才能说出，这个人住在"人民路15号"，这样才能精确定位。文件系统就是路牌的划分方法。
+  储存设备都需要指定文件系统，计算机才能读写。所谓"格式化"，就是为硬盘安装文件系统。不同的操作系统有不同的文件系统，Linux使用ext4，OSX使用HFS+，Windows使用NTFS，Solaris和Unix使用ZFS。如果计算机不认识某个文件系统，就会显示这块盘无法读写。 
 
-2.Windows的文件系统
-Windows里的文件系统主要有三种：FAT32、NTFS、exFAT。
-FAT32是最老的文件系统，所有操作系统都支持，兼容性最好。但是，它是为32位计算机设计的，单个文件不能超过2的(32-1)次方个字节，也就是不能超过4GB，分区不能超过8TB。也就是为什么一些U盘无法一次性拷贝4G以上的大文件；
-NTFS是Windows的默认文件系统，用来替换FAT32，Windows的系统盘只能使用这个文件系统；
-exFAT可以看作是FAT32的64位升级版，ex就是extended的缩写，表示"扩展的FAT32"，功能不如NTFS，但是解决了文件和分区的大小问题，最大分区可以到8PB；
+- 2.Windows的文件系统
+  Windows里的文件系统主要有三种：FAT32、NTFS、exFAT。
+  FAT32是最老的文件系统，所有操作系统都支持，兼容性最好。但是，它是为32位计算机设计的，单个文件不能超过2的(32-1)次方个字节，也就是不能超过4GB，分区不能超过8TB。也就是为什么一些U盘无法一次性拷贝4G以上的大文件；
+  NTFS是Windows的默认文件系统，用来替换FAT32，Windows的系统盘只能使用这个文件系统；
+  exFAT可以看作是FAT32的64位升级版，ex就是extended的缩写，表示"扩展的FAT32"，功能不如NTFS，但是解决了文件和分区的大小问题，最大分区可以到8PB； 
 
-3.分区表
-硬盘分区，是指一块硬盘上面，同时存在多个文件系统。
-每个文件系统管理的区域，就称为一个分区(partition),比如一块100GB的硬盘，可以一半是NTFS分区，另一半是exFAT分区。
-硬盘必须先分区，才能指定每个区的文件系统。分区大小、起始位置、结束位置、文件系统等信息，都储存在分区表里面。
-分区表也分成两种所谓硬盘分区，就是指一块硬盘上面，同时存在多个文件系统。每个文件系统管理的区域，就称为一个分区（partition）。比如，一块 100 GB 的硬盘，可以一半是 NTFS 分区，另一半是 exFAT 分区。
-硬盘必须先分区，才能指定每个区的文件系统。分区大小、起始位置、结束位置、文件系统等信息，都储存在分区表里面。
-分区表也分成两种格式：MBR 和 GPT。前者是传统格式，兼容性好；后者更现代，功能更强大。一般来说，都推荐使用 GPT格式：MBR和GPT。前者是传统格式，兼容性好；后者更现代，功能更强大。一般来说，都推荐使用GPT。
-4.buildroot中提到的几种文件系统
-xfs:XFS最早针对IRIX操作系统开发，是一个高性能的日志型文件系统，能够在断电以及操作系统崩溃的情况下保证文件系统数据的一致性。它是一个64位的文件系统，后来进行开源并且移植到了Linux操作系统中。XFS引入分配组、B+树、extent等方法来改进海量高并发小文件场景下性能。
-btrfs:通常念成Butter FS，Better FS或B-treeFS，由Oracle于2007年宣布并进行中的COW(copy-on-write式)文件系统。继ext3/4文件系统之后，比较强大的Linux文件系统，具有快照，内建磁盘阵列(RAID)支持，支持子卷等功能，允许在线调整文件系统大小。
-cramfs:一个压缩式的文件系统，它并不需要一次性地将文件系统中的所有内容都解压缩到内存之中，而只是在系统需要访问某个位置的数据的时侯，马上计算出该数据在cramfs中的位置，将其实时地解压缩到内存之中，然后通过对内存的访问来获取文件系统中需要读取的数据。
-romfs:一种简单的只读文件系统，主要是用来当做初始文件系统来使用的，在嵌入式linux或是uclinux中通常使用这中文件系统来作为引导系统的文件系统，甚至uclinux有时就直接把ROMFS作为其根文件系统，而不是将其作为系统启动中的过渡文件系统。
-squashfs:一个只读的文件系统，它可以将整个文件系统压缩在一起，存放在某个设备，某个分区或者普通的文件中。如果将其压缩到一个设备中，那么可以将其直接mount起来使用，而如果它仅仅是个文件的话，您可以将其当为一个loopback设备使用。
-f2fs:Flash-Friendly File System是一种闪存文件系统，主要由三星集团研发，适合Linux内核使用。此文件系统起初是为了NAND闪存的存储设备设计(诸如固态硬盘、eMMC和SD卡)，这些设备广泛存在于自移动设备至服务器领域。
-jffs2:磁盘文件系统(ext2, FAT)设计运行在磁盘上，在运行在闪存上时，需要闪存转换层(Flash Translation Layer), 它的功能就是将底层的闪存模拟成一个具有512字节扇区大小的标准块设备(block device)，从而模仿磁盘。这势必带来写操作性能的下降，更好的解决问题的方法就是实现一个特别针对闪存的文件系统，而JFFS2就是一个这样的文件系统。
-yaffs2:Yet Another Flash File System，是一种类似于JFFS/JFFS2的专门为Flash设计的嵌入式文件系统。与JFFS相比，它减少了一些功能， 因此速度更快、占用内存更少。
-ubifs:无序区块映像文件系统(Unsorted Block Image File System)，一种用于固态硬盘存储设备的文件系统，它与LogFS相互竞争，是JFFS2的后继文件系统之一。UBIFS在设计与性能上均较YAFFS2、JFFS2更适合大容量的NAND flash。
-5.其它提到名词解释
-cloop:cloop是一个Linux内核模块，支持压缩回环文件系统。有了它，您可以安装压缩文件系统，如块设备，并在访问时无缝解压缩其数据。
-cpio:cpio是一个非常古老的归档工具。已逐渐被tar替代，但是有些功能是tar不存在的。
+- 3.分区表
+  硬盘分区，是指一块硬盘上面，同时存在多个文件系统。
+  每个文件系统管理的区域，就称为一个分区(partition),比如一块100GB的硬盘，可以一半是NTFS分区，另一半是exFAT分区。
+  硬盘必须先分区，才能指定每个区的文件系统。分区大小、起始位置、结束位置、文件系统等信息，都储存在分区表里面。
+  分区表也分成两种所谓硬盘分区，就是指一块硬盘上面，同时存在多个文件系统。每个文件系统管理的区域，就称为一个分区（partition）。比如，一块 100 GB 的硬盘，可以一半是 NTFS 分区，另一半是 exFAT 分区。
+  硬盘必须先分区，才能指定每个区的文件系统。分区大小、起始位置、结束位置、文件系统等信息，都储存在分区表里面。
+  分区表也分成两种格式：MBR 和 GPT。前者是传统格式，兼容性好；后者更现代，功能更强大。一般来说，都推荐使用 GPT格式：MBR和GPT。前者是传统格式，兼容性好；后者更现代，功能更强大。一般来说，都推荐使用GPT。
+- 4.buildroot中提到的几种文件系统
+  xfs:XFS最早针对IRIX操作系统开发，是一个高性能的日志型文件系统，能够在断电以及操作系统崩溃的情况下保证文件系统数据的一致性。它是一个64位的文件系统，后来进行开源并且移植到了Linux操作系统中。XFS引入分配组、B+树、extent等方法来改进海量高并发小文件场景下性能。
+  btrfs:通常念成Butter FS，Better FS或B-treeFS，由Oracle于2007年宣布并进行中的COW(copy-on-write式)文件系统。继ext3/4文件系统之后，比较强大的Linux文件系统，具有快照，内建磁盘阵列(RAID)支持，支持子卷等功能，允许在线调整文件系统大小。
+  cramfs:一个压缩式的文件系统，它并不需要一次性地将文件系统中的所有内容都解压缩到内存之中，而只是在系统需要访问某个位置的数据的时侯，马上计算出该数据在cramfs中的位置，将其实时地解压缩到内存之中，然后通过对内存的访问来获取文件系统中需要读取的数据。
+  romfs:一种简单的只读文件系统，主要是用来当做初始文件系统来使用的，在嵌入式linux或是uclinux中通常使用这中文件系统来作为引导系统的文件系统，甚至uclinux有时就直接把ROMFS作为其根文件系统，而不是将其作为系统启动中的过渡文件系统。
+  squashfs:一个只读的文件系统，它可以将整个文件系统压缩在一起，存放在某个设备，某个分区或者普通的文件中。如果将其压缩到一个设备中，那么可以将其直接mount起来使用，而如果它仅仅是个文件的话，您可以将其当为一个loopback设备使用。
+  f2fs:Flash-Friendly File System是一种闪存文件系统，主要由三星集团研发，适合Linux内核使用。此文件系统起初是为了NAND闪存的存储设备设计(诸如固态硬盘、eMMC和SD卡)，这些设备广泛存在于自移动设备至服务器领域。
+  jffs2:磁盘文件系统(ext2, FAT)设计运行在磁盘上，在运行在闪存上时，需要闪存转换层(Flash Translation Layer), 它的功能就是将底层的闪存模拟成一个具有512字节扇区大小的标准块设备(block device)，从而模仿磁盘。这势必带来写操作性能的下降，更好的解决问题的方法就是实现一个特别针对闪存的文件系统，而JFFS2就是一个这样的文件系统。
+  yaffs2:Yet Another Flash File System，是一种类似于JFFS/JFFS2的专门为Flash设计的嵌入式文件系统。与JFFS相比，它减少了一些功能， 因此速度更快、占用内存更少。
+  ubifs:无序区块映像文件系统(Unsorted Block Image File System)，一种用于固态硬盘存储设备的文件系统，它与LogFS相互竞争，是JFFS2的后继文件系统之一。UBIFS在设计与性能上均较YAFFS2、JFFS2更适合大容量的NAND flash。
+- 5.其它提到名词解释
+  cloop:cloop是一个Linux内核模块，支持压缩回环文件系统。有了它，您可以安装压缩文件系统，如块设备，并在访问时无缝解压缩其数据。
+  cpio:cpio是一个非常古老的归档工具。已逐渐被tar替代，但是有些功能是tar不存在的。
 
 参考资料：
 exFAT 文件系统指南
@@ -2693,6 +2786,8 @@ UBI文件系统详细介绍
 ### 2.8 Bootloaders(引导程序)
 
 ```
+==== 一级配置菜单：Bootloaders ===
+
 Bootloaders --->
 [ ] afboot-stm32 //STM32平台的一个非常小的引导加载程序
 [ ] Barebox //Barebox引导程序,以前叫做U-Boot v2
@@ -2730,9 +2825,14 @@ U-Boot binary format ---> //U-Boot二进制文件格式
 [ ] Environment image ---- //镜像环境
 [ ] Generate a U-Boot boot script //生成U-Boot启动脚本
 ```
-①：受限每行字数，该处完整链接为：https://git.dev.tencent.com/weidongshan/imx6ull_uboot.git；2.9 Host utilities(主机工具)
+①：受限每行字数，该处完整链接为：https://git.dev.tencent.com/weidongshan/imx6ull_uboot.git；
+
+
+
+### 2.9 Host utilities(主机工具)
 
 ```
+==== 一级配置菜单：Host utilities  ===
 Host utilities --->
 [ ] host aespipe //AES加密或解密管道
 [ ] host android-tools //包含fastboot和adb实用程序
@@ -2801,6 +2901,11 @@ Host utilities --->
 [ ] host zstd //快速无损压缩方式
 ```
 ### 2.10 Legacy config options(旧版配置选项)
+
+```
+==== 一级配置菜单： Legacy config options ===
+```
+
 一些陆续被移除buildroot的配置选项，忽略。
 
 ## 3.Buildroot目录结构
@@ -2900,6 +3005,8 @@ staging:包含了根文件系统的层次结构，编译生成的所有头文件
 target:已经rootfs_overlay/处理过的根文件系统，但没有创建/dev/下的设备节点；3.3 package目录
 package目录是存放所有软件包构建脚本*.mk、配置选项Config.in的目录，这里添加一个自定义APP，来理解实现原理。
 ```
+
+###  3.2 添加自定义APP
 
 ①：在package/目录下，创建一个hceng_app目录；
 ②：在hceng_app/目录下，创建文件Config.in和hceng_app.mk，注意*.mk的文件名不能乱取，只能是app名字，且为小写；
@@ -3179,7 +3286,6 @@ System configuration --->
 原：(board/stmicroelectronics/stm32mp157-dk/overlay/)) Root filesystem overlay directories
 新：(board/stmicroelectronics/stm32mp157-myir/overlay/)) Root filesystem overlay directories
 注:配置中出现的新目录/文件，后面统一再创建。
-
 ```
 
 设置制作SD卡启动的脚本配置信息路径：
@@ -3239,10 +3345,8 @@ U-Boot configuration (Using an in-tree board defconfig file) --->
 () Additional configuration fragment files
 ```
 
-
 Host utilities --->
 一般保持默认，编译过程中遇到主机缺什么，再来勾选上。
-
 
 Legacy config options
 不用看。
