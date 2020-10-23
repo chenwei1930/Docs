@@ -18,7 +18,7 @@ Buildroot是Linux平台上一个构建嵌入式Linux系统的框架。
 ## 2.Buildroot配置选项
 
 以Buildroot 2019.02.4，imx6ull配置为例，对配置选项进行注释。
-执行make menuconfig进入一级配置菜单('一共10个')：
+执行**make menuconfig**进入一级配置菜单('一共10个')：
 
 ```
 Target options --->
@@ -36,7 +36,7 @@ Legacy config options --->
 
 ### 2.1 Target options(目标选项)
 ```
-=== 一级配置菜单：Target options ---> ===
+===一级配置菜单：Target options ---> ===
 
 Target options --->
 Target Architecture (ARM (little endian)) ---> //目标处理器的架构和大小端模式 [ARM (little endian)]
@@ -48,12 +48,14 @@ ARM instruction set (ARM) ---> //ARM的指令集设置 [ARM]
 ```
 
 ①：ABI是X86计算机上的，EABI是嵌入式平台上; EABI/EABIhf分别适用于armel和armhf两个不同的架构，armel和armh在对待浮点运算采取了不同的策略(有fpu的arm才能选择EABIhf)；
-②：ARM浮点体系结构(VFP)，VFPvX为历史各版本，比如浮点运算指定为VFP4(vector floating point4)指令或neon向量浮点指令；2.2 Build options(编译选项)
+②：ARM浮点体系结构(VFP)，VFPvX为历史各版本，比如浮点运算指定为VFP4(vector floating point4)指令或neon向量浮点指令；
 
-
-Build options --->
+### 2.2 Build options(编译选项)
 
 ```
+=== 一级配置菜单：Build options---> ===
+
+Build options --->
 Commands ---> //指定下载、解压命令参数选项
 (wget --passive-ftp -nd -t 3) Wget command //用于常规FTP/HTTP下载压缩包 [被动传输模式;不创建目录;超时重试次数为3]
 (svn --non-interactive) Subversion (svn) command //通过SSH下载压缩包 [禁用所有交互式提示]
@@ -173,7 +175,7 @@ Init system (BusyBox) ---> //初始化系统方案 [BusyBox] ①
  ( ) Dynamic using devtmpfs + mdev     
  (X) Dynamic using devtmpfs + eudev    
 
-(system/device_table.txt) Path to the permission tables //权限表路径
+(system/device_table.txt) Path to the permission tables //权限表路径 ★
 system/device_table.txt                
 
 
@@ -484,13 +486,15 @@ uImage:是U-Boot专用的镜像文件，使用mkimage工具在zImage之前加上
 ==== 一级配置菜单：Target packages ===
 
 Target packages --->
-[*] BusyBox //使能编译BusyBox
+[*] BusyBox //使能编译BusyBox ★
 (package/busybox/busybox.config) BusyBox configuration file to use? //设置BusyBox配置文件路径
 () Additional BusyBox configuration fragment files //其他BusyBox配置片段文件
 -*- Show packages that are also provided by busybox //列出部分busybox也提供的包
 [ ] Enable SELinux support //SELinux支持(安全增强型Security-Enhanced Linux)
 [ ] Individual binaries //每个应用程序作为单独二进制文件(为SELinux提供支持)
 [ ] Install the watchdog daemon startup script //在启动脚本安装看门狗守护程序
+[*] Rockchip BSP packages  --->          ★ 
+
 Audio and video applications ---> //音频和视频应用
 Compressors and decompressors ---> //压缩和解压
 Debugging, profiling and benchmark ---> //调试、分析和基准测试
@@ -511,11 +515,11 @@ Security ---> //安全
 Shell and utilities ---> //Shell和程序
 System tools ---> //系统工具
 Text editors and viewers ---> //文版编辑和浏览
-
+Libretro cores and retroarch --->
 ```
 接下来对每个二级目录的子目录注释。
 
-#### 2.6.1 Audio and video applications
+#### 2.6.1 Audio and video applications（音频和视频应用程序）
 
 ```
 ====Target packages====
@@ -572,7 +576,7 @@ a glibc toolchain w/ threads and wchar *
 [ ] ympd //MPD网页客户端
 ```
 
-#### 2.6.2 Compressors and decompressors
+#### 2.6.2 Compressors and decompressors（解压缩）
 
 ```
 ====Target packages====
@@ -649,9 +653,7 @@ Compressors and decompressors --->
 [ ] whetstone //测试双精度浮点数操作的速度和效率
 ```
 
-
-
-#### 2.6.4 Development tools
+#### 2.6.4 Development tool（开发工具）
 
 ```
 ====Target packages====
@@ -684,7 +686,7 @@ Compressors and decompressors --->
 [ ] tree //递归显示目录列表的命令
 ```
 
-#### 2.6.5 Filesystem and flash utilities
+#### 2.6.5 Filesystem and flash utilities（文件系统和闪存实用程序）
 
 ```
 ====Target packages====
@@ -732,7 +734,7 @@ Compressors and decompressors --->
 [ ] xfsprogs //XFS文件系统工具和库
 ```
 
-#### 2.6.6 Fonts, cursors, icons, sounds and themes
+#### 2.6.6 Fonts, cursors, icons, sounds and themes（字体、光标、图标、声音和主题）
 
 ```
 ====Target packages====
@@ -774,7 +776,7 @@ gcc >= 4.8, NPTL, dynamic library *** //一款动作角色扮演游戏(ARPG)引�
 [ ] stella //一款多平台Atari 2600 VCS仿真器
 ```
 
-#### 2.6.8 Graphic libraries and applications (graphic/text)
+#### 2.6.8 Graphic libraries and applications (graphic/text)（图形库和应用程序（图形/文本））
 
 ```
 ====Target packages====
@@ -1021,7 +1023,7 @@ Firmware ---> //固件
 [ ] xorriso //可创建、加载、处理和写入具有Rock Ridge扩展名的ISO 9660系统映像
 [ ] xr819-xradio //SDIO WiFi芯片XR819的无线驱动程序
 ```
-#### 2.6.10 Interpreter languages and scripting
+#### 2.6.10 Interpreter languages and scripting（解释器语言和脚本）
 
 ```
 ====Target packages====
@@ -2057,7 +2059,7 @@ Text and terminal handling ---> //文字和终端处理  ★
 [ ] msmtp //SMTP客户端
 [ ] mutt //一个基于文本的复杂邮件用户代理Mail User Agent(MUA)
 ```
-#### 2.6.13 Miscellaneous
+#### 2.6.13 Miscellaneous （其他）
 
 ```
 ====Target packages====
@@ -3420,3 +3422,4 @@ sudo dd if=output/images/sdcard.img of=/dev/sdb
 这样生成的sdcard.img文件大小不会变太大，进入系统后，执行resize2fs /dev/mmcblk0p4(rootfs在SD卡第4分区)，即可看到系统空间变为了4G。
 再将resize2fs /dev/mmcblk0p4命令添加到启动脚本里，通过一定的判断，在首次进入系统时执行扩容即可。
 另外，如果提示没有resize2fs命令，在Target packages --->Filesystem and flash utilities --->[*] e2fsprogs --->[*] resize2fs勾选上即可。
+
