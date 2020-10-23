@@ -364,11 +364,17 @@ Part    Start LBA       End LBA         Name
         guid:   1e690000-0000-4322-8000-472d00002c71
 ```
 
+### 1.2.8 烧录工具读取update固件的分区表
 
+1 烧录update固件。
 
+![image-20201022105912765](RK_Linux_Compile.assets/image-20201022105912765.png)
 
+2 点击设备分区表，读取分区信息。
 
-## 1.2.8 uboot自动遍历外部存储设备
+![image-20201022111133530](RK_Linux_Compile.assets/image-20201022111133530.png)
+
+### 1.2.9 uboot自动遍历外部存储设备
 
 DISTRO格式
 打包格式：这是目前开源Linux的一种通用固件打包格式，将ramdisk、dtb、kernel打包成一个image，这个
