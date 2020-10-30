@@ -316,7 +316,19 @@ Gamma矫正是进行图像的存储显示进行标准化的一个处理过程，
 
 ![image-20201009165820920](camera_debug.assets/image-20201009165820920.png)
 
+鱼眼纠正
 
+
+
+鱼眼镜头拍摄的照片的校正。
+
+![img](camera_debug.assets/7.jpg)
+
+
+
+
+
+![img](camera_debug.assets/7_result.jpg)
 
 #### BLC
 
@@ -621,7 +633,7 @@ RK2206>I2cDev_ReadData ret1[sensor_0]:Info: GC2145 pid:0x0!
 
 ![xlck](camera_debug/xlck.png)
 
-##
+#
 
 ## 6 参数说明
 
