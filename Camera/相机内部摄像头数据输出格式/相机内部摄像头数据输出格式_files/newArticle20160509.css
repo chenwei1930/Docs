@@ -1,0 +1,710 @@
+﻿body{font-family: Arial,Helvetica,sans-serif; font-size: 12px; background-color: #fff;  padding: 0; margin: 0;}
+li{padding: 0; margin: 0;}
+.lf360{float: left;}
+.rt360{float: right;}
+.both{clear: both;}
+.both360doc{clear: both;}
+.clear360doc{clear: both;}
+a:link, a:visited{color: #3d6ba7; text-decoration: none;}
+a:hover{color: #3d6ba7; }
+.plbox{width: 670px; height: 175px; background-color: #fafafa;}
+.plmain{padding: 15px 20px;}
+.deluwx{color: #626262; height: auto; text-align: left; font-size: 14px;}
+.deluwx span{font-weight: 700;}
+.wenzhang_pl_box{width: 655px; text-align: left; margin: 5px 0 20px 0; clear: both;}
+.wenzhang_pl_right{float: left; text-align: left; width: 588px;}
+#artContent .wenzhang_pl_right {float:none;}
+#artContent .pl_con { margin:5px  0 0;}
+#artContent img{max-width:100%;}
+.timewenzi{color: #848484; padding-left: 7px;}
+.pl_con{line-height: 25px; margin: 5px 0 0 8px; word-wrap: break-word; padding-top: 7px; padding-bottom: 7px; font-size: 14px; width: 580px; clear: both;}
+.revlace{color: #2d7ead; padding-top: 3px; vertical-align: top; padding-left: 8px; height: 20px;}
+.iehight{height: 7px;}
+.plskuai{height: 26px; background-color: #fafafa; line-height: 26px; padding-left: 8px;}
+.yeschu{color: #2c9900; font-weight: 700;}
+.nochu{color: #cd4700; font-weight: 700;}
+.pl_consmall{line-height: 25px; margin: 5px 0 0 8px; word-wrap: break-word; padding-top: 7px; padding-bottom: 7px; font-size: 14px; clear: both;}
+.pingrig{padding-right: 15px;} 
+.pltit{height: 36px;}
+.sharelink A:link, .sharelink A:visited{COLOR: #6a6a6a; text-decoration: none;}
+.sharelink A:hover{COLOR: #3b6ba9; text-decoration: none;}
+.fenxiang{position: absolute; border: 1px solid #cbcbcb; text-align: left; background-color: #fff; margin-top: 9px; margin-left: -40px; font-size: 12px; height: 150px; width: 108px;}
+.fenxiang li{padding-left: 12px; height: 29px; border-bottom: 1px solid #f2f2f2;white-space: nowrap;word-break: keep-all;}
+.biaoqin{width: 248px; height: 180px; border: #d6d6d6 1px solid; background-color: #fff; margin-top: 30px; margin-left: 0; *margin-left: -23px !important;}
+.biaoqinpic{clear: both; padding-top: 10px; padding-left: 10px;}
+.biaoqinpic li{height: 32px; background-image: none;} .biaoqinpic img{padding: 2px; margin: 0;}
+.guanbiwz2{padding-top: 9px; padding-right: 14px; *padding-top: 11px !important;}
+.guanbiwz3{font-size: 12px; font-weight: 700; color: #4d4d4d; float: left;}
+.faxin{overflow-y: auto; height: 161px; width: 328px; color: #000; font-size: 12px; line-height: 16px; background-color: #fff; border: 1px solid #c9c9c9;}
+.guanbiwz111{font-size: 12px; font-weight: 700; color: #4d4d4d; float: left; padding-top: 9px; padding-left: 16px; *padding-top: 11px !important;}
+.highlight{background-color: #fff8a5;cursor:pointer;}
+.highlight_tr{background-color: #fff8a5;}
+/*.sticky{background-color: #e3edf8; color: #466ea6; text-decoration: underline;}*/
+.sticky {background-color: #fff8a5;cursor: pointer;}
+.sticky_tr {background-color: #fff8a5;}
+.sticky_img {position: absolute;margin-top: -4px; 
+/*top: -10px;
+right: -10px;*/
+}
+.closedivdragenable{background-image: url(http://pubimage.360doc.com/lay_bg.gif); text-align: left; TEXT-INDENT: 10px; width: 312px; height: 16px; PADDING-TOP: 10px;}
+.stickyitem{width: 310px; height: 20px;}
+.stickytext{width: 310px;}
+.box_1{border: #a1c0df 1px solid; background-color: #e7f3fb;}
+.box_6{border: #a9a9a9 1px solid; background-color: #fff;}
+.wenzhang_pl_left{width: 57px; text-align: left; height: 70px;}
+.login_box_font{text-align: left; color: olive; font-size: 14px; font-weight: 700;}
+.spanCgCgLink{color: #1848b5;}
+.spanCgCgLinkOnMouseOver{color: #1848b5; cursor: pointer; text-decoration: underline;}
+.spanCgCgLinkOnMouseOut{color: #1848b5; text-decoration: none;}
+#divemail TD{line-height: 26px; font-size: 14px;}
+.mzbodl{font-weight: 700;}
+.revlace a:link, .revlace a:visited{color: #3d6ba7; text-decoration: none;}
+.revlace a:hover{color: #3d6ba7; text-decoration: underline;}
+.wenzhang_pl_boxsmall{text-align: left; margin: 26px 0 15px; width: 580px; clear: both; padding-left: 16px;}
+.wenzhang_pl_rightsmall{text-align: left; PADDING-LEFT: 8px; width: 512px; float: left;}
+.revacediv{text-align: left; width: 597px; CLEAR: both;}
+.revacextdiv{width: 597px; height: 2px;}
+#fullbg{Z-INDEX: 1001; position: absolute; FILTER: Alpha(Opacity=30); background-COLOR: gray; DISPLAY: none; TOP: 0; LEFT: 0; -moz-opacity: .4; opacity: .4;}
+#dialog{Z-INDEX: 10000; position: absolute; width: 500px; DISPLAY: none; height: 310px;}
+.loginnewdiv{PADDING-LEFT: 16px; width: 351px; COLOR: #6d6d6d;}
+.guanbi{width: 48px; float: right;}
+.guanbidiv{height: 38px; PADDING-TOP: 9px;}
+.backgroundDivIe{Z-INDEX: 9; position: absolute; FILTER: Alpha(Opacity=0,Style=0); background-COLOR: #000; opacity: .3;}
+.paixucssright{PADDING-LEFT: 4px; float: left; PADDING-TOP: 8px;}
+.bjyellow2{LINE-height: 26px; background-COLOR: #fef9d1; PADDING-LEFT: 6px; CURSOR: pointer;}
+.bjwhite2{LINE-height: 26px; background-COLOR: #fffff7; PADDING-LEFT: 6px; CURSOR: pointer;}
+.logininputanew{border: #eee 1px solid; PADDING-BOTTOM: 8px; LINE-height: 24px; PADDING-LEFT: 5px; width: 198px; PADDING-RIGHT: 5px; height: 18px; COLOR: #b2b2b2; FONT-SIZE: 12px; PADDING-TOP: 8px;}
+.zcbutton{position: absolute; margin-left: 30px; margin-top: -10px;}
+.addtionone{position: absolute; color: #cc4f4f; margin-left: 50px; margin-top: -62px; *margin-left: -28px !important; *margin-top: -37px !important; font-size: 22px; font-weight: 700; display: none;}
+#goTop2{bottom: 30px; position: fixed; width: 131px; z-index: 2; text-align: left; _position: absolute;}
+#goTop2 a{display: block;width: 50px;height: 49px;background: url(http://pubimage.360doc.com/NewArticle/wz.gif?) no-repeat;}
+#goTop a{height: 50px;}
+#goTop a:hover{background-position: -50px 0;}
+#goTop1 a{background-position: -100px 0;}
+#goTop2 .goserviceqq{background-position: -150px 0;}
+#goTop2 .goserviceqq:hover{background-position:-200px 0;}
+.huifuxt{width: 584px; height: 148px; background: url(http://pubimage.360doc.com/wz/wz17.gif) repeat-x; background-position: top; background-color: #fafafa; margin-left: 8px;}
+.checkbox{vertical-align: middle; margin-top: 0;}
+.dlinputwz{padding-top: 9px; padding-left: 10px; width: 60px;}
+.hezuodiv{padding-left: 78px; padding-top: 14px;}
+.zddenglu{padding-top: 9px; padding-left: 13px;}
+.huifubt{width: 81px; height: 28px; float: right;} .huifubt a:link, .huifubt a:visited{display: block; width: 81px; height: 28px; background: url(http://pubimage.360doc.com/wz/wz18.gif) no-repeat;} .huifubt a:hover{background-image: url(http://pubimage.360doc.com/wz/wz18a.gif);}
+.huifubt2{width: 81px; height: 28px; float: right;} .huifubt2 a:link, .huifubt2 a:visited{display: block; width: 81px; height: 28px; background: url(http://pubimage.360doc.com/wz/wz24.gif) no-repeat;} .huifubt2 a:hover{background-image: url(http://pubimage.360doc.com/wz/wz24a.gif);}
+.denglubt{width: 104px; height: 36px;} .denglubt a:link, .denglubt a:visited{display: block; width: 104px; height: 36px; background: url(http://pubimage.360doc.com/wz/wz21.gif) no-repeat;} .denglubt a:hover{background-image: url(http://pubimage.360doc.com/wz/wz21a.gif);}
+.txtbox{width: 335px; height: 100px; border: 1px solid #d4d4d4; overflow: auto; line-height: 20px; font-size: 12px; padding: 2px 5px; color: grey;}
+.quding{background: url(http://pubimage.360doc.com/wz/button1.gif) no-repeat; width: 80px; height: 30px; line-height: 30px; text-align: center; color: #fff; cursor: pointer;}
+.xuxiao{background: url(http://pubimage.360doc.com/wz/button2.gif) no-repeat; width: 80px; height: 30px; line-height: 30px; text-align: center; color: #555; cursor: pointer;}
+.txtinput{border: 1px solid #d4d4d4; height: 18px; line-height: 18px; color: #747474; padding: 5px 10px; width: 297px; font-size: 14px;}
+.sinputwz{padding-top: 6px; color: #b1b1b1; font-size: 12px; height: 37px;}
+.pizhu{background: url(http://pubimage.360doc.com/wz/biaozhubg1.png) no-repeat; width: 116px; height: 112px; text-align: center; color: #1c1c1c; padding: 5px;z-index:3;}
+.bjbiaoji1{height: 30px; margin-top: 1px; line-height: 30px; cursor: pointer;}
+.bjbiaoji2{height: 30px; line-height: 30px; cursor: pointer;}
+.pizhu2{background: url(http://pubimage.360doc.com/wz/biaozhubg2.png) no-repeat; width: 116px; height: 61px; text-align: center; color: #1c1c1c; padding: 4px;z-index:3;}
+.pop_content3{background: url(http://pubimage.360doc.com/wz/wz23.gif) repeat-x; text-align: left; width: 304px; border: 4px solid #8e8e8e; -webkit-border-radius: 4px; -moz-border-radius: 4px; border-radius: 4px; background-color: #fff; Z-INDEX: 200; position: absolute;}
+.puzhusmll{height: 20px; padding-top: 8px;}
+.pizhucool{padding: 0 9px; color: #414141;z-index:3;}
+.pizhudt{padding-left: 4px; border-top: 1px solid #efefef; padding-top: 12px;z-index:3;}
+.pizhbot{height: 34px; background-color: #f8f8f8; padding-top: 6px;}
+.tjpz{background: url(http://pubimage.360doc.com/wz/wz23.gif) repeat-x; height: 26px; padding-top: 7px; border-top: 1px solid #d8d8d8;}
+.pztxtbox{width: 284px; padding: 5px 10px; overflow: auto; border: none; height: 102px; line-height: 18px; color: #a2a2a2; font-size: 12px;}
+.tjpzsl{width: 67px; float: right;}
+.qudinga{background: url(http://pubimage.360doc.com/wz/button1a.gif) no-repeat; width: 80px; height: 30px; line-height: 30px; text-align: center; color: #fff; cursor: pointer;}
+.xuxiaoa{background: url(http://pubimage.360doc.com/wz/button2a.gif) no-repeat; width: 80px; height: 30px; line-height: 30px; text-align: center; color: #555; cursor: pointer;}
+.pop_content2{text-align: left; width: 620px; height: 378px; background-color: #f8f8f8; border: 1px solid #d8d8d8;}
+.tcengtop{height: 60px; padding-top: 17px; padding-left: 20px; padding-right: 15px;}
+.tcengmid{padding-top: 26px; height: 26px; text-align: center;}
+.pizhu3{background: url(http://pubimage.360doc.com/wz/biaozhubg3.png) no-repeat; width: 114px; height: 33px; text-align: center; color: #1c1c1c; padding: 5px;z-index:3;}
+.pizhu0{background: url(http://pubimage.360doc.com/wz/biaozhubg0.png) no-repeat; width: 114px; height:122px; text-align: center; color: #1c1c1c; padding: 5px;z-index:3;}
+.weixinbox{width: 459px; height: 347px; background-color: #fff; -webkit-border-radius: 4px; -moz-border-radius: 4px; border-radius: 4px;}
+.chacha{padding-top: 15px; padding-right: 19px; height: 27px; text-align: right;}
+.weixinwz{font-size: 14px; font-weight: 700; color: #8c8c8c; text-align: center;}
+.chaa a:link, .chaa a:visited{display: block; width: 14px; height: 14px; background: url(http://pubimage.360doc.com/wz/cha2.gif) no-repeat;}
+.chaa a:hover{background: url(http://pubimage.360doc.com/wz/cha1a.gif) no-repeat;}
+.tuijianpy{width: 370px; height: 354px; background-color: #fff; -webkit-border-radius: 4px; -moz-border-radius: 4px; border-radius: 4px; text-align: left; border: 4px solid #8e8e8e;}
+.cengbj{height: 33px; background: url(http://pubimage.360doc.com/cengbj.gif) repeat-x;}
+.cengleft{font-size: 14px; color: #4d4d4d; padding-left: 16px; line-height: 32px; font-weight: 700; float: left;}
+.chas a:link, .chas a:visited{display: block; width: 10px; height: 9px; background: url(http://pubimage.360doc.com/chas.gif) no-repeat;}
+.chas a:hover{display: block; width: 10px; height: 9px; background-image: url(http://pubimage.360doc.com/chasa.gif); background-repeat: no-repeat;}
+.loginnew{text-align: left; PADDING-LEFT: 57px; width: 280px; float: left; padding-top: 8px;}
+.newwddivtop{text-align: left; padding-left: 4px; height: 55px; color: #525252; font-size: 14px; padding-top: 13px;}
+.newwdleft{width: 459px; float: left; padding-top: 13px;}
+.newwdfont{padding-left: 9px; font-weight: 700;}
+.newwdwz2{color: #fc5b00; font-size: 12px;}
+.newwdwz1{color: #000; font-size: 12px; padding-top: 5px;}
+.sharelink{line-height: 29px;}
+.shangtishi_pt{width: 300px; height: 48px; margin-top: 30px; line-height: 24px; text-align: center;}
+.erjibt_li{background: url(http://pubimage.360doc.com/wz/xianbg.gif) no-repeat; width: 86px; height: 28px; color: #fff; cursor: pointer;}
+.erjibta_li{background: url(http://pubimage.360doc.com/wz/xianbga.gif) no-repeat; width: 86px; height: 28px; color: #fff; cursor: pointer;}
+.erjibtgray_li, .erjibtgraya_li{cursor: pointer;}
+.tishi-box1{color: #494949; padding-left: 30px; font-size: 14px;}
+.tishi-wz1{clear: both; color: #2a2a2a;}
+.btwz{text-align: center; line-height: 28px; font-size: 12px; color: #666;}
+.modlist2_re{text-align: left; padding-top: 17px; font-size: 14px;}
+.paixu_big{width: 298px; height: 30px; text-align: left; vertical-align: top; color: #3B6EA7; overflow: hidden;}
+.paixu_li{float: left; width: 14px; height: 14px; background: #f58220; font-size: 12px; text-align: center; color: #FFF;}
+.paixu_li2{float: left; width: 14px; height: 14px; background: #d3d3d3; font-size: 12px; text-align: center; color: #FFF;}
+.paixu_info{float: left; width: 268px; height: 14px; text-align: left; margin-left: 5px;}
+.clo1{color: #949494;}
+.clo2{color: #262626;}
+.rwmswz{font-size: 12px; color: #979797;}
+.rwmswzt{color: #191919; font-weight: 700;}
+.rwmswzms{color: #373737;}
+.remsnbox{line-height: 24px; font-size: 14px; text-align: left;}
+.r_wx{position: absolute; z-index: 2001; margin-left: -217px; margin-top: -134px;}
+.r_hdimg{padding-top: 5px; clear: both; text-align: left; position: relative;}
+.r_hdxx{position: absolute; right: 1px; top: 6px;}
+.jb_x{padding-top: 11px; padding-right: 20px;}
+.jb_wz{font-size: 14px; line-height: 24px; height: 60px;}
+.jb_eml{border: #d4d4d4 1px solid; padding: 8px 5px; font-size: 12px; width: 335px; color: grey;}
+.jb_w2{color: #b1b1b1; height: 32px; padding-top: 5px;}
+.jb_xing{color: #de2c2c; font-size: 22px;}
+.jb_cg{padding-top: 100px; padding-left: 137px; font-size: 14px; font-weight: 700;}
+.jb_w3{padding-left: 77px; color: #787878; line-height: 24px; padding-top: 11px;}
+.dsftb{background-image: url(http://pubimage.360doc.com/index/sf28.png); _background-image: url(http://pubimage.360doc.com/index/sf28.gif); background-repeat: no-repeat; width: 28px; height: 28px; display: block; float: left; margin: 0 5px;}
+.sf1{background-position: 0 0;}
+.sf2{background-position: 0 -28px;}
+.sf3{background-position: 0 -56px;}
+.dsfwz{line-height: 28px; float: left; display: block; color: #929292;}
+.doc360article_content{width: 1012px; height: auto; margin: 0 auto; padding: 0;}
+#sameArtOuter{right: -90px !important; left: auto !important; _top: 35px;}
+body{margin: 0; padding: 0;}
+.f_left{float: left; _display: inline;}
+.f_right{float: right; _display: inline;}
+.doc360article_content a, .user_data_name a:hover{text-decoration: none; outline: 0;}
+.doc360article_content img{border: none;}
+.doc360article_content a:hover{color: #0f659c !important;}
+#bdshare *, .a_right *, .bottom_controler *, .prev_next *, .youlike *{list-style: outside none; margin: 0; padding: 0;}
+#bdshare, #bdshare *, #bgchange, .a_right *, .article_container, .article_data, .bottom_article *, .bottom_controler *, .prev_next *, .youlike *{font-family: "microsoft yahei",arial,simsun;}
+.clearboth{clear: both; width: 100%; height: 0; font-size: 0; overflow: hidden; margin: 0; padding: 0;}
+.a_left{width: 656px; height: auto; float: left; position: relative; padding-bottom: 50px;z-index:2;}
+#bgchange{padding: 13px 13px 0; width: 656px; height: auto;}
+.fontsize_bgcolor_controler{height: 17px;}
+.a_fontsize{width: 17px; height: 17px; float: right; position: relative;}
+.a_bgcolor{width: 17px; height: 17px; float: right; position: relative; margin-left: 10px;}
+.fschange{width: 146px; height: 35px; z-index: 2; border: 1px solid #cbcbcb; background: #fff; position: absolute; right: 0; top: 18px; text-align: center; display: none;}
+.fschange label{font-size: 13px; display: inline-block; margin-top: 7px;} .fschange label input{height: 14px; vertical-align: top;}
+@media screen and (-webkit-min-device-pixel-ratio:0){.fschange label input{vertical-align: sub;}}
+.a_colorlist{z-index: 2; width: 146px; height: 35px; border: 1px solid #cbcbcb; background: #fff; position: absolute; right: 0; top: 18px; text-align: center; display: none;} .a_colorlist span{display: inline-block; width: 13px; height: 13px; overflow: hidden; border: solid 1px #cbcbcb; margin: 10px 1px 0; cursor: pointer; font-size: 12px;} .a_colorlist img{vertical-align: top; visibility: hidden;} .a_colorlist .cur img{visibility: visible !important;}
+.a_color1{background: #e7f4fd !important;}
+.a_color1 .color_in_app{background-color: #e7f4fd !important;}
+.a_color2{background: #f5f1e6 !important;}
+.a_color2 .color_in_app{background-color: #f5f1e6 !important;}
+.a_color3{background: #eae8f6 !important;}
+.a_color3 .color_in_app{background-color: #eae8f6 !important;}
+.a_color4{background: #fef5f0 !important;}
+.a_color4 .color_in_app{background-color: #fef5f0 !important;}
+.a_color5{background: #ebf4ef !important;}
+.a_color5 .color_in_app{background-color: #ebf4ef !important;}
+.a_color6{background: #FFF !important;}
+div.a_color1body{background: #AFC7D7;}
+div.a_color2body{background: #D0C7AF;}
+div.a_color3body{background: #C4C0DE;}
+div.a_color4body{background: #DAC9BF;}
+div.a_color5body{background: #BDD2C6;}
+div.a_color6body{}
+.doc360article_content #titiletext{font-size: 30px; font-family: simhei; color: #000; line-height: 40px; margin: 12px 0 25px 0; overflow: hidden; text-align: left; word-break: break-all;}
+.article_data{height: 35px; border-bottom: solid 1px #efefef;position:relative; z-index:11;}
+.article_data_left{position: relative; float: left; text-align: left; font-size: 13px; color: #707070; height: 25px; margin-top: 10px;z-index:2;}
+.a_username{vertical-align: bottom; _vertical-align: middle;} .a_username a{color: #547b3c;}
+.a_from{vertical-align: bottom; _vertical-align: middle;} .a_from a{color: #2e2e2e;}
+.article_data_left .a_from a{color: #707070;}
+.article_data_right{height: 35px; position:absolute;right: 0;top: 0;}
+.article_data_right .zcommond>a{font-size: 13px; line-height: 35px; color: #707070; display: block; height: 35px; overflow: hidden; text-align: right;} .article_data_right .p1{float: right; width: 55px; background: url(http://pubimage.360doc.com/NewArticle/btnico_wx.png) no-repeat left center; _background: url(http://pubimage.360doc.com/NewArticle/btnico_wx.gif) no-repeat left center;}
+.article_data_right .p2{float: right;background: url(http://pubimage.360doc.com/NewArticle/btnico_cang.png) no-repeat left center; _background: url(http://pubimage.360doc.com/NewArticle/btnico_cang.gif) no-repeat left center; width: 124px;}
+/*.article_data_right .p2 此条后期上新版转藏按钮后废弃 之后可删除*/
+.article_data_right .p3{float: right; background: url(http://pubimage.360doc.com/NewArticle/btnico_gai.png) no-repeat left center; width: 45px;}
+.article_container{word-break: break-word; padding: 10px 0 0; height: auto;  font-size: 16px; text-align: left; color: #2f2f2f; line-height: 1.5; float: left;position:relative;}
+.bottombtn{height: 39px; text-align: left; position:relative;z-index:3;} .bottombtn .btn_collect,.bottombtn .btn_good{float:left;height: 36px; line-height: 36px; display: inline-block;font-size: 14px; color: #000 !important; font-family: "Microsoft YaHei"; border-radius: 2px;border-radius: 0px\9;  background-color: #fff; padding: 0 14px 0 34px; background-image: url(http://pubimage.360doc.com/NewArticle/btn_icon1.gif); background-repeat: no-repeat; margin: 0 2px;} .bottombtn .btn_collect:hover,.bottombtn .btn_good:hover{background-color: #fd933a; color: #fff !important; text-decoration: none;}
+.btn_collect{background-position: 0 0;}
+.btn_good{position: relative; background-position: 0 -75px;} .btn_good #flowernumadd{position: absolute; right: 0; top: -20px; font-weight: 700; font-size: 22px; color: #cc4f4f;}
+.btn_sharewx{background-position: 0 -149px;}
+.btn_find{background-position: 0 -223px;}
+.btn_collect:hover{background-position: 0 -37px;}
+.btn_good:hover{background-position: 0 -111px;}
+.btn_sharewx:hover{background-position: 0 -185px;}
+.btn_find:hover{background-position: 0 -259px;}
+.flower_loading{background-image: url(http://pubimage.360doc.com/NewArticle/load_.gif) !important; background-position: 5px center !important;}
+.bottom_controler{height: 28px; border-bottom: solid 1px #efefef;}
+.bottom_cleft{width: 60%; height: auto; overflow: hidden; font-size: 13px; color: #707070; text-align: left; float: left; margin-top: 4px;}
+.bottom_cright{width: 40%; height: auto; overflow: hidden; font-size: 13px; color: #707070;}
+.bottom_cright{float: right; text-align: right;} .bottom_cright a{display: inline-block; height: 32px; line-height: 32px; color: #707070;}
+.prev_next{height: auto; line-height: 30px; color: #000;  font-size: 14px; font-weight: 700;width:100%;text-align:left;} .prev_next p{width: 98%; height: 26px;display:none;overflow: hidden; word-break: keep-all; text-overflow: ellipsis; white-space: nowrap;} .prev_next p a{color: #707070;} .prev_next .p1{ text-align: left;} .prev_next .p2{text-align:left;}
+.str_border{height: 24px; overflow: hidden; border-bottom: solid 1px #efefef; margin-top: 14px; text-indent: 6px; text-align: left;} .str_border strong{font-size: 16px; color: #000; float: left;}
+.youlike, .zcommond{width: 100%; height: auto; overflow: hidden;}
+.a_right .youlike{margin-left: 16px !important;}
+.a_left .youlike{margin-left: -6px !important;}
+.youlike li{float: left; width: 116px; height: auto; overflow: hidden; text-align: left; _display: inline;} .youlike li .youlikeimg{width: 114px; height: 86px; overflow: hidden; border: solid 1px #ddd;} .youlike li .youliketext{line-height: 17px; height: 38px; overflow: hidden;} .youlike li .youliketext a{font-size: 12px; color: #2e2e2e;} .youlike li .youliketext a:hover{color: #0f659c;}
+.bottom_article{width: 48%; height: auto; overflow: hidden;}
+.barticle_list{height: auto; overflow: hidden; margin-top: 10px;}
+.barticle_list li{text-align: left; width: 100%; height: 30px; line-height: 30px; overflow: hidden; word-break: keep-all; text-overflow: ellipsis; white-space: nowrap; background: url(http://pubimage.360doc.com/NewArticle/article_libg.jpg) no-repeat 7px center; text-indent: 24px;}
+.barticle_list li.j{background: url(http://pubimage.360doc.com/NewArticle/article_libg2.jpg) no-repeat 6px center;text-indent: 30px;}
+.barticle_list li a{color: #6c6c6c; font-size: 14px;}
+.titwx{text-align: left;}
+.a_more{line-height: 24px; color: #2e2e2e !important; height: 24px; padding-right: 16px; background: url(http://pubimage.360doc.com/NewArticle/a_more.gif) no-repeat right center; display: inline-block;}
+
+.a_right{float: right; width: 300px; height: auto; margin-top: 13px; position: relative;}
+/*add 20180522*/
+.user_photo_new{width: 70px;height: 70px;border-radius: 50%;-webkit-border-radius: 50%;overflow: hidden;margin: 22px 0 0 10px;}
+.user_photo_new img{width: 100%;height: 100%;}
+/**/
+.user_info{height: 116px; background: #fdfdfd;}
+
+.user_data{width: 208px; height: auto; overflow: hidden; text-align: left;}
+#userdegree{margin-top: 5px;}
+.user_data_name{height: 24px; overflow: hidden; margin-top: 18px;} .user_data_name img{float: left; margin-top: 3px !important; margin-left: 3px !important;} .user_data_name a{color: #080808 !important; display: inline-block; height: 24px; line-height: 24px; font-size: 16px; float: left;}
+.user_data_num{height: 28px; margin-top: 14px;font-size: 0;}
+
+.user_data_dh,.user_data_gz{display: inline-block;width: 59px;height: 26px;line-height: 26px;border: solid 1px #eaeaea;border-radius: 2px;font-size:12px;}
+.user_data_gz{text-indent:23px;color: #131313 !important;background: url(http://pubimage.360doc.com/NewArticle/gz1.gif) no-repeat 10px center #fff;}
+.user_data_gz2{text-align: center;background-image:none ;text-indent: 0;background-color: #eee;cursor: default;}
+.user_data_dh{margin-left:11px;text-indent:25px;color: #131313 !important;background: url(http://pubimage.360doc.com/NewArticle/talknew.gif) no-repeat 8px center #fff;}
+a.user_data_gz:hover,a.user_data_dh:hover{color: #131313 !important;background-color: #eee;}
+#user_star{height: 14px; margin-top: 10px; overflow: hidden;}
+.user_star img{float: left;}
+.his_her{width: 280px; height: auto; margin: 23px auto 0; overflow: hidden;}
+.his_her_type li{cursor: pointer; width: 140px; background-image: url(http://pubimage.360doc.com/NewArticle/user_TA.gif); height: 31px; font-size: 14px; color: #000; background-repeat: no-repeat; background-position: right bottom;}
+.his_her_type li.cur{background-position: left bottom;}
+.his_her_type li.curone{width: 100%; text-align: left !important;}
+.his_her_type li span.s1{font-size: 12px;color: #2d2d2d;}
+.his_her_div{width: 100%; height: 210px; position: relative; overflow: hidden;}
+.his_her_list{height: 100%; width: 561px; overflow: hidden; position: absolute; left: 0; top: 0;z-index:1;}
+.his_her_list li{float: left; width: 280px; height: auto; overflow: hidden;}
+.his_her_list li div{width: 100%; height: auto; overflow: hidden; background: url(http://pubimage.360doc.com/NewArticle/article_libg.jpg) no-repeat 6px center;}
+.his_her_list li div.j{background: url(http://pubimage.360doc.com/NewArticle/article_libg2.jpg) no-repeat 5px center;}
+.his_her_list li div span{display: block; float: left; margin-left: 20px; font-size: 14px; line-height: 30px; height: 30px; _display: inline-block;}
+.his_her_list li div.j span{margin-left: 28px;}
+.his_her_list li div a{display: block; float: left; width: 230px; height: 30px; line-height: 30px; text-decoration: none; text-align: left; font-size: 14px; color: #626262; word-break: keep-all; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;} 
+.his_her_list li a.more_ta{text-align: right; background: url(http://pubimage.360doc.com/NewArticle/a_more.gif) no-repeat right center; padding-right: 16px; float: right; color: #626262;}
+.a_right .youlike li{margin: 5px 10px 0 !important;}
+.bodycontent_marginleft{float: left; margin-left: 30px; _display: inline;}
+.bodycontent_marginleft2{float: left; margin-left: 30px; _display: inline;}
+.bodycontent_marginleft .shareList{margin-left: -30px; _margin-left: 0; _left: -30px;}
+.bodycontent_marginleft2 .shareList{margin-left: -30px; _margin-left: 0; _left: -30px;}
+.floatad{padding-left: 3px !important; padding-right: 2px !important; position: absolute; background-color: #9a9a9a; color: #fff; left: 0; bottom: 0; *+bottom:5px;} .floatad a:hover{color: #fff !important;}
+#adbaidu1{display: block; _margin-left: 10px; *+margin-left:10px;}
+#artContent {min-width:656px} #artContent pre{white-space: pre-wrap;word-wrap: break-word;}
+.biaoti3{font-family: simhei,Arial,Helvetica;font-size:26px;color:#5d9d23; font-weight:normal; }
+.ggwz{padding-left: 3px; padding-right:2px; position:absolute; margin-top:-15px; background-color:#9a9a9a; color:#fff;}
+.ggwz a:link {color: #fff; text-decoration: none}
+.ggwz a:visited {color: #fff; text-decoration: none}
+.ggwz a:hover {color: #fff !important; text-decoration:none;}
+
+.article_data_right .s1{ float:right; height:35px; line-height:35px;color:#707070; cursor:pointer;font-size:13px;}
+.article_data_right .s2,.bottombtn .s2{ width:25px; height:35px; cursor:pointer; overflow:hidden;}
+.article_data_right .s2 span,.bottombtn .s2 span{  width:0px; height:0px; overflow:hidden; line-height:0px; font-size:0px; border-color:#333 transparent transparent; display:block;border-style:solid dashed dashed dashed;border-width:5px; margin:16px 0 0 4px;}
+.article_data_right .s2 span{_margin:15px 0 0 0px;}
+.sharelist_new{ width:98px; height:116px; border:solid 1px #f2f2f2; position:absolute;bottom:-118px; z-index:2; background:#fff; display:none;}
+.article_data_right .sharelist_new{ left:53px;}
+.bottombtn .sharelist_new{ left:326px;}
+.sharelist_new a{ display:block; height:29px; line-height:29px;color:#707070; text-align:left; text-indent:30px; background-image:url(http://pubimage.360doc.com/NewArticle/NewArticleShareIcon.png); _background-image:url(http://pubimage.360doc.com/NewArticle/NewArticleShareIcon.gif); background-repeat:no-repeat;}
+.sharelist_new a:hover{ background-color:#f2f2f2;}
+.sharelist_new .slbg1{ background-position:6px 5px}
+.sharelist_new .slbg2{background-position:6px -26px}
+.sharelist_new .slbg3{background-position:6px -56px}
+.sharelist_new .slbg4{background-position:6px -86px}
+.sharelist_new .slbg5{background-position:6px -112px}
+.bottombtn .span1{ display:inline-block; height:36px; line-height:36px;font-size:14px; cursor:pointer;margin-left:10px;}
+.bottombtn .sharewx{ display:inline-block; height:36px; width:55%; text-align:right;width:55px; background: url(http://pubimage.360doc.com/NewArticle/btnico_wx.png) no-repeat left center; _background: url(http://pubimage.360doc.com/NewArticle/btnico_wx.gif) no-repeat left center; line-height:36px; color:#000; font-size:14px;}
+.shibaiwz{ margin:100px auto; width:100%; text-align:center; font-size:14px; font-weight:bold; }
+#artContent p,#artContent div,#artContent span{font-family: inherit;}
+#preBody pre{white-space: pre-wrap;word-wrap: break-word;}
+ /*study*/
+.top_cirdiv {background: #f2f2f2;}
+.top_cirdiv a.circlea {border: none;width: 272px;padding: 15px 0 15px 28px;}
+.top_cirdiv .ns_recommendlist_rightinfo {width: 228px;}
+.top_cirdiv .ns_recommendtext {width: 210px;}
+a.circlea {display: block;width: 236px;height: auto;overflow: hidden;padding: 10px 0 10px 10px;border-bottom: solid 1px #e3e6ed;text-align: left;}
+.circlea:hover {background: #f2f2f2;}
+.circlea img {width: 31px; height: 31px;}
+.ns_recommendlist_rightinfo {width: 192px;height: 32px;overflow: hidden;float: right;}
+.ns_recommendlist_rightinfo .p1 {font-size: 12px;height: 15px;line-height: 15px;color: #000;position: relative;font-weight: bold;}
+.ns_recommendlist_rightinfo .p1 span {position: absolute;width: 42px;height: 15px;line-height: 15px;background: #51af56;color: #fff;
+text-align: center;margin-left: 10px;font-size: 12px;font-weight: normal;border-radius: 2px;overflow: hidden;}
+.ns_recommendlist_rightinfo .p2 p {height: 20px;float: left;line-height: 20px;color: #8f8f8f;overflow: hidden;word-break: keep-all;}
+p.ns_recommendtheme { margin-left: 12px;}
+.ns_recommendtext {color: #5e5e5e;line-height: 20px;margin-top: 8px;width: 229px;}
+.wordnobreak_ {overflow: hidden;word-break: keep-all;text-overflow: ellipsis;white-space: nowrap;}
+.his_her_list li div a i {font-style: normal;color: #b0b0b0;}
+/**/
+.doc360outlinkpop{width: 256px;height: auto;overflow:hidden;background: #FDF7EA;z-index: 3;position: absolute;padding: 18px 16px;border: solid 1px #E4E4E4;border-radius: 2px;-webkit-border-radius: 2px;text-align: left;display: none;left: 0;top: 0;}
+.doc360outlinkpop p{margin: 0;line-height: 22px;color: #000;word-break: break-all;}
+.doc360outlinkpop a.closer{position: absolute;right: 4px;top: 4px;width: 20px;height: 20px;text-align: center;line-height: 20px;font-size: 18px;color: #000;}
+.doc360outlinkpop a:hover{text-decoration: none;}
+/*左侧分享*/
+.docsharelist{width: 33px;height:auto;overflow: hidden;position: fixed;margin-left: -66px;top: 110px;}
+.docsharelist p{margin: 0;padding: 0;}
+.docsharelist .dp1{text-align: center;color: #666;height: 25px;}
+.docsharelist .dp2{height: 124px;overflow: hidden;}
+.docsharelist .dp2 a{display:block;width: 33px;height: 33px;margin-bottom: 12px;background: url(http://pubimage.360doc.com/NewArticle/share.jpg) no-repeat;overflow: hidden;border-radius: 5px;-webkit-border-radius: 5px;}
+.docsharelist .dp2 a.a1{background-position: 0 0;}
+.docsharelist .dp2 a.a2{background-position: 0 -44px;}
+.docsharelist .dp2 a.a3{background-position: 0 -90px;}
+.docsharelist .dp2 a.a4{background-position: 0 -133px;}
+.docsharelist .dp2 a.a5{background-position: 0 -180px;}
+.docsharelist .dp2 a.a6{background-position: 0 -230px;}
+.docsharelist .dp3{text-align: right;height: 20px;line-height: 20px;margin-top: 10px;cursor: pointer;background: url(http://pubimage.360doc.com/NewArticle/down.jpg) no-repeat 0 5px;}
+.docsharelist .dp3 a{color: #b0b0b0;}
+.docsharelist .dp3 a:hover{color: #666 !important;}
+/*原创分享*/
+.share_original{background: #fff;width: 550px;height: 428px;overflow: hidden;border-radius: 4px;-webkit-border-radius: 4px;text-align: left;}
+.share_original .so_closer{font-size: 26px;width: 30px;height: 30px;line-height: 30px;text-align: center;float: right;text-decoration: none;margin: 5px 5px 0 0;color: #000;}
+.share_original .so_closer:hover{color: #6fa849;}
+.share_original .p1{color: #0a0a0a;font-size: 18px;height: 50px;line-height: 50px;width: 276px;text-align: right;margin: 12px auto 0;background: url(http://pubimage.360doc.com/Authentication/duihao_bp.jpg) no-repeat 0 center;}
+.share_original .p2{color: #818181;font-size: 14px;text-align: center;height: 20px;line-height: 20px;margin: 34px 0 0 0;}
+.share_original .p3{width: 160px;height: 160px;overflow: hidden;margin: 6px auto 0;}
+.share_original .p4{width: 258px;height: 26px;overflow: hidden;margin: 30px 0 0 118px;}
+.share_original .p4 p{float: left;color: #999;height: 26px;line-height: 26px;margin: 0;}
+.share_original .p4 a{display: block;width: 21px;height: 21px;background: url(http://pubimage.360doc.com/NewArticle/NewArticleShareIcon.png) no-repeat;_background: url(http://pubimage.360doc.com/NewArticle/NewArticleShareIcon.gif) no-repeat;float: left;margin: 5px 12px 0;}
+.share_original .p4 a.a1{margin-left: 20px;}
+.share_original .p4 a.a2{background-position: 0 -31px;}
+.share_original .p4 a.a3{background-position: 0 -60px;}
+.share_original .p4 a.a4{background: url(http://pubimage.360doc.com/NewArticle/sharelink.png) no-repeat center 0;margin-right: 0;}
+/*20190312*/
+.new_plbox{text-align: left;margin-top: 10px;}
+.new_plbox p,.replylist p,.ul-similar p{padding: 0;margin: 0;}
+.new_plbox .p1{width: 92px;height: 34px;line-height: 34px;text-align: center;font-size: 16px;color: #272727;}
+.new_plbox .p1 span{color: #e04d4d;font-size: 18px;}
+.new_huifubt{width: 567px;height: auto;overflow: hidden;}
+.new_huifubt textarea{height: 32px;line-height: 32px;border: solid 1px #d5d5d5;width: 472px;border-right: none;padding: 0 10px;font-size: 14px;color: #a6a6a6;float: left;}
+.new_huifubt_show textarea{width: 545px;border: solid 1px #d5d5d5;border-bottom: none;height: 86px;line-height: 22px;padding-top: 7px;color: #333;}
+.new_huifubt p{float: right;width: 71px;height: 32px;border: solid 1px #d5d5d5;}
+.new_huifubt_show p{width: 565px;background: #f4f4f5;border-top: none;text-align: right;}
+.new_huifubt p a{display: block;width: 71px;height: 32px;line-height: 32px;text-align: center;font-size: 14px;color: #fff;background: #519b36;}
+.new_huifubt p a.a2{background: none;color: #666;}
+.new_huifubt_show p a{display: inline-block;}
+.new_huifubt p a:hover{color: #fff !important;background: #3f7e11;}
+.new_huifubt p .a2:hover{background: #e1e1e1;color: #666 !important;}
+.replylist{width: 676px;height: auto;overflow: hidden;text-align: left;margin-top: 10px;}
+.replylist>li{border-bottom: solid 1px #e5e5e5;width: 100%;height: auto;overflow: hidden;padding: 10px 0;}
+.replylist>li ul{width: 100%;height: auto;overflow: hidden;}
+.replylist .reply_pic{width: 37px;height: 37px;overflow: hidden;border-radius: 50%;-webkit-border-radius: 50%;}
+.replylist .reply_pic img{width: 100%;height: 100%;}
+.replylist .reply_r{width: 612px;height: auto;overflow: hidden;margin-left: 11px;}
+.reply_r .reply_r{width: 563px;}
+.reply_text_str{height: 20px;overflow: hidden;}
+.reply_text_str p{height: 20px;line-height: 20px;}
+.reply_text_str p a{color: #66a567;font-size: 14px;}
+.reply_text_str p span{font-size: 12px;color: #666;display: inline-block;margin-left: 6px;}
+.reply_text_str>a{height: 20px;line-height: 20px;padding-left: 20px;color: #999;margin-left: 12px;background: url(http://pubimage.360doc.com/NewArticle/z.jpg?t=2019) no-repeat;}
+.reply_text_str>a.reply_zan{background-position: 0 1px;}
+.reply_text_str>a.reply_cai{background-position: 0 -33px;}
+.reply_text_str>a.reply_none{background-image: url(http://pubimage.360doc.com/NewArticle/z2.jpg);}
+.reply_text_str>i{font-style: normal;float: left;height: 20px;line-height: 20px;text-align: right;width: 40px;color: #588600;cursor: pointer;background: url(http://pubimage.360doc.com/xiugai.gif) no-repeat left 2px;margin-left: 12px;}
+.reply_r p.reply_text{font-size: 14px;color: #333;line-height: 22px;margin-top: 6px;word-break: break-all;}
+.reply_r p.reply_text textarea{width: 99%;height: 50px;border: solid 1px #a6a6a6;padding: 2px;}
+.reply_r p.reply_text a{display:inline-block;width: 48px;height: 20px;margin: 4px 4px 0 0;}
+.reply_r p.reply_text a.a1{background: url(http://pubimage.360doc.com/blue/ArtSure.gif);}
+.reply_r p.reply_text a.a2{background: url(http://pubimage.360doc.com/blue/ArtCancel.gif);}
+.replylist .reply_btn{height:30px;width: 100%;overflow: hidden;}
+.reply_btn a{color: #1c6898;display: inline-block;line-height: 30px;height: 30px;}
+.reply_btn a.a1{padding-right: 12px;margin-left: 16px;background: url(http://pubimage.360doc.com/NewArticle/reply_btn.gif) no-repeat right center;}
+.reply_btn a.a1s{background: url(http://pubimage.360doc.com/NewArticle/reply_btn2.gif) no-repeat right center;}
+.replylist_lite{width: 100%;height: auto;overflow: hidden;margin-top: 6px;}
+.reply_more{width: 100%;height: 27px;line-height: 27px;text-align: center;background: #f7f7f7;display: block;font-size: 14px;color: #1c6898;}
+.reply_more:hover{background: #eee;}
+.reply_more img{vertical-align: middle;}
+.reply_pager{text-align: center;}
+.reply_pager a{display: inline-block;color: #1c6898;margin: 30px 2px;}
+.reply_pager a:hover{text-decoration: underline;}
+.reply_pager span{color: #333;display: inline-block;margin: 30px 2px;}
+.ul-similar li{width: 100%;height: auto;overflow: hidden;padding: 12px 0 14px;border-bottom: solid 1px #e8e8e8;text-align: left;}
+.similar-pic{width: 148px;height: 100px;border: solid 1px #f4f4f4;}
+.similar-pic img{width: 100%;height: 100%;}
+.similar-info{margin-left: 20px;width: 478px;}
+.similar-info .similar-title{font-size: 16px;line-height: 22px;font-weight:bold;}
+.similar-title a{color: #333;}
+.similar-info .similar-text{font-size: 14px;line-height: 22px;margin-top: 6px;}
+.similar-text a{color: #999;}
+.articleMaxH .article_container{height: 2000px;overflow: hidden;width: 100%;}
+.article_showall{width: 100%;height:220px;position: absolute;left: 0;bottom: 0;background: url(http://pubimage.360doc.com/NewArticle/atmask.png) 0 0 repeat-x;z-index: 999;display: none;}
+.articleMaxH .article_showall{display: block;}
+.articleMaxH .yc_user,.articleMaxH #divreward,.articleMaxH #divresaveunder,.articleMaxH #divtort{display: none !important;}
+.article_showall>div{height: 72px;background: #fff;margin-top: 148px;overflow: hidden;}
+.article_showall>div a{display: block;width: 113px;height: 34px;border: solid 1px #d8e7d4;border-radius: 20px;-webkit-border-radius: 20px;margin: 19px auto 0;text-indent: 22px;line-height: 34px;font-size: 14px;color: #318510;background: url(http://pubimage.360doc.com/NewArticle/showall1.png) no-repeat 84px center #fff;}
+.article_showall>div a:hover{color: #318510 !important;background: url(http://pubimage.360doc.com/NewArticle/showall2.png) no-repeat 84px center #e9f4e5;}
+.reply_r .new_huifubt{margin-bottom: 10px;}
+.reply_r .reply_r .new_huifubt_show{margin-top: 4px;width: 561px;}
+.reply_r .reply_r .new_huifubt_show  textarea{width: 539px;}
+.reply_r .reply_r .new_huifubt_show  p{width: 559px;}
+li>.reply_r>.new_huifubt_show{width: 610px;}
+li>.reply_r>.new_huifubt_show textarea{width: 588px;}
+li>.reply_r>.new_huifubt_show p{width: 608px;}
+body>.cengbox {background-color: #fff;border: 4px solid #8e8e8e;border-radius: 4px;height: 327px;text-align: left;width: 422px;}
+.rbtn_confirm_s,.rbtn_cancel_s{ display: inline-block;width: 62px; height: 26px;text-align: center;line-height: 26px;color: #fff !important;font-size: 14px;background: #5d9e1e;border: solid 1px #efefef;border-radius: 3px;text-decoration: none !important;}
+.rbtn_cancel_s{background: #f1f1f1;color: #7e7e7e !important;}
+.rbtn_confirm_s:hover{background: #1a6b1a;}
+.rbtn_cancel_s:hover{background: #eee;color: #333;}
+
+/*文章头部原创活动信息*/
+.article_activity{background: #f8f8f8;padding: 14px 18px;height: auto;overflow: hidden;margin-top: 10px;text-align:left;}
+.article_activity p{font-size: 12px;line-height: 22px;margin: 0;padding: 0;}
+.article_activity .p1{color: #333;}
+.article_activity .p1 a{color: #2a5f91;}
+.article_activity .p2{color: #999;margin-top: 6px}
+.article_activity .p2 span{color: #333;}
+.article_sign{font-size: 12px;text-align: center;height: 15px;line-height: 15px;color: #48b667;float: left;margin-right: 5px;border: solid 1px #b3e0b2;padding: 0 2px;border-radius: 2px;-webkit-border-radius: 2px;margin-top: 10px;}
+/*vip icon*/
+.article_data_left .user_vip_s{margin-top: 3px;}
+.fenxiang li .user_vip_s{margin: 2px 0 0 3px}
+.user_data_name .user_vip_b{margin: 5px 0 0 5px;}
+.reply_text_str .user_vip_s{margin: 2px 0 0 2px;}
+/*浮动头部操作栏*/
+.atnavicons{background: url(http://pubimage.360doc.com/NewArticle/icons.png?ts=2020072901) no-repeat;}
+.atfixednav{position: fixed;height: 54px;top: 0;left: 0;width: 100%;background: url(http://pubimage.360doc.com/NewArticle/navshadow.png) repeat-x bottom;z-index: 9999;display: none;}
+.atfixednav .d1{width: 1016px;height: 49px;margin: 0 auto;position: relative;z-index: 2;text-align: left;}
+.atfixednav .anbg{width: 100%;height: 49px;position: absolute;left: 0;top: 0;background: #fff;opacity: 0.95;filter: alpha(opacity=95);}
+.atfixednav .d1 .atbtn_home{width: 30px;height: 30px;overflow: hidden;position: relative;margin: 9px 10px 0 0}
+.atfixednav .d1>a.atnavicons{background-position: -152px 0;}
+.atfixednav .d1 .atbtn_home i{display: block;width: 14px;height: 13px;background-position: -181px -30px;margin: 8px auto 0}
+.atfixednav .d1 .atbtn_home canvas{position: absolute;width: 100%;height: 100%;left: 0;top: 0;}
+.atfixednav .at_crumb{height: 49px;line-height: 49px;color: #666;font-size: 13px;margin: 0;padding: 0;float: left;width: 440px;}
+.atfixednav .at_crumb a{color: #488424;}
+.atfixednav .s1{float: right;height: 49px;margin-right: 14px;position: relative;width: 54px;}
+.atfixednav .s1>a{float: left;margin-right: 8px;position: relative;}
+.atfixednav .s1 a:hover{text-decoration: none;}
+.atfixednav .s1 b{font-weight: normal;color: #666;font-size: 14px;line-height: 20px;white-space: nowrap;word-break: keep-all;position: absolute;height: 20px;bottom: 0;right: -33px;}
+.atfixednav .s1 i{color: #cc4f4f;position: absolute;top: 4px;right: -10px;font-style: normal;display: none;font-weight: bold;font-size: 13px;}
+.atfixednav .ic10{width:74px;}
+.atfixednav .ic10 b{right: -54px;}
+.atfixednav .ic1>a{width: 22px;height: 22px;background-position: 0 0;margin-top: 13px;}
+.atfixednav .ic2>a{width: 20px;height: 20px;background-position: -101px 0;margin-top: 14px;}
+.atfixednav .ic3>a{width: 20px;height: 23px;background-position: -24px 0;margin-top: 12px;}
+.atfixednav .ic4>a{width: 21px;height: 20px;background-position: -127px 0;margin-top: 15px;}
+.atfixednav .ic5>a{width: 20px;height: 20px;background-position: -49px 0;margin-top: 15px;}
+.atfixednav .ic6>a{width: 20px;height: 20px;background-position: -76px 0;margin-top: 14px;}
+.atfixednav .ic7>a{width: 20px;height: 21px;background-position: -198px 0;margin-top: 14px;}
+.atfixednav .ic8>a{width: 20px;height: 20px;background-position: -223px 0;margin-top: 14px;}
+.atfixednav .ic9>a{width: 19px;height: 21px;background-position: -249px 0;margin-top: 14px;}
+.atfixednav .ic10>a{width: 20px;height: 20px;background-position: -270px 0;margin-top: 14px;}
+.atfixednav .ic1>a:hover{background-position: 0 -25px;}
+.atfixednav .ic2>a:hover{background-position: -101px -45px;}
+.atfixednav .ic3>a:hover{background-position: -24px -52px;}
+.atfixednav .ic4>a:hover{background-position: -127px -22px;}
+.atfixednav .ic5>a:hover{background-position: -49px -23px;}
+.atfixednav .ic6>a:hover{background-position: -76px -22px;}
+.atfixednav .ic7>a:hover{background-position: -198px -24px;}
+.atfixednav .ic8>a:hover{background-position: -223px -24px;}
+.atfixednav .ic9>a:hover{background-position: -249px -24px;}
+.atfixednav .ic10>a:hover{background-position: -270px -24px;}
+.atfixednav .ic2>a.done{background-position: -101px -22px;}
+.atfixednav .ic3>a.done{background-position: -24px -26px;}
+.atfixednav .s1 .sharelist_new{left: -2px;height: 145px;bottom: -147px;height: auto;}
+.sharelist_new .slbg0{background: url(http://pubimage.360doc.com/NewArticle/btnico_wx.png) no-repeat 4px 5px;}
+/**/
+
+.preview-content{zoom: 1;background: #fcfcfc;padding: 15px 30px;position: relative;border: 1px solid #F4F4F4;border-bottom: 0;z-index: 999;}
+.preview-content:after{content: "";display: table;clear: both;}
+.preview-content #headImg{width: 66px;height: 66px;border: 1px solid #f1f1f1;border-radius: 70px;display: inline-block;}
+.preview-content .preview_right{margin-left: 15px;}
+.preview-content .preview_right .preview-name{font-size: 16px;color: #000;line-height: 38px;text-align: left;}
+.preview-content .preview_right .preview-name span{display: inline-block;color: #89a386;font-size: 12px;border: 1px solid #dee5e2;border-radius: 3px;padding: 1px 2px;line-height: 14px;margin-left: 4px;}
+.preview-content .preview_right .preview-name a{color: #000;}
+.preview-content .preview_right .preview-data{font-size: 14px;color: #999;line-height: 24px;}
+.preview-content .preview_right .preview-data .wxgzh{display: inline-block;position: relative;cursor: pointer;}
+.preview-content .preview_right .preview-data .wxgzh .codeIcon{display: inline-block;width: 14px;height: 14px;background: url(http://pubimage.360doc.com/payment/wallet/codeIcon.png) no-repeat;position: relative;top: 2px;margin: 0 10px 0 4px;}
+.preview-content .preview_right .preview-data .wxgzh .code{width: 117px;height: 124px;border: 1px solid #e3e3e3;position: absolute;top: -134px;right: -83px;background: #FFF;text-align: center;font-size: 12px;color: #7c7c7c;line-height: 12px;display: none;}
+.preview-content .preview_right .preview-data .wxgzh .code img{width: 86px;height: 86px;display: block;margin: 10px auto 0;}
+.preview-content .preview_right .preview-data .wxgzh .code:before{display: inline-block;position: absolute;left: 10px;width: 0px;height: 0px;content: "";top: 124px;border-top: 8px solid #e3e3e3;border-right: 8px solid transparent;border-bottom: 8px solid transparent;border-left: 8px solid transparent;}
+.preview-content .preview_right .preview-data .wxgzh .code:after{display: inline-block;position: absolute;left: 10px;width: 0px;height: 0px;content: "";top: 122px;border-top: 8px solid white;border-right: 8px solid transparent;border-bottom: 8px solid transparent;border-left: 8px solid transparent;}
+.preview-content .preview_right .preview-data .artNum{color: #df6262;}
+.preview-content .preview-profile{width: 100%;font-size: 14px;color: #979797;line-height: 24px;padding: 10px 0px 0 5px;min-height: 20px;text-align: left;}
+.preview-content .preview-profile a{color: #7c98a5}
+.preview-content .preview-profile .noCen{font-size: 14px;color: #979797;}
+.preview-content .preview-profile .noCen:before{content: "";display: table;width: 14px;height: 14px;background: url(http://pubimage.360doc.com/payment/wallet/bi.gif) no-repeat;display: inline-block;vertical-align: middle;margin-right: 3px;}
+.preview-content .preview-gz{width: 70px;height: 30px;position: absolute;right: 30px;top: 24px}
+.preview-content .preview-gz .gz{cursor: pointer;display: inline-block;font-size: 13px;width: 68px;height: 28px;text-align: center;line-height: 26px;border: 1px solid #95d39f;border-radius: 30px;color: #a7a7a7;}
+.preview-content .preview-gz .gz span{color: #95d39f;font-size: 18px;padding-right: 2px;}
+.preview-content .preview-gz .gz:hover{background: #95d39f;color: #FFF !important;}
+.preview-content .preview-gz .gz:hover span{color: #FFF !important;}
+.preview-content .preview-gz .ygz{display: inline-block;font-size: 13px;width: 68px;height: 28px;text-align: center;line-height: 28px;border: 1px solid #eaeaea;border-radius: 30px;color: #979797;}
+.preview-content .preview-bor{border-bottom: 1px solid #F4F4F4;position: absolute;left: 20px;right: 20px;bottom: 0px;}
+/**/
+section{display: block;}
+pre.edit_coder{padding:10px 15px;background: #eee;border-radius: 10px;-webkit-border-radius: 10px;font-size: 14px;}
+/**/
+.bevip__icon{background-image: url(http://pubimage.360doc.com/NewArticle/vipiconsf.png?20200717);background-repeat: no-repeat;}
+.bevip__{width: 458px;height: auto;position: relative;text-align: left;min-height: 420px;}
+.bevip__ a{text-decoration: none;}
+.bevip__ .bevip__step1>div{background: #f7fafb;height: auto;overflow: hidden;}
+.bevip__ p{margin: 0;}
+.bevip__step2,.bevip__lost{display: none;}
+.bevip__text1,.bevip__text2,.bevip__text3{background: url(http://pubimage.360doc.com/NewArticle/newviptext20200722.png) no-repeat;width: 358px;height: 76px;margin:42px auto 0 ;}
+.bevip__text1{background-position: 0 -76px;}
+.bevip__text2{background-position: 0 -230px;height: 120px;}
+.bevip__text3{background-position: 0 -152px;}
+.bevip__ a.closer{color: #000;font-size: 20px;position: absolute;right: 10px;top: 10px;height: 20px;width: 20px;text-align: center;line-height: 20px;z-index: 10;}
+.bevip__ a.closer:hover{color: #5d9e1e;}
+.bevip__qr{width: 400px;height: auto;border: solid 1px #F1F1F1;margin: 15px auto 24px;overflow: hidden;padding: 20px 0;background: #fff;}
+.bevip__qr .bevip__code{float: left;width: 140px;height: 140px;background: #eee;margin: 0 0 0 20px;position: relative;}
+.bevip__code a.reset{position: absolute;width: 100%;height: 100%;position: absolute;left: 0;top: 0;z-index: 10;}
+.bevip__code a.reset span{display: block;width: 100%;height: 100%;background: #000;opacity: 0.7;filter: alpha(opacity=70);}
+.bevip__code a.reset i{position: absolute;width: 70px;height: 54px;left: 50%;top: 50%;margin: -27px 0 0 -35px;background-position: 0 -40px;}
+
+.bevip__qr_right{width: 230px;float: right;position: relative;}
+.bevip__qr_right .p1{height: 32px;line-height: 32px;color: #e66153;font-size: 16px;text-indent: 4px;margin-top: 6px;}
+.bevip__qr_right .p1 span{font-size: 16px;display: inline-block;font-size: 30px;}
+.bevip__qr_right .p2{height: 24px;line-height: 24px;font-size: 14px;color: #000;margin-top: 16px;}
+.bevip__qr_right .p2 i{display: inline-block;height: 24px;width: 58px;background-position: -2px 0;vertical-align: top;}
+.bevip__qr_right .p3{text-align: right;margin-top: 45px;padding-right: 14px;}
+.bevip__qr_right .p3 a{color: #999;}
+.bevip__qr_right .p4{font-size: 14px;color: #e66153;line-height: 30px;position: absolute;width: 100%;height: 110px;background: #fff;top: 49px;text-indent: 4px;}
+.bevip__qr_right .p5{margin-bottom: -20px;display: none;height: 20px;font-size: 12px;color: #999;}
+.bevip__step1>div>.p3{height: 42px;line-height: 42px;font-size: 12px;color: #adadad;text-indent: 28px;}
+.bevip__step1>div>.p3 span{color: #e4c38d;}
+.bevip__step1>p{text-align: right;height: 20px;line-height: 20px;}
+.bevip__step1>p a{color: #fff;}
+.bevip__step2{height: auto;background: #fff;overflow: hidden;}
+.bevip__step2 .p1,.bevip__copysub .p1,.bevip__tips>.p1{height: 22px;line-height: 22px;text-align: center;margin-top: 31px;font-size: 0;}
+.bevip__step2 .p1 i,.bevip__copysub .p1 i,.bevip__tips>.p1 i{width: 22px;height: 22px;background-position: -144px -12px;display: inline-block;vertical-align: top;margin-right: 8px;}
+.bevip__step2 .p1 span,.bevip__copysub .p1 span,.bevip__tips>.p1 span{font-size: 16px;color: #4f4f4e;line-height: 22px;}
+.bevip__step2 .p2{height: 20px;line-height: 20px;font-size: 16px;color: #565656;text-align: center;margin-top: 32px;}
+.bevip__step2 .p2 i{display: inline-block;width: 26px;height: 20px;background-position: -245px -66px;vertical-align: top;margin: 0 3px;}
+#bevip__wxtips .p2{height: auto;text-align: left;line-height: 36px;padding-left: 80px;}
+#bevip__wxtips .p2 i{margin-top: 7px;}
+.bevip__tips>.p1+.bevip__tips_p4{margin-top: 28px;}
+.bevip__tips_p4+.bevip__card{margin-top: 20px;}
+.bevip__tips .bevip__qr{margin-bottom: 0;}
+.bevip__step2 .d1{height: 51px;text-align: center;overflow: hidden;font-size: 0;margin-top: 22px;}
+.bevip__step2 .d1 a{display: inline-block;width: 51px;height: 51px;margin: 0 16px;opacity: 0.9;filter: alpha(opacity=90);border-radius: 50%;}
+.bevip__step2 .d1 a:hover{opacity: 1;filter: alpha(opacity=100);box-shadow: 0 0 2px #999;}
+.bevip__step2 .d1 a.a1{background-position: -96px -107px;}
+.bevip__step2 .d1 a.a2{background-position:-181px -107px;}
+.bevip__step2 .d1 a.a3{background-position: -265px -107px;}
+.bevip__step2 .d2,.bevip__tips .d2{width: 409px;height: 15px;margin: 43px auto 0;background-position: -7px -201px;}
+.bevip__step2 .d2{position: relative;z-index: 2;}
+.bevip__rights_bg{background: #F8FDFF;margin-top: -8px;padding-top: 8px;height: auto;overflow: hidden;z-index: 1;}
+.bevip__rights{height: auto;overflow: hidden;margin-top: 9px;padding-left: 62px;padding-bottom: 21px;}
+.bevip__rights li{height: 31px;overflow: hidden;width: 196px;float: left;margin-top: 4px;}
+.bevip__rights li p{float: left;height: 31px;line-height: 31px;font-size: 12px;color: #1a1a1a;}
+.bevip__rights li i{float: left;height: 31px;width: 32px;margin-right: 8px;}
+.bevip__rights li i.i1{background-position:-393px 0 ;}
+.bevip__rights li i.i2{background-position: -393px -31px;}
+.bevip__rights li i.i3{background-position: -393px -62px;}
+.bevip__rights li i.i4{background-position: -393px -93px;}
+.bevip__lost{height: 420px;background: #fff;position: relative;padding-top: 0.5px;}
+.bevip__lost>.p1{height: 22px;line-height: 14px;font-size: 12px;margin-top: 128px;text-indent: 60px;}
+.bevip__lost>.p1 a{color: #4d728f;}
+.bevip__lost>input{display: block;width: 364px;height: 37px;border: solid 1px #dadada;outline: none;margin:0 auto;border-radius: 5px;color: #9c9c9c;font-size: 13px;text-indent: 16px;line-height: 37px;}
+.bevip__lost>input:focus{color: #333;}
+a.bevip__retrieve{display: block;width: 125px;height: 38px;line-height: 38px;text-align: center;color: #fff;font-size: 14px;border-radius: 4px;margin: 33px auto 0;background: #529840;}
+.bevip__lost .bevip__back{position: absolute;color: #4d728f;bottom: 14px;right: 22px;}
+.bevip__lost .p1_tips{position: absolute;width: 464px;height: 224px;background: #fffaf1;padding: 12px;border: solid 1px #f1e9e2;border-radius: 2px;top: -132px;left: -18px;display: none;z-index:10}
+.bevip__lost .p1_tips p{font-size: 12px;color: #292929;line-height: 20px;}
+.bevip__lost .p1_tips i{position: absolute;width: 17px;height: 9px;background-position: -98px 0;left: 80px;bottom: -7px;}
+.bevip__copysub{height: 248px;overflow: hidden;background: #fff;}
+.bevip__copysub .p1{margin-top: 66px;}
+.bevip__copysub .p2{text-align: center;height: 24px;line-height: 24px;font-size: 16px;margin-top: 12px;color: #4f4f4e;}
+.bevip__copysub a{display: block;width: 125px;height: 38px;line-height: 38px;text-align: center;color: #fff;border-radius:2px;font-size: 14px;margin: 26px auto 0;background: #529840;}
+/**/
+a.filedownload{display: block;width: 144px;height: 37px;background: #5ba238;text-decoration: none;color: #fff;border-radius: 4px;text-align: center;line-height: 37px;font-size: 15px;margin: 24px auto 0;}
+a.filedownload:hover{color: #fff !important;background: #1b5f09;}
+/**/
+.bevip__tips p{margin: 0;}
+.bevip__tips{width: 496px;height: auto;position: relative;background: #f7fafb;overflow:hidden;display: none;}
+.bevip__tips a{text-decoration: none;}
+.bevip__tips a.closer{color: #000;font-size: 20px;position: absolute;right: 10px;top: 10px;height: 20px;width: 20px;text-align: center;line-height: 20px;z-index: 10;}
+.bevip__icon2{background-image: url(http://pubimage.360doc.com/NewArticle/vipicons20200722.png?22);background-repeat: no-repeat;}
+.bevip__tips_p1{width: 259px;height: 26px;background-position: 0 -26px;margin: 44px auto 0}
+.bevip__tips_p2{width: 281px;height: 26px;margin: 44px auto 0}
+.bevip__tips_p3{width: 303px;height: 26px;margin: 44px auto 0;background-position: 0 -112px;}
+.bevip__tips_p4{width: 345px;height: 64px;margin: 44px auto 0;background-position: 0 -141px;}
+.bevip__tips_p5{width: 266px;height: 63px;margin: 44px auto 0;background-position: 0 -207px;}
+.bevip__tips_p6{width: 412px;height: 64px;margin: 43px auto 0;background-position: 0 -277px;position: relative;}
+.bevip__tips_p6 span{width: 40px;height: 40px;text-align: center;font-size: 30px;color: #e66153;position: absolute;font-weight: bold;left: 180px;top: -10px;line-height: 40px;}
+.bevip__tips_p7{width: 362px;height: 24px;margin: 44px auto 0;background-position: 0 -352px;}
+.bevip__tips .d2{position: relative;z-index: 2;margin-top: 13px;}
+.bevip__tips .d3{background-position: -7px -224px;}
+.bevip__tips .d4{background-position: -7px -250px;}
+.bevip__tips .d2 a,.bevip__step2 .d2 a{position: absolute;right: -12px;top: -2px;height: 15px;line-height: 15px;color: #999;}
+/**/
+#adarttopgoogle{width: 970px;height: 90px;position: relative;margin: 0 auto;}
+#adarttopgoogle .ad_closer{position: absolute;left: 8px;top: 82px;width: 79px;height: 21px;background-position: 0 -89px;}
+/*全屏*/
+body.fullopen,html.fullopen{height: 100%;overflow: hidden;}
+.artfullscreen__{width: 100%;height: 100%;background: #e3e3e3; z-index: 1001;position: fixed;left: 0;top: 0;text-align: left;overflow: auto;display: none;}
+.artfullscreen__box{padding: 32px 60px;height: auto;overflow: hidden;background: #fff;box-shadow: 0 0 6px #999;display: table;margin:20px auto;min-height: 95%;}
+@-moz-document url-prefix() {
+     .artfullscreen__box{height: 86%;min-height: auto;}
+}
+.fullopen .atfixednav{z-index: 1;}
+.artfullscreen__box_scr{word-break: break-word;height: auto;font-size: 16px;color: #2f2f2f;line-height: 1.5;position: relative;}
+.artfullscreen__box_scr .atr_str{font-size: 30px;font-family: simhei;color: #000;line-height: 40px;margin: 30px 0;overflow: hidden;text-align: left;word-break: break-all;font-weight: bold;}
+.artfullscreen_toolbar{width: 24px;height: 166px;position: absolute;top: 15px;}
+a.artfullscreen_closer{color: #4a4a4a;width: 24px;height: 24px;line-height: 24px;text-align: center;display: block;font-size: 28px;font-weight: bold;text-decoration: none;float: right;}
+.artfullscreen_toolbar>div{height: 19px;clear: both;padding: 18px 3px 0 0;}
+.artfullscreen_toolbar .a_colorlist,.artfullscreen_toolbar .fschange{top: -9px;right: 21px;box-shadow: 0 0 5px #ccc;}
+.artfullscreen_toolbar .fschange input{margin-right: 2px;}
+.artfullscreen_toolbar .a_bgcolor{margin-left: 0;}
+#artContent h2#titiletext{font-size: 30px;font-family: simhei;color: #000;line-height: 40px;margin:0 0 30px 0;overflow: hidden;text-align: left;word-break: break-all;}
+span.newbtn_print,span.newbtn_fullscreen,span.newbtn_forward,span.newbtn_revise,span.newbtn_share,span.newbtn_copy,span.newbtn_word{float: right;width: 61px;height: 23px;border-radius: 2px;border:solid 1px #dedede;margin: 6px 4px 0;background: #fff;cursor: pointer;position: relative;}
+span.newbtn_copy{width: 75px;}
+span.newbtn_print i,span.newbtn_fullscreen i,span.newbtn_forward i,span.newbtn_revise i,span.newbtn_share i,span.newbtn_copy i,span.newbtn_word i{display: block;background: url(http://pubimage.360doc.com/NewArticle/newbtns2.png?2020) no-repeat;}
+span.newbtn_share>.sharelist_new{left: -21px;top: 25px;height: 145px;}
+span.newbtn_print i{width: 41px;height: 15px;margin: 4px auto 0;}
+span.newbtn_fullscreen i{width: 42px;height: 14px;margin: 5px auto 0;background-position: 0 -36px;}
+span.newbtn_forward i{width: 42px;height: 14px;margin: 4px auto 0;background-position: 0 -18px;}
+span.newbtn_revise i{width: 42px;height: 13px;margin: 5px auto 0;background-position: 0 -53px;}
+span.newbtn_share i{width: 42px;height: 13px;margin: 5px auto 0;background-position: 0 -71px;}
+span.newbtn_copy i{width: 66px;height: 15px;margin: 4px auto 0;background-position: 0 -87px;}
+span.newbtn_word i{width: 29px;height: 13px;margin: 5px auto 0;background-position: 0 -106px;}
+span.newbtn_print:hover,span.newbtn_fullscreen:hover,span.newbtn_forward:hover,span.newbtn_revise:hover,span.newbtn_share:hover,span.newbtn_copy:hover,span.newbtn_word:hover{background: #f0f0f0;}
+.newbtn_revise a,.newbtn_share>a{display: block;width: 100%;height: 100%;position: absolute;left: 0;top: 0;}
+body>.contextmenu{width: 130px;height: auto;overflow: hidden;position: absolute;top: 0;left: -1000px;border: solid 1px #ddd;background: #fff;box-shadow: 1px 1px 2px #d1d1d1;z-index: 100000001;text-align: left;}
+body>.contextmenu li{height: 38px;overflow: hidden;}
+body>.contextmenu li a{display: block;height: 38px;line-height: 38px;text-decoration: none;text-indent: 20px;font-size: 12px;color: #333;}
+body>.contextmenu li a:hover{color: #2c8000;background: #f5f5f5;}
+body>.unlogin{width: auto;white-space: nowrap;word-break: keep-all;border: none;box-shadow: 0 0 4px #d1d1d1;font-size: 0;box-shadow: 0 0 6px #d1d1d1\9;}
+body>.unlogin li{display: inline-block;}
+body>.unlogin li a{display: inline-block;padding: 0 12px;text-indent: 0;height: 36px;border: solid 1px #ebebeb;border-left: none;font-size: 14px;line-height: 36px;}
+body>.unlogin li .a1{border-left: solid 1px #ebebeb;}
+.fullopen .doc360outlinkpop{z-index: 9999;}
+.article_data_right>.zcommond{overflow: visible;}
+.artalert{position: fixed;left: 50%;top: 50%;height: auto;border: solid 1px #aeaeae;color: #373737;font-size: 14px;white-space: nowrap;word-break: keep-all;border-radius: 10px;-webkit-border-radius: 10px;box-shadow: 0 0 6px #666;line-height: 25px;text-align: center;z-index: 990999;display: none;background: #fff;padding: 15px 20px;min-width: 200px;overflow: hidden;}
+.artalert>p{color: #373737;margin: 0;font-weight: normal;}
+.bevip__copysub2{height: 248px;overflow: hidden;background: #fff;}
+.bevip__copysub2 .p1{margin-top: 66px;}
+.bevip__copysub2 .p2{text-align: center;height: 24px;line-height: 24px;font-size: 16px;margin-top: 12px;color: #4f4f4e;}
+.bevip__copysub2 a{display: block;width: 125px;height: 38px;line-height: 38px;text-align: center;color: #fff;border-radius:2px;font-size: 14px;margin: 26px auto 0;background: #529840;}
+.bevip__card{height: 69px;padding-top: 1px;font-size: 12px;margin-top: 30px;padding-left: 44px;}
+.bevip__card li{float: left;width: 108px;height: 67px;border: solid 1px #ebe4dc;background: #fffaf4;border-radius: 4px;position: relative;text-align: center;cursor: pointer;margin: 0 20px 0 0;}
+.bevip__card li .p1{color: #3d2b0d;height: 20px;line-height: 20px;}
+.bevip__card li .p2{color: #e66153;font-size: 12px;height: 26px;line-height: 26px;font-weight: bold;}
+.bevip__card li .p2 span{font-size: 24px;}
+.bevip__card li .p3{color: #7d7d7d;height: 18px;line-height: 18px;}
+.bevip__card li.cur{background: #fce1b6;border-color:#ff9800;cursor: default;}
+.bevip__card li .p4{width: 78px;height: 20px;line-height: 20px;color: #fff;text-align: center;position: absolute;right: -1px;top: -22px;border-radius: 4px 4px 0 0;overflow: hidden;border: solid 1px #f8b379;border-bottom: none;background-color: #fa652a;background-image: linear-gradient(to right, #f8471d , #fd953e);}
+.bevip__tips .bevip__card{padding-left: 66px;}
+.p1+.bevip__tips_p1,.p1+.bevip__tips_p2,.p1+.bevip__tips_p3{margin-top: 37px;}
+/**/
+.print_err,.bevip__paymenttip{position: relative;width: 360px;height: 240px;overflow: hidden;border-radius:6px ;background: #fff;}
+.print_err a.closer,.bevip__paymenttip a.closer{position: absolute;width: 22px;height: 22px;line-height: 20px;font-size: 20px;text-align: center;right: 10px;top: 10px;color: #5d5c5c;}
+.print_err p,.bevip__paymenttip p{margin: 0;}
+.print_err>p{height: 20px;line-height: 20px;text-align: center;font-size: 14px;color: #333;margin-top: 55px;}
+.print_err .d1 a{float: left;width: 59px;height: 88px;overflow: hidden;margin:26px 0 0 30px;}
+.print_err .d1 a i{display: block;width: 59px;height: 59px;background: url(http://pubimage.360doc.com/NewArticle/wz.gif?) no-repeat;}
+.print_err .d1 a p{height: 18px;line-height: 18px;color: #999;font-size: 12px;text-align: center;margin-top: 6px;}
+.print_err .d1 .a1{margin-left: 60px;}
+.print_err .d1 .a1 i{background-position:0 -113px ;}
+.print_err .d1 .a2 i{background-position:-61px -113px;}
+.print_err .d1 .a3 i{background-position:-122px -113px;}
+.print_err .d1 .a1:hover i{background-position:0 -52px;}
+.print_err .d1 .a2:hover i{background-position:-61px -52px;}
+.print_err .d1 .a3:hover i{background-position:-122px -52px;}
+.servicenumber{width: 278px;height: 84px;position: absolute;left: 50%;top: 50%;margin: -42px 0 0 -139px;overflow: hidden;background: #fff;border-radius: 6px;box-shadow: 0 0 8px #333;display: none;}
+.servicenumber a.closer{right: 5px;top: 5px;}
+.servicenumber p{height: 84px;line-height: 84px;text-align: center;font-size: 20px;color: #000;}
+.bevip__paymenttip .p1{height: 20px;line-height: 20px;color: #000;font-size: 18px;text-align: center;margin-top:54px ;}
+.bevip__paymenttip .p2{text-align: center;font-size: 14px;color: #666;line-height: 22px;margin-top: 16px;}
+.bevip__paymenttip>div{text-align: center;font-size: 0;margin-top: 36px;}
+.bevip__paymenttip div a{display: inline-block;width: 106px;height: 31px;background: #f1f1f1;color: #666;border-radius: 2px;margin: 0 8px;font-size: 14px;line-height: 31px;}
+.bevip__paymenttip a.a1{color: #fff;background: #498532;}
+.atfixednav .ic10x a{background-image:url(http://pubimage.360doc.com/default/tree/loading.gif);background-repeat: no-repeat;background-position:center !important;}
+.newbtn_wordx:before{content: '';width: 20px;height: 20px;background: url(http://pubimage.360doc.com/default/tree/loading.gif) no-repeat #fff center;position: absolute;border-radius: 50%;left: 29px;top: 1px;}
+/*VIP特权弹窗*/
+.vipnewtips_{width: 563px;height: 514px;overflow: hidden;background: #fff;text-align: center;}
+.vipnewtips_ .ic{background:url(http://pubimage.360doc.com/index7/vippop.jpg) no-repeat;}
+.vipnewtips_ .d1{width: 417px;height: 27px;background-position: 0 -270px;margin: 48px auto 0}
+.vipnewtips_ .d1v{width: 385px;height: 74px;background-position: 0 -304px;margin: 40px auto 0}
+.vipnewtips_ .p1{color: #999;font-size: 14px;height: 20px;line-height: 20px;margin: 20px 0 0 0;}
+.vipnewtips_ .d2{width: 502px;height: 255px;margin: 30px auto 0;}
+.vipnewtips_ .a1{display: block;width: 116px;height: 38px;background: #4a5764;font-size: 16px;color: #fff;line-height: 38px;border-radius: 20px;-webkit-border-radius: 20px;margin: 45px auto 0;}

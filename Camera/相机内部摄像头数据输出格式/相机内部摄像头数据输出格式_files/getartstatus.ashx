@@ -1,0 +1,1 @@
+doccheckarts([ { "result":"1","artid":""}])
