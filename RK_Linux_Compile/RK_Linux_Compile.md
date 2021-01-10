@@ -1639,7 +1639,7 @@ device/rockchip/common/mk-buildroot.sh
 
 - buildroot/docs： 存放相关的参考文档。
 
-- buildroot/arch： 目录存放CPU架构相关的配置脚本，如arm/mips/x86 ，这些CPU相关的配置，在制作工具链，编译boot和内核时很关键。
+- buildroot/arch： 目录存放CPU架构相关的配置脚本，如arm/mips/x86 ，这些CPU相关的配置，在制作工具链**，编译boot和内核时很关键。**
 
 - buildroot/board：存放了一些默认开发板的配置补丁之类的
 
@@ -1667,7 +1667,7 @@ device/rockchip/common/mk-buildroot.sh
 ├── configs:  放置开发板的一些配置参数.
 ├── COPYING
 ├── DEVELOPERS
-├── dl:       存放下载的源代码及应用软件的压缩包.
+├── dl:       存放下载的源代码及应用软件的压缩包.如果有个软件包下载地址下载失败，会报错！！
 ├── docs:     存放相关的参考文档.
 ├── fs:       放各种文件系统的源代码.
 ├── linux:    存放着Linux kernel的自动构建脚本.
@@ -1945,7 +1945,7 @@ manifest
 
 ## 7 Buildroot 瑞芯微介绍
 
-### 7.1 编译
+### 7.1  编译
 
 ```
 $source envsetup.sh
@@ -1968,12 +1968,11 @@ root@c:/home/c/linux/v2# source envsetup.sh
 root@c:/home/c/linux/v2# ./build.sh
 ```
 
-不同的芯片，申明了不同的环境变量表示了dts等配置
+不同的芯片，申明了不同的环境变量表示了DTS设备树等配置
 
 ```shell
 cw@SYS3:~/sdk/312x_i/device/rockchip$ cat .BoardConfig.mk 
 #!/bin/bash
-
 # Target arch
 export RK_ARCH=arm
 # Uboot defconfig
@@ -2023,29 +2022,30 @@ cw@SYS3:~/sdk/312x_i/device/rockchi
 ./build.sh firefly-rk3288.mk
 
 # 文件路径在 `device/rockchip/rk3288/firefly-rk3288.mk`
-
 ```
 
-`.mk` 文件默认配置为编译 Buildroot 固件，下面对 Buildroot 相关配置进行说明：
+buildroot/configs/defconfig下的.为Buildroot 配置文件
 
 ```
 # Buildroot config
 export RK_CFG_BUILDROOT=rockchip_rk3288     # Buildroot 根文件系统配置文件
-
 # 文件路径在 `buildroot/configs/rockchip_rk3288_defconfig`
+
+
 # Recovery config
 export RK_CFG_RECOVERY=rockchip_rk3288_recovery     # recovery 模式下根文件系统配置文件（可省略）
-
 # 文件路径在 `buildroot/configs/rockchip_rk3288_recovery_defconfig`
+
 # rootfs image path
 export RK_ROOTFS_IMG=buildroot/output/$RK_CFG_BUILDROOT/images/rootfs.$RK_ROOTFS_TYPE   # Buildroot 根文件系统镜像路径
-
 # 本例中，文件路径在 `buildroot/output/rockchip_rk3288/images/rootfs.ext4`
 # 注：该文件路径将在首次编译根文件系统后生成
 
 ```
 
-执行编译命令时，将会根据 `.mk` 文件进行编译。7.3 编译原理
+执行编译命令时，将会根据 `.mk` 文件进行编译。
+
+7.3 编译原理
 
  针对output/**build**/某个包进行了修改，需要单独重新编译该软件包，直接编译Buildroot是不起效果的。
 
@@ -2071,6 +2071,12 @@ output/包/包含以下文件追踪编译过程。
 $make clean all
 $make
 ```
+
+所以在make clean或make distclean之前最好把dl做备份
+
+强烈建议不要执行make distclean，不要执行make clean，你要重编译的话，就把/home/cw/sdk/rv1109/buildroot/output/rockchip_rv1126_rv1109/ 这样的目录直接rm -rf，然后make重编译即可
+
+注意，为节省时间配置一次可将下面文件夹备份./buildroot-2019.02.1/dl./buildroot-2019.02.1/output/host/这样在执行make distclean后，将dl下的内容恢复可节省下载时间对于host路径而言，host端需要的工具链则不需要重新
 
 #### 7.3.2 不完全重建buildroot
 
@@ -2107,7 +2113,7 @@ make                     //自动对这个包重新编译
 
 开发根文件系统则存放在output/target，内核镜像、uboot、压缩的根文件系统存放在output/images下target
 
-- 方法一：手动复制到output/target下
+- 方法一：手动复制到output/target下（不建议）
 
 ```
 cw@SYS3:~/sdk/3126i/buildroot/output/rockchip_rk3128$ ag -g "sink-test"
@@ -2119,7 +2125,7 @@ cw@SYS3:~/sdk/3126i$  make
 cw@SYS3:~/sdk/3126i$  ./mkfirmware.sh
 ```
 
-- 方法二：在包的配置mk文件，设置istall阶段自动拷贝
+- 方法二：在包的配置mk文件，设置istall阶段自动拷贝（推荐）
 
 intel-wds编译后，想把它在output/包/下生成的某个可执行文件复制到开发板根文件系统（根文件系统则存放在output/target，也就是target目录，注意target目录就是开发板下面的除了dev目录的所有文件）
 package/intel-wds/intel-wds.mk 在配置文件里面修改，编译后install把某个文件一起拷贝到开发板目录
@@ -2130,14 +2136,39 @@ define INTEL_WDS_INSTALL_TARGET_CMDS
 endef
 ```
 
-### 7.5 output下修改保存为补丁
+### 7.5 output 软件包源码修改保存为补丁
 
-如何给package 增加一个patch,生成补丁后，拷贝到对应的buildroot/package/对应包下。buildroot在解压源代码的时候，自动打上这个目录下的所有补丁，注意补丁的格式和序号。打补丁的过程，make编译的时可以看到log。
+- 1. 先介绍软件包编译（执行make 软件报名）过程 
+
+.stamp_configured 配置.stamp_downloaded 下载.stamp_extracted 解压.stamp_patched 打上补丁.stamp_staging_installed 编译 .stamp_target_installe 安装
+
+这是一个软件包编译的5个过程。首先buildroot是一个仓库，buildroot/package/包含各个软件包的下载地址、开个、补丁、编译配置。
+
+```
+root@cw:/home/cw/3126c_i/buildroot/package/qjson# ls -al
+总用量 84
+drwxr-xr-x    2 root root  4096 6月  22  2020 .
+drwxr-xr-x 1991 root root 65536 7月  25 10:12 ..
+-rw-r--r--    1 root root   845 6月  22  2020 0001-fix-Qt4-package-error-in-CMakeLists.txt.patch 补丁
+-rw-r--r--    1 root root   373 6月  22  2020 Config.in   KCONFIG配置
+-rw-r--r--    1 root root   110 6月  22  2020 qjson.hash 下载地址和哈希校验码
+-rw-r--r--    1 root root   455 6月  22  2020 qjson.mk 编译配置
+```
+
+编译过先检查 Config.in 宏开关是不是打开了，是的话，就从qjson.hash文件的下载地址下载压缩包到dl目录，从dl目录解压软件包源码到build。root/output/rockchip_rk3126c/build/rqjson目录, 注意buildroot/output是不被 buildroot git仓库所管理的。
+
+注意:dl目录编译时显示url下载失败，你可以从其他地方拷贝软件压缩包到这个目录下。强烈注意，不要对buildroot执行make clean，这样会删除dl目录下下载的压缩包，正确的做法，应该是rm -rf buildroot/output/开发板， 然后再重新编译。
+
+- 2. 如何将buildroot/output/软件包，源码修改保存为补丁
+
+由于buildroot/output/软件包源码是不被 buildroot git仓库所管理的。那么我们需要在该软件包下初始化一个git仓库，修好后保存为补丁，并复制到buildroot/package/包名/目录下，这个是被buildroot git仓库所管理的，提交在buildroot git仓库。  于是下次编译这个的时候，会自动打上这个补丁。
+
+
 
 以rkwifibt 为例,
 
 ````
-1. cd buildroot/output/rockchip_rk3308_release/build/rkwifibt-1.0.0
+buildroot/package/1. cd buildroot/output/rockchip_rk3308_release/build/rkwifibt-1.0.0 //这个目录是软件包的编译源代码目录。是编译过程解压出来的，并自动打上对应补丁
 2. 初始化仓库
 git init
 3. 添加将要修改的文件到 git 仓库
@@ -2148,7 +2179,31 @@ git commit -s
 git add wifi_start.sh
 git commit -s
 6. 生成补丁
-git format-patch
+git format-patch  然后复制到buildroot/package/对应包目录下，注意buildroot目录下是一个仓库，这个仓库忽略了.gitignore目录
+
+root@cw:/home/cw/3126c_i/buildroot# git log  提交的格式如下
+f81e5a020835b837722e94ce9a9af8afa5cf0ad3 package: rockchip: rockface: add face detection choice
+d7df81695cc14fe7a6e11b38d4c0e45a47c045ba package: rockchip: QFacialGate: modify install S06_QFacialGate
+5109a69a9a0c2de53ac0f96f
+
+root@cw:/home/cw/3126c_i/buildroot# cat .gitignore  
+/output  不被buildroot仓库管理
+/dl
+/download
+/.auto.deps
+/.config.cmd
+/.config.old
+/..config.tmp
+/.config
+*.depend
+*.o
+/*.patch
+/*.diff
+*.orig
+*.rej
+*~
+*.pyc
+.BoardConfig.mk
 ````
 
 举例buildroot/package/connma，make的时候解压在ouput文件夹下面，解压后，会自动打上这些patch
@@ -3100,11 +3155,11 @@ drwxrwxr-x  2 cw cw 4096 Jun 26  2019 rockimg
 drwxrwxr-x  4 cw cw 4096 May 30  2019 userdata
 cw@SYS3:~/3126c_inner/device/rockchip$ vim .BoardConfig.mk 
 cw@SYS3:~/3126c_inner/device/rockchip$ 
-cw@SYS3:~/3126c_inner/device/rockchip$ git d
+cw@SYS3:~/3126c_inner/device/rockchip$ git diff
 diff --git a/rk3126c/BoardConfig.mk b/rk3126c/BoardConfig.mk
 index cff7bb2..ee248ce 100755
 --- a/rk3126c/BoardConfig.mk
-+++ b/rk3126c/BoardConfig.mk
++++ b/rk3126c/BoardConfig.mkiff
 @@ -7,7 +7,7 @@ export RK_UBOOT_DEFCONFIG=rk3126
  # Kernel defconfig
  export RK_KERNEL_DEFCONFIG=rockchip_linux_defconfig
