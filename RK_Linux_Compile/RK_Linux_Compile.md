@@ -1662,18 +1662,18 @@ device/rockchip/common/mk-buildroot.sh
 ├── board   存放了一些默认开发板的配置补丁之类的
 ├── boot
 ├── CHANGES
-├── Config.in
+├── Config.in 
 ├── Config.in.legacy
 ├── configs:  放置开发板的一些配置参数.
 ├── COPYING
 ├── DEVELOPERS
-├── dl:       存放下载的源代码及应用软件的压缩包.如果有个软件包下载地址下载失败，会报错！！
+├── dl:       存放下载的源代码及应用软件的压缩包.如果有个软件包下载地址下载失败，会报错！！（不被git仓库管理）
 ├── docs:     存放相关的参考文档.
 ├── fs:       放各种文件系统的源代码.
 ├── linux:    存放着Linux kernel的自动构建脚本.
 ├── Makefile
 ├── Makefile.legacy
-├── output: 是编译出来的输出文件夹.
+├── output: 是编译出来的输出文件夹. （不被git仓库管理）
 │   ├── build: 存放解压后的各种软件包编译完成后的现场.
 │   ├── host: 存放着制作好的编译工具链，如gcc、arm-linux-gcc等工具.
 │   ├── images: 存放着编译好的uboot.bin, zImage, rootfs等镜像文件，可烧写到板子里, 让linux系统跑起来.
@@ -1684,6 +1684,25 @@ device/rockchip/common/mk-buildroot.sh
 ├── support
 ├── system
 └── toolchain
+
+root@cw:/home/cw/3126c_i/buildroot# cat .gitignore 
+/output
+/dl
+/download
+/.auto.deps
+/.config.cmd
+/.config.old
+/..config.tmp
+/.config
+*.depend
+*.o
+/*.patch
+/*.diff
+*.orig
+*.rej
+*~
+*.pyc
+.BoardConfig.mk
 ```
 
 
@@ -2021,7 +2040,7 @@ cw@SYS3:~/sdk/312x_i/device/rockchi
 ```
 ./build.sh firefly-rk3288.mk
 
-# 文件路径在 `device/rockchip/rk3288/firefly-rk3288.mk`
+# 文件路径在 `device/rockchip/rk3288/firefly-rk3288.mk` 注意这其实和uboot、kernel有关，和rootfs没有关系
 ```
 
 buildroot/configs/defconfig下的.为Buildroot 配置文件
@@ -2078,18 +2097,10 @@ $make
 
 注意，为节省时间配置一次可将下面文件夹备份./buildroot-2019.02.1/dl./buildroot-2019.02.1/output/host/这样在执行make distclean后，将dl下的内容恢复可节省下载时间对于host路径而言，host端需要的工具链则不需要重新
 
-#### 7.3.2 不完全重建buildroot
+#### 7.3.2 不完全重建buildroot （单独编译软件包）
 
 新增一个包无需全部重新编译，但是如果新增的是一个库，且别其他文件所引用，则需一起重新编
-译，或者全部重编。
-
----
-
-编译过程建议加上V=1
-
----
-
-
+译，或者全部重编。编译过程建议加上V=1 显示详细编译信息
 
 BuildRoot 如何单独编译某个一包？
 
@@ -2101,21 +2112,21 @@ make <package> -dirclean //删除output/build/package 这个文件夹
 make                     //自动对这个包重新编译
 ```
 
-2. 如果只是修改output 目录下代码（非源码！！！只是一份拷贝），只需要启动编译的步骤，编译前运行 make < package >-rebuild千万不要make <package> -dirclean ，这样会删除整个output/<package>/这个文件夹，修改全没了。
+2. 如果修改buildrot/output 目录下代码（是压缩包解压出来的源码），只需要启动编译的步骤，编译前运行 make < package >-rebuild千万不要make <package> -dirclean ，这样会删除整个output/<package>/这个文件夹，修改全没了。
 
-```
+``` 
  make <package> -rebuild
  然后make （ make 或 make <package>）打包
  最后 ./mkfirmware.sh 
 ```
 
-###7.4 拷贝文件到开发板根文件系统
+### 7.4 拷贝文件到开发板根文件系统
 
 开发根文件系统则存放在output/target，内核镜像、uboot、压缩的根文件系统存放在output/images下target
 
 - 方法一：手动复制到output/target下（不建议）
 
-```
+```shell
 cw@SYS3:~/sdk/3126i/buildroot/output/rockchip_rk3128$ ag -g "sink-test"
 build/intel-wds-ece955a9947e8d5848223c849d2c0f3f928078d4/sink/sink-test
 
@@ -2130,7 +2141,7 @@ cw@SYS3:~/sdk/3126i$  ./mkfirmware.sh
 intel-wds编译后，想把它在output/包/下生成的某个可执行文件复制到开发板根文件系统（根文件系统则存放在output/target，也就是target目录，注意target目录就是开发板下面的除了dev目录的所有文件）
 package/intel-wds/intel-wds.mk 在配置文件里面修改，编译后install把某个文件一起拷贝到开发板目录
 
-```c
+```makefile
 define INTEL_WDS_INSTALL_TARGET_CMDS
 	cp -f $(@D)/sink/sink-test $(TARGET_DIR)/usr/bin/
 endef
@@ -2142,9 +2153,9 @@ endef
 
 .stamp_configured 配置.stamp_downloaded 下载.stamp_extracted 解压.stamp_patched 打上补丁.stamp_staging_installed 编译 .stamp_target_installe 安装
 
-这是一个软件包编译的5个过程。首先buildroot是一个仓库，buildroot/package/包含各个软件包的下载地址、开个、补丁、编译配置。
+这是一个软件包编译的5个过程。首先buildroot是一个git仓库，buildroot/package/包含各个软件包的下载地址、开个、补丁、编译配置，这些包含在Git仓库里，而buildroot/output并不被Git仓库管理，而是编译输出。
 
-```
+```shell
 root@cw:/home/cw/3126c_i/buildroot/package/qjson# ls -al
 总用量 84
 drwxr-xr-x    2 root root  4096 6月  22  2020 .
@@ -2163,11 +2174,9 @@ drwxr-xr-x 1991 root root 65536 7月  25 10:12 ..
 
 由于buildroot/output/软件包源码是不被 buildroot git仓库所管理的。那么我们需要在该软件包下初始化一个git仓库，修好后保存为补丁，并复制到buildroot/package/包名/目录下，这个是被buildroot git仓库所管理的，提交在buildroot git仓库。  于是下次编译这个的时候，会自动打上这个补丁。
 
-
-
 以rkwifibt 为例,
 
-````
+````shell
 buildroot/package/1. cd buildroot/output/rockchip_rk3308_release/build/rkwifibt-1.0.0 //这个目录是软件包的编译源代码目录。是编译过程解压出来的，并自动打上对应补丁
 2. 初始化仓库
 git init
@@ -2208,10 +2217,247 @@ root@cw:/home/cw/3126c_i/buildroot# cat .gitignore
 
 举例buildroot/package/connma，make的时候解压在ouput文件夹下面，解压后，会自动打上这些patch
 
-```
+```shell
 cw@SYS3:~/sdk/3126i/buildroot/package/connman ls
 0001-tethering-Reorder-header-includes.patch  0002-nat-build-failure.patch  Config.in  connman.hash  connman.mk  S45connman
 ```
+### 7.6   strip
+
+strip是一个命令，用于去除可执行文件的调式信息。查看一个object文件有not stripped和stripped，而buildroot编译出来的目标文件大多是stripped的。
+
+检查文件是否strip可以使用file命令：
+
+```shell
+root@cw:/home/cw/3126c_i/buildroot/output/rockchip_rk3128# ag -g whetstone
+build/whetstone-1.2/whetstone
+target/usr/bin/whetstone
+
+root@cw:/home/cw/3126c_i/buildroot/output/rockchip_rk3128# file target/usr/bin/whetstone
+target/usr/bin/whetstone: ELF 32-bit LSB executable, ARM, EABI5 version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux-armhf.so.3, for GNU/Linux 4.4.0, stripped
+root@cw:/home/cw/3126c_i/buildroot/output/rockchip_rk3128# 
+root@cw:/home/cw/3126c_i/buildroot/output/rockchip_rk3128# file build/whetstone-1.2/whetstone
+build/whetstone-1.2/whetstone: ELF 32-bit LSB executable, ARM, EABI5 version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux-armhf.so.3, for GNU/Linux 4.4.0, not stripped
+```
+
+1)  buildroot是默认strip的,   STRIP_STRIP_DEBUG的意义：Remove debugging symbols only.
+
+```makefile
+buildroot/Config.in
+
+注意 BR2_STRIP_strip 默认是选中的 
+config BR2_STRIP_strip
+    bool "strip target binaries"
+    depends on !BR2_PACKAGE_HOST_ELF2FLT
+    default y
+    help
+      Binaries and libraries in the target filesystem will be
+      stripped using the normal 'strip' command. This allows to save
+      space, mainly by removing debugging symbols. Debugging symbols
+      on the target are needed for native debugging, but not when
+```
+
+2） STRIP_FIND_CMD  
+
+```makefile
+
+定义在文件 buildroot/Makefile
+STRIP_FIND_CMD = find $(TARGET_DIR)
+ifneq (,$(call qstrip,$(BR2_STRIP_EXCLUDE_DIRS)))
+STRIP_FIND_CMD += \( $(call finddirclauses,$(TARGET_DIR),$(call qstrip,$(BR2_STRIP_EXCLUDE_DIRS))) \) -prune -o
+ endif
+ 
+STRIP_FIND_CMD += -type f \( -perm /111 -o -name '*.so*' \)
+ 
+# file exclusions:
+# - libpthread.so: a non-stripped libpthread shared library is needed for
+#   proper debugging of pthread programs using gdb.
+# - ld.so: a non-stripped dynamic linker library is needed for valgrind
+# - kernel modules (*.ko): do not function properly when stripped like normal
+#   applications and libraries. Normally kernel modules are already excluded
+#   by the executable permission check above, so the explicit exclusion is only
+#   done for kernel modules with incorrect permissions.
+STRIP_FIND_CMD += -not \( $(call findfileclauses,libpthread*.so* ld-*.so* *.ko $(call qstrip,$(BR2_STRIP_EXCLUDE_FILES
+```
+
+大概解读一下STRIP_FIND_CMD：
+
+查找target目录下，除BR2_STRIP_EXCLUDE_DIRS目录和BR2_STRIP_EXCLUDE_FILES文件以外的，所有可执行的regular文件，或者文件名是*.so的文件
+
+另外 libpthread*.so, ld-*.so, *.ko 也被看做是strip例外文件，注释里有解释。
+
+你在output/target下看到的binary文件就是stripped的了
+
+### 7.7  检查最终配置和编译时间
+
+- buildroot 执行make menuconfig并make savedefconfig配置后，最终的宏设置文件是：
+
+ buildroot/output/rockchip_rk3126/.config
+
+- 查看buildroot编译时间开发板串口
+
+```
+[root@rk312x:/]# cat timestamp
+
+built by cw on SYS3 at 2020-10-28 14:02:31
+```
+
+### 7.8  Squash文件系统
+
+使用的rootfs.squashfs 
+
+```shell
+
+root@cw:/home/cw/3126c_i/buildroot/output/rockchip_rk312x/images# ls
+rootfs.cpio  rootfs.cpio.gz  rootfs.ext2  rootfs.ext4  rootfs.squashfs  rootfs.tar
+root@cw:/home/cw/3126c_i/buildroot/output/rockchip_rk312x/images# file rootfs.squashfs 
+rootfs.squashfs: Squashfs filesystem, little endian, version 4.0, 56455730 bytes, 4314 inodes, blocksize: 131072 bytes, created: Sun Jan 10 09:36:47 2021
+```
+
+
+
+源码和编译出的制作文件系统工具mksquashfs
+
+```
+cw@cw:~/3126c_i/buildroot/fs/squashfs$ ls
+Config.in  squashfs.mk
+
+cw@cw:~/3126c_i/buildroot/package/squashfs$ ls -al
+drwxr-xr-x    2 root root  4096 6月  22  2020 .
+drwxr-xr-x 1991 root root 65536 7月  25 10:12 ..
+-rw-r--r--    1 root root  1634 6月  22  2020 0001-include-sysmacros.patch
+-rw-r--r--    1 root root  1931 6月  22  2020 0001-musl.patch
+-rw-r--r--    1 root root  1053 6月  22  2020 Config.in
+-rw-r--r--    1 root root   141 6月  22  2020 Config.in.host
+-rw-r--r--    1 root root   230 6月  22  2020 squashfs.hash
+-rw-r--r--    1 root root  2311 6月  22  2020 squashfs.mk
+
+root@cw:/home/cw/3126c_i/buildroot/output/rockchip_rk3126c# ag -g  mksquashfs
+host/bin/mksquashfs
+build/host-squashfs-3de1687d7432ea9b302c2db9521996f506c140a3/squashfs-tools/mksquashfs.o
+build/host-squashfs-3de1687d7432ea9b302c2db9521996f506c140a3/squashfs-tools/mksquashfs.c
+build/host-squashfs-3de1687d7432ea9b302c2db9521996f506c140a3/squashfs-tools/mksquashfs
+build/host-squashfs-3de1687d7432ea9b302c2db9521996f506c140a3/squashfs-tools/mksquashfs.h
+```
+
+- squash文件系统的特点：
+
+  · 数据(data),节点(inode)和目录(directories)都被压缩。
+
+  · 保存了全部的32位UID/GIDS和文件的创建时间. (注: cramfs是8位,没有创建时间)。
+
+  · 支持多达4G的文件系统. (cramfs是16M)。
+
+  · 节点和目录都是高度压缩, 而且都是存储在字节边界(packed on byte boundaries); 所有压缩的节点长度平均在8个字节左右.(具体的长度根据文件的类型是不同的. 比如, 普通文件,目录,符号链接,块设备和字符设备的节点的大小就不一样)。
+
+  · squashfs可以允许块大小(block size)达32Kb(1.x)和64kb(2.x), 这样可以达到比4K块大小更大的压缩率。
+
+  · squashfs 2引进了碎片块(fragment blocks)的概念: 一种将许多比块size 小的文件存储在一个块中, 以达到更大的压缩率。
+
+  · 重复的文件会被检测并删除掉。
+
+  · 同时支持big和little endian架构. SQ可以将文件系统MOUNT到不同的字节顺序(byte-order)的机器上面。
+
+在使用嵌入式 Linux 系统的时，会出现由于设备意外断电引起文件系统损坏而最终使该设备无法启动的现象。为了应对这种情况，通常会从硬件设计如采用备用电源，无论是锂电池还是超级电容等，或者从系统软件设上加以规避。本文接下来将介绍如何使用 squashfs 只读文件系统制作 Linux 系统文件，并采用 overlayfs 为用户目录增加可写权限。演示采用 Colibri iMX6 计算机模块，该方法同样也适用于 Toradex 其他产品，如 iMX8 计算机模块。
+
+Squashfs 是一种只读压缩文件系统，通常被用于数据备份或者系统资源受限的计算机系统上使用，如 Linux 发行版的 LiveCD，OpenWRT 系统也采用 squashfs。OverlayFS 一个结合其他文件系统的联合挂载，将多个挂载点叠加为一个目录。常见的应用是在一个只读的分区上叠加可读写的另一个分区。嵌入式 Linux 设备通常的功能都是被设计好的，极少需要在后期安装其他软件或更改 Linux 系统软件，更多的是更新设备应用程序和相关数据。因此基于 squashfs 的只读文件系统，结合 overlayfs 为用户应用和数据提供读写操作，能够提高嵌入式 Linux 文件系统可靠性。
+
+RootFS 分区是 Linux 运行的文件系统，usr, bin, lib, etc, home 等目录都在上面。一般该分区是EXT3，EXT4 格式，支持文件的写入和删除。而文件系统的损坏也常发生于此，最终导致设备启动失败。因此我们这里会采用只读格式的 squashfs 。UserData 是能够读写的 EXT4 分区。该分区通过 overlayfs 会被挂载到原本位于只读 squashfs 中的 /home/root 目录。用户应用可以毫无察觉得使用该目录，在上面写入和删除文件，但不破坏只读 squashfs 文件系统，所有的操作都会被转移到 UserData 分区上。用户的应用也会存在 UserData 分区上，启动的时候从这里加载应用程序。该分区是可写的，所有这上面的文件是可以被更新。
+
+![image-20210110213951601](RK_Linux_Compile.assets/image-20210110213951601.png)
+
+### 7.9  Linux下mdev的配置-自动挂载U盘
+
+1. 启用buildroot中的mdev
+
+buildroot中有4种设备节点管理方式，在→ System configuration → /dev management 中可以选择，
+
+- Static using device table （静态分配，rootfs中有就有，没有的话，启动后也不会动态创建）
+- Dynamic using devtmpfs only （启动过程中动态创建，启动后不会自动创建设备节点）
+- Dynamic using devtmpfs + mdev（启动过程中动态创建，启动后使用mdev管理设备节点）
+- Dynamic using devtmpfs + eudev （启动过程中动态创建，启动后使用eudev管理设备节点）
+
+前两种都能知道怎么回事，而mdev基本是eudev的简化版，因此eudev由于功能更多更复杂，也导致占用比mdev大得多。实测打包后，依旧比mdev大1.4M左右。
+
+![image-20210110234341143](RK_Linux_Compile.assets/image-20210110234341143.png)
+
+2.  mdev配置文件格式
+
+mdev的配置文件为 /etc/mdev.conf。 新版的buildroot 启用mdev时，已经自动配置好启动过程中根据/sys/目录创建/dev/下设备节点，且自动启动mdev。因此这里只说mdev.conf的配置
+
+**基本格式**
+
+```
+:  
+       :设备名称，支持正则表达式如hd[a-z][0-9]*等
+:          :用户ID和组ID
+  :八进制表示的设备属性
+```
+
+**执行脚本格式**
+
+```
+   :   [=|>path] [@|$|*]
+[=|>path]:这个选项可以更改设备节点的命名和路径，如：
+          <1> =/driver: 可以将设备节点移动到driver目录下
+          <2> =newname: 可以讲设备节点改为newname命名
+          <3> >/driver/newname: 可以在/driver目录下创建一个设备节点的链接，并命名为newname
+[@|$|*]:这个选项当设备匹配成功时，执行指令，这个指令可以是自己编写的脚本。前面的符号含义如下：
+          <1>@:在设备节点创建完执行
+          <2>$:在设备节点删除前执行
+          <3>*:在设备节点创建完和删除前执行
+```
+
+3. 自动挂载U盘
+
+mdev当检测到hotplug时，会根据配置文件的配置执行相应的脚本。而当系统检测到U盘插入时，系统会将U盘首先映射到 /dev/sd* (如sda sdb 等）。
+我们编写/etc/mdev.conf：
+
+``` 
+sd[a-z][0-9]      0:0 666        @/etc/mdev/udisk_insert 
+sd[a-z]           0:0 666        $/etc/mdev/udisk_remove
+```
+
+说明：
+@ 表示当检测到hotplug有设备名为sda0~sdz9的设备插入时，执行的脚本。
+$ 表示该设备拔出时执行的脚本。
+
+下面编写检测到U盘插入时调用的脚本 /etc/mdev/udisk_insert ：
+
+````shell
+#!/bin/sh
+if [ -d /sys/block/*/$MDEV ] ; then
+mkdir -p /media/$MDEV
+mount -t vfat -o utf8=1 /dev/$MDEV /media/$MDEV 
+fi
+````
+
+注：$MDEV 是传入的设备名。
+先创建准备挂载到的设备文件夹，这里挂载到 /media/<设备名>/，再将设备挂载到该目录。一般U盘使用fat文件系统，因此我们指定挂载的目标文件系统为vfat。
+
+下面编写检测到U盘拔出时调用的脚本 /etc/mdev/udisk_remove：
+
+```shell
+#!/bin/sh
+umount -l /media/$MDEV
+rm -rf /media/$MDEV
+```
+
+注： 与插入时相反顺序即可。 先取消挂载，再删除挂载目录。
+
+脚本中除了可以使用 M D E V ， 还 可 以 使 用 MDEV，还可以使用 MDEV，还可以使用ACTION，其中 M D E V 用 来 存 放 匹 配 到 的 设 备 名 ， MDEV用来存放匹配到的设备名， MDEV用来存放匹配到的设备名，ACTION用来存放设备插拔状态其值为add和remove。
+
+实际测试
+
+在插入U盘后，在/media/文件夹出现了 /media/sda1/，且 执行ls /media/sda1之后，列出了U盘中的内容。
+
+参考内容：
+
+[1]: https://blog.csdn.net/dragon101788/article/details/8757204
+[2]: https://my.oschina.net/u/2990965/blog/777618
+
+
+
+
 
 ## 8 Buildroot命令
 
