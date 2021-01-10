@@ -2455,11 +2455,70 @@ rm -rf /media/$MDEV
 [1]: https://blog.csdn.net/dragon101788/article/details/8757204
 [2]: https://my.oschina.net/u/2990965/blog/777618
 
+### 7.10 overlay和构建后处理脚本
 
+```shell
+               
+root@cw:/home/cw/3126c_i/buildroot/output/rockchip_rk3128# cat .config
+BR2_ROOTFS_OVERLAY="board/rockchip/rk3128/fs-overlay/ board/rockchip/common/base board/rockchip/common/wifi"         这个是替换的文件
+BR2_ROOTFS_POST_BUILD_SCRIPT="build/post.sh" 构建处理脚本的路径
+```
 
+- overlay
 
+overlay下的文件自动覆盖rootfs里的文件。
 
-## 8 Buildroot命令
+根文件系统覆盖，可以自定义你自己的根文件系统，增加配置文件、脚本、链接符号、文件夹或其它的文件等。根文件系统的覆盖为一个独立的文件夹，其文件内容将覆盖原有的根文件系统。BR2_ROOTFS_OVERLAY包括了独立空间的覆盖文件夹的路径。
+
+ buildroot/board/  rockchip/rv1126_rv1109/fs-overlay 类似这里放各个芯片需要替换的rootfs系统文件
+
+ buildroot/configs/  rockchip_rv1126_rv1109_defconfig 在配置里面设置需要替换的目录
+
+```
+在make menuconfig中配置路径
+BR2_ROOTFS_OVERLAY
+
+需要替换的文件
+root@cw:/home/cw/3126c_i/buildroot/board/rockchip/rk3326# ls
+fs-overlay-32  fs-overlay-64
+
+设置替换的目录
+root@cw:/home/cw/3126c_i/buildroot/configs# cat rockchip_rv1126_rv1109_defconfig
+BR2_ROOTFS_OVERLAY="board/rockchip/rv1126_rv1109/fs-overlay-sysv/"
+BR2_PACKAGE_RKWIFIBT_AP6256=y
+....省略
+```
+
+- 构建后执行的处理脚本
+
+某些时候，仅仅使用根文件覆盖并不能满足我们的需求，此时可以使用构建后处理脚本，来动态的生成新的文件，覆盖已经存在的文件或清除不需要的文件。 BR2_ROOTFS_POST_BUILD_SCRIPT选项中定义了脚本的路径（独立的空间）。
+脚本的第一个参数为：$(TARGET_DIR)，其它的参数可以通过BR2_ROOTFS_POST_SCRIPT_AGS选项传递。
+
+如下为一个构建后处理的脚本示例（路径为：board/myproject/post-build.sh）：
+
+```
+#!/bin/sh
+TARGET_DIR=$1
+BOARD_DIR=board/myproject/
+# Generate a file identifying the build (git commit and build date)
+echo $(git describe) $(date +%Y-%m-%d-%H:%M:%S) > \
+		$TARGET_DIR/etc/build-id
+# Create /applog mountpoint, and adjust /etc/fstab
+mkdir -p $TARGET_DIR/applog
+grep -q "^/dev/mtdblock7" $TARGET_DIR/etc/fstab || \
+		echo "/dev/mtdblock7\t\t/applog\tjffs2\tdefaults\t\t0\t0" >> \
+		$TARGET_DIR/etc/fstab
+# Remove unneeded files
+rm -rf $TARGET_DIR/usr/share/icons/bar
+```
+
+Buildroot的配置为：
+
+```
+BR2_ROOTFS_POST_BUILD_SCRIPT="board/myproject/post-build.sh"
+```
+
+## 8  Buildroot命令
 
 ### 8.1 编译类命令
 
@@ -2469,7 +2528,7 @@ rm -rf /media/$MDEV
 | make                       | make 配置后编译:                                             |
 | make 2>&1 \| tee build.log | 编译时候保存日志（亲测ok,用于分析出错原因有用）              |
 | make clean                 | 删除所有build output，只保留配置文件                         |
-| make distclean             | 删除一切，包括所有配置文件，下载文件                         |
+| make distclean             | 删除一切，包括所有配置文件，dl目录下的下载文件               |
 | make V=1                   | 详细构建，默认情况下，Buildroot隐藏在生成期间运行的许多命令，只展示最重要的。要获得完全详细的生成，请传递V=1： |
 | make graph-size            | 分析文件系统大小组成，文件大小，包大小                       |
 | make graph-depends         | 生成全部软件依赖图                                           |
