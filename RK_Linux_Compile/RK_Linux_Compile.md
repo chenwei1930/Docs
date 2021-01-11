@@ -2937,6 +2937,50 @@ TRUST 0x4000 0x6000 0x4000 4MB
 
 
 
+
+## JFFS2 文件系统支持
+
+#### 简介
+
+JFFS2 的全名为 Journalling Flash FileSystem Version 2（闪存日志型文件系统第 2 版），其功能就是管理在 MTD 设备上实现的日志型文件系统。与其他的存储设备存储方案相比，JFFS2 并不准备提供让传统文件系统也可以使用此类设备的转换层。它只会直接在 MTD 设备上实现日志结构的文件系统。JFFS2 会在安装的时候，扫描 MTD 设备的日志内容，并在 RAM 中重新建立文件系统结构本身。
+
+#### 配置
+
+配置：
+
+```
+CONFIG_JFFS2_FS=y
+```
+
+#### 镜像制作
+
+```
+mkfs.jffs2 -r data/-o data.jffs2 -e 0x10000 --pad=0x400000 -s 0x1000 -n		// --pad 定为分区大小一致，erase size 设置为 64KB
+```
+
+```
+Options:
+ --pad [=SIZE]            Pad output to SIZE bytes with 0xFF. If SIZE is
+                          not specified, the output is padded to the end of
+                          the final erase block
+  -r, -d, --root=DIR      Build file system from directory DIR (default: cwd)
+  -s, --pagesize=SIZE     Use page size (max data node size) SIZE.
+                          Set according to target system's memory management
+                          page size (default: 4KiB)
+  -e, --eraseblock=SIZE   Use erase block size SIZE (default: 64KiB)
+  -n, --no-cleanmarkers   Don't add a cleanmarker to every eraseblock
+```
+
+```shell
+
+cw@SYS3:~/sdk/rk356x/device/rockchip/userdata$ ls
+squashfs.img  userdata_empty  userdata_normal  userdata_sl
+
+cw@SYS3:~/sdk/rk356x/device/rockchip/userdata$  mksquashfs userdata_normal/ squashfs.img -noappend -always-use-fragments
+```
+
+
+
 ### 11.3 分区表和编译关系
 
 编译时候遇到生成的rootfs大于parameter文件限制的情况
