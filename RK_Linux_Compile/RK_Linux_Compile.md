@@ -9,7 +9,6 @@ RK Linux编译
 1. shell的环境变量，只在当前shell有效，所以不要登入多个shell，会导致环境变量缺失编译失败。
 2. 不要强制停止source envsetup.sh的执行，可能导致文件缺失，比如生成的makefile为空，这时候你要删除空的makefile再重新编译。如果已经输入数字错误，就在输入一个错误数字，按回车，脚本提示数字非法就自动退出
 
-
 ```shell
 1、同步代码
 $.repo/repo/repo sync --no-tags
@@ -49,8 +48,6 @@ rockdev
 ├── trust.img
 └── uboot.img
 ```
-
-
 
 小技巧：编译之后，查看环境变量中各项配置：确定脚本执行的信息，以firefly为例
 
@@ -97,8 +94,6 @@ XDG_RUNTIME_DIR=/run/user/1032
 _=/usr/bin/env
 cw@SYS3:~/sdk/312x_i$ 
 ```
-
-
 
 ## 烧写工具
 
@@ -263,7 +258,6 @@ system: Android 的 system 分区映像，ext4 文件系统格式，对应的是
 - recovery和rootfs是编译buildroot生成的
 
 - userdata.img  是用户数据镜像，其实就是一个目录打包为文件系统镜像，目录可以放一些文件。这个是device/rockchip/common/mk-image.sh脚本打包的
-
 
 ```shell
 cw@SYS3:~/sdk/312x_i/rockdev$ ls -l
@@ -624,8 +618,7 @@ cw@SYS3:~/sdk/3126i$ ./mkfirmware.sh  （打包固件）
 四条编译命令
 
 ```shell
-cd kernel
-kernel$ make ARCH=arm rockchip_linux_defconfig
+kernel$ make ARCH=arm rockchip_linux_defconfig //使用默认配置
 kernel$ make ARCH=arm menuconfig             //这条命令生成了.config文件
 kernel$ make ARCH=arm savedefconfig          //条命令下生成上defconfig文件
 scripts/kconfig/conf  --savedefconfig=defconfig Kconfig
@@ -737,15 +730,10 @@ load addr is 0x68400000! // trust的运行地址会被追加在打包头信息�
 ./build.sh   全自动编译会编译并打包固件 `update.img`，生成固件目录 `rockdev/`：
 
 #### 部分编译
-
 - 编译 kernel:      ./build.sh kernel
-
 - 编译 u-boot:      ./build.sh uboot
-
 - 编译 rootfs:        编译 Buildroot 根文件系统，将会在 `buildroot/output` 生成编译输出目录：
-
   ./build.sh buildroot 注：确保作为普通用户编译 Buildroot 根文件系统，避免不必要的错误。编译过程中会自动下载所需软件包，请保持联网状态
-
 #### 更新链接&打包固件
 
 - 更新链接
@@ -764,7 +752,7 @@ load addr is 0x68400000! // trust的运行地址会被追加在打包头信息�
 ./build.sh updateimg
 ```
 
-### sdk 更新后重编
+### sdk 更新后重编所有app
 
 ```
 ./build.sh app-rebuild
@@ -2322,8 +2310,6 @@ root@cw:/home/cw/3126c_i/buildroot/output/rockchip_rk312x/images# file rootfs.sq
 rootfs.squashfs: Squashfs filesystem, little endian, version 4.0, 56455730 bytes, 4314 inodes, blocksize: 131072 bytes, created: Sun Jan 10 09:36:47 2021
 ```
 
-
-
 源码和编译出的制作文件系统工具mksquashfs
 
 ```
@@ -2567,10 +2553,6 @@ dot  -Tpdf \
 
 ![](RK_Linux_Compile.assets/make_graph-size.png)
 
-
-
-
-
 file-size-stats.csv 文件大小，举例：
 
 |           File name           | Package name | File size | Package size | File size in package (%) | File size in system (%) |      |      |
@@ -2583,7 +2565,6 @@ package-size-stats.csv 包大小，举例：
 | Package name | Package size | Package size in system (%) |      |      |
 | ------------ | ------------ | -------------------------- | ---- | ---- |
 | intel-wds    | 372916       | 0.2                        |      |      |
-
 
 
 ### make graph-depends
@@ -2602,8 +2583,6 @@ dot  -Tpdf \
         /home/cw/sdk/3126i/buildroot/output/rockchip_rk3128/graphs/graph-depends.dot
 ```
 
-
-
 ![](RK_Linux_Compile.assets/make_graph-depends.png)
 
 ### make <包名>-graph-depends
@@ -2620,14 +2599,6 @@ dot  -Tpdf -o /home/cw/sdk/3126i/buildroot/output/rockchip_rk3128/graphs/intel-w
 
 ![image-20200316193828443](RK_Linux_Compile.assets/image-20200316193828443.png)
 
-
-
-
-
-
-
-
-
 ### make graph-build 
 
 可以明白整个编译流程时间都耗在哪里，针对性进行分析优化，有利于提高编译效率。
@@ -2641,13 +2612,9 @@ dot  -Tpdf -o /home/cw/sdk/3126i/buildroot/output/rockchip_rk3128/graphs/intel-w
 ▶ build.pie-packages.pdf, pie chart of the per-package build time     每个包的编译时间饼图
 ▶ build.pie-steps.pdf, pie chart of the per-step build time                  编译顺序下，每一步的编译时间
 
-
-
 ![img](RK_Linux_Compile.assets/1083701-20190614102518315-1402017455.png)
 
 其中比较有参考意义的文件是build.hist-duration.pdf文件，按照耗时从大到小排列。
-
-
 
 ```
 cw@SYS3:~/sdk/3126i/buildroot$ cd ..
@@ -2668,12 +2635,9 @@ cw@SYS3:~/sdk/3126i/buildroot/output/rockchip_rk3128/graphs$ ls -al
 
 ![image-20200316192054362](RK_Linux_Compile.assets/image-20200316192054362.png)
 
-
-
 ###  RK SDK不支持的几个命令
 
 ```
-
 Buildroot自带文档
 ▶ 网站文档 https://buildroot.org/docs.html (PDF,
 HTML, text)
@@ -2689,8 +2653,6 @@ make manual-pdf //生成pdf的手册
 make manual-split-html
 make manual-text
 ```
-
-
 
 ## UBOOT
 
@@ -2750,14 +2712,13 @@ linux‐gnu/bin
 
 编译命令：
 ./make.sh [board] ‐ ‐ ‐ ‐                         [board]的名字来源是：configs/[board]_defconfig 文件。
+
 命令范例：
 
 ```
 ./make.sh evb‐ rk3308 ‐ ‐ ‐ ‐ build for evb‐ rk3308_defconfig
 ./make.sh firefly‐ rk3288 ‐ ‐ ‐ ‐ build for firefly‐ rk3288_defconfig
 ```
-
-
 
 ## 编译
 
@@ -2769,7 +2730,7 @@ make;
 编译完成后，U-Boot 根目录，生成以下三个镜像文件：
 $:~/u-boot$ tree
 ├── rk3128x_loader_v1.06.238.bin
-├── trust_with_ta.img
+├── trust_with_ta.img  
 └── uboot.img
 
 ### Kernel  编译步骤
@@ -2781,7 +2742,6 @@ make ARCH=arm rk3128h-box.img CROSS_COMPILE=arm-linux-gnueabihf- -j16
 kernel/
 ├── kernel.img
 ├── resource.img
-
 
 ### Buildroot  编译步骤
 
@@ -2817,22 +2777,17 @@ kernel/
 0x00100000@0x0005a000(rootfs) @符号之前的数值是分区大小（单位block 512byte），@符号之后的数值是分区的起始位置，
 ```
 
-介绍数字单位都是块（512字节），对应的分区最好按4MB对齐`，大小也按4MB整数倍配置。
+介绍数字单位都是块（512字节，为什么以块(512字节)为单位，以flash为例:这是由于存储驱动有关系，flash是块设备，读写512字节每块），对应的分区最好按4MB对齐`，大小也按4MB整数倍配置。
+
+**计算技巧： 在16进制下除 0x800 ， 结果再转10进制**
 
 ```
 计算公式：  数字*512字节/1024/1024
 0x00002000 计算后是4MB
 0x00004000 计算后是8MB
-计算技巧： 在16进制下除 0x800 ， 结果再转10进制
 ```
 
-为什么以块(512字节)为单位，以flash为例:这是由于存储驱动有关系，flash是块设备，读写512字节每块。
-
 ![image-20200316192054362](RK_Linux_Compile.assets/512byte.png)
-
-
-
-
 
 ### 介绍
 
@@ -2883,7 +2838,6 @@ TYPE: GPT          创建的是GPT分区
 CMDLINE: mtdparts=rk29xxnand:0x00002000@0x00004000(uboot),0x00002000@0x00006000(trust),0x00002000@0x00008000(misc),0x00010000@0x0000a000(boot),0x00010000
 @0x0001a000(recovery),0x00010000@0x0002a000(backup),0x00020000@0x0003a000(oem),0x00100000@0x0005a000(rootfs),-@0x0015a000(userdata:grow)
 uuid:rootfs=614e0000-0000-4b53-8000-1d28000054a9
-
 ```
 
 ```
@@ -2971,10 +2925,7 @@ backup 之前的分区只可改小，不可变大，所以请预留足够空间�
 另外现在 backup 已经不再备份 system.img 了。
 ```
 
-
-
 ### 分区表定义
-
 
 | FIRMWARE_VER:8.1     | 固件版本，打包updata.img时会使用到，升级工具会根据这个识别固件版本。 |
 | -------------------- | ------------------------------------------------------------ |
@@ -3081,8 +3032,6 @@ squashfs.img  userdata_empty  userdata_normal  userdata_sl
 
 cw@SYS3:~/sdk/rk356x/device/rockchip/userdata$  mksquashfs userdata_normal/ squashfs.img -noappend -always-use-fragments
 ```
-
-
 
 ## 分区表和编译关系
 
@@ -3287,8 +3236,6 @@ mv: cannot stat '/home/cw/sdk/312x_i/tools/linux/Linux_Pack_Firmware/rockdev/upd
 Make update image failed!
 ```
 
-
-
 ## 启动流程
 
   This chapter introduce the generic boot flow for Rockchip Application Processors, including the detail about what image we may use in Rockchip platform for kind of boot path:
@@ -3441,21 +3388,16 @@ cw@SYS3:~/sdk/312x_i/buildroot/output/rockchip_rk3128$
 1、查找内核下面的
 
 ```
-
 rk3308_robot_defconfig
 201:CONFIG_VFAT_FS=m
 
 lsk_defconfig
 198:CONFIG_VFAT_FS=y
-
 rockchip_linux_defconfig
 501:CONFIG_VFAT_FS=y
 502:CONFIG_FAT_DEFAULT_CODEPAGE=936
 503:CONFIG_FAT_DEFAULT_IOCHARSET="utf8"
-
 ```
-
-
 
 ```
 ISO/IEC 8859-1:1998，又称Latin-1或“西欧语言”
@@ -3467,9 +3409,7 @@ ISO 8859-1，正式编号为ISO/IEC 8859-1:1998，又称Latin-1或“西欧语�
 英语虽然没有重音字母，但仍会标明为ISO/IEC 8859-1编码。除此之外，欧洲以外的部分语言，如南非荷兰语、斯瓦希里语、印尼语及马来语、菲律宾他加洛语等也可使用ISO/IEC 8859-1编码。
 ```
 
-
-
-![1](F:\github\Docs\RK_Linux_Compile.assets/1.png)
+![1](./RK_Linux_Compile.assets/1.png)
 
 ## kernel
 
@@ -3488,8 +3428,6 @@ git diff
 git checkout arch/
 rm .config
 ```
-
-
 
 ### 新加设备树
 
@@ -3533,6 +3471,8 @@ dts 语法可以像 c/c++一样，通过#include xxx.dtsi 来包含其他公用�
 
 ### 创建 dts  文件
 
+1)修改 dts  所在目录的 Makefile注意是dtb结尾
+
 ```
 diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
 index 16859011d6b0..1b3c3c383142 100644
@@ -3548,7 +3488,7 @@ index 16859011d6b0..1b3c3c383142 100644
         rk3128h-box-avb.dtb \
 ```
 
-### 修改 dts  所在目录的 Makefile
+2)增加dts文件
 
 ```shell
 
@@ -3570,7 +3510,6 @@ index 000000000000..6b7bcc86a3fe
 +#include <dt-bindings/gpio/gpio.h>
 +#include <dt-bindings/input/input.h>
 +#include <dt-bindings/pinctrl/rockchip.h>
-
 ```
 
 编译 kenrel 的时候可以直接 make dts-name.img（如 rk3308-evb-amic-v10.img），即
@@ -3578,16 +3517,15 @@ index 000000000000..6b7bcc86a3fe
 
 ### 修改编译脚本,指向最新的设备树
 
-```
+```shell
 cw@SYS3:~/3126c_inner/device/rockchip$ ls -al
-total 92
 drwxrwxr-x 22 cw cw 4096 May 30  2019 .
 drwxrwxr-x  3 cw cw 4096 May 30  2019 ..
 lrwxrwxrwx  1 cw cw   22 May 30  2019 .BoardConfig.mk -> rk3126c/BoardConfig.mk
 drwxrwxr-x  2 cw cw 4096 Jun 30  2019 common
 drwxrwxr-x  2 cw cw 4096 Jul  2  2019 .git
 -rw-rw-r--  1 cw cw   16 May 30  2019 .gitignore
-drwxrwxr-x  6 cw cw 4096 May 30  2019 oem
+drwxrwxr-x  6 cw cw 4096 May 30  2019 oem  下面是oem打包为文件系统镜像的目录
 drwxrwxr-x  2 cw cw 4096 May 30  2019 px30
 drwxrwxr-x  2 cw cw 4096 May 30  2019 px3se
 drwxrwxr-x  3 cw cw 4096 May 30  2019 rk1808
@@ -3603,8 +3541,8 @@ drwxrwxr-x  2 cw cw 4096 May 30  2019 rk3328
 drwxrwxr-x  2 cw cw 4096 May 30  2019 rk3399
 drwxrwxr-x  2 cw cw 4096 May 30  2019 rk3399pro
 drwxrwxr-x  2 cw cw 4096 May 30  2019 rk3399pro-npu
-drwxrwxr-x  2 cw cw 4096 Jun 26  2019 rockimg
-drwxrwxr-x  4 cw cw 4096 May 30  2019 userdata
+drwxrwxr-x  2 cw cw 4096 Jun 26  2019 rockimg 这个是空的misc
+drwxrwxr-x  4 cw cw 4096 May 30  2019 userdata 下面是useradate打包为文件系统镜像的目录
 cw@SYS3:~/3126c_inner/device/rockchip$ vim .BoardConfig.mk 
 cw@SYS3:~/3126c_inner/device/rockchip$ 
 cw@SYS3:~/3126c_inner/device/rockchip$ git diff
@@ -3617,14 +3555,14 @@ index cff7bb2..ee248ce 100755
  export RK_KERNEL_DEFCONFIG=rockchip_linux_defconfig
  # Kernel dts
 -export RK_KERNEL_DTS=rk3126-linux
-+export RK_KERNEL_DTS=rk3126-linux-dpf
++export RK_KERNEL_DTS=rk3126-linux-dpf   在这里重新声明设备树名字，不要后缀
  # boot image type
  export RK_BOOT_IMG=zboot
 ```
 
+执行./build.sh device/ rk3126c/BoardConfig.mk  重新指定板级配置
+
 重新编译即可 ./build.sh kernel
-
-
 
 ## TRUST
 
