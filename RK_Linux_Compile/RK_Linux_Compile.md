@@ -7,7 +7,7 @@ RK Linux编译
 ## 1.1 下载SDK并编译，生成固件
 
 1. shell的环境变量，只在当前shell有效，所以不要登入多个shell，会导致环境变量缺失编译失败。
-2. 不要强制停止source envsetup.sh的执行，可能导致文件缺失，比如生成的makefile为空，这时候你要删除空的makefile再重新编译。如果已经输入数字错误，就在输入一个错误数字，按回车，脚本提示数字非法
+2. 不要强制停止source envsetup.sh的执行，可能导致文件缺失，比如生成的makefile为空，这时候你要删除空的makefile再重新编译。如果已经输入数字错误，就在输入一个错误数字，按回车，脚本提示数字非法就自动退出
 
 
 ```shell
@@ -54,7 +54,7 @@ rockdev
 
 小技巧：编译之后，查看环境变量中各项配置：确定脚本执行的信息，以firefly为例
 
-```
+```shell
 cw@SYS3:~/sdk/312x_i$ env
 RK_MISC=wipe_all-misc.img   
 RK_ARCH=arm        系统架构arch =arm 这说明是32位， 如果arch=arm64说明是64位
@@ -68,16 +68,16 @@ LIBRARY_PATH=/usr/local/lib
 RK_UBOOT_DEFCONFIG=rk3128            uboot使用的默认配置
 OLDPWD=/home/cw/sdk/312x_i/kernel        
 RK_CFG_PCBA=rockchip_rk3128_pcba
-RK_PARAMETER=parameter-buildroot.txt
+RK_PARAMETER=parameter-buildroot.txt   使用的分区表
 SSH_TTY=/dev/pts/47
 USER=cw
 RK_JOBS=12
-RK_USERDATA_DIR=userdata_normal
+RK_USERDATA_DIR=userdata_normal    在/device/rockchip/common目录下 userdata目录打包为镜像
 RK_OEM_FS_TYPE=ext2
 MAIL=/var/mail/cw
 PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
 PWD=/home/cw/sdk/312x_i
-RK_BOOT_IMG=zboot.img
+RK_BOOT_IMG=zboot.img                    kernel的镜像名字
 LANG=en_US.UTF-8
 RK_KERNEL_DTS=rk3128-fireprime          内核使用的dts
 RK_KERNEL_DEFCONFIG=rockchip_linux_defconfig  内核defconfig
@@ -89,10 +89,10 @@ RK_CFG_RECOVERY=rockchip_rk3128_recovery
 RK_TARGET_PRODUCT=rk3128
 RK_CFG_BUILDROOT=rockchip_rk3128
 LOGNAME=cw
-RK_OEM_DIR=oem_normal
+RK_OEM_DIR=oem_normal               在/device/rockchip/common目录下，oem目录打包为镜像
 XDG_DATA_DIRS=/usr/local/share:/usr/share:/var/lib/snapd/desktop
 SSH_CONNECTION=172.16.21.104 1493 10.10.10.190 22
-RK_KERNEL_IMG=kernel/arch/arm/boot/zImage
+RK_KERNEL_IMG=kernel/arch/arm/boot/zImage   打包的镜像格式
 XDG_RUNTIME_DIR=/run/user/1032
 _=/usr/bin/env
 cw@SYS3:~/sdk/312x_i$ 
@@ -103,6 +103,8 @@ cw@SYS3:~/sdk/312x_i$
 ## 1.2 烧写工具
 
 请用SDK里面AndroidTool.exe ，不建议复制出来，SDK里面已经配置好了各子项名称路径，你可以直接选用。如
+
+版本的话，不同芯片可能不同。
 
 Windows工具：[AndroidTool](http://www.t-firefly.com/doc/download/page/id/4.html#windows_22)
 
@@ -260,7 +262,7 @@ system: Android 的 system 分区映像，ext4 文件系统格式，对应的是
 
 - recovery和rootfs是编译buildroot生成的
 
-- userdata.img是用户数据镜像
+- userdata.img  是用户数据镜像，其实就是一个目录打包为文件系统镜像，目录可以放一些文件。这个是device/rockchip/common/mk-image.sh脚本打包的
 
 
 ```shell
@@ -299,7 +301,7 @@ mk-toolchain.sh
 rkflash.sh
 Version.mk
 ```
-### 1.2.5  recovery模式和普通模式
+### 1.2.5  recovery模式和普通模式 区分
 
 [root@buildroot:/]# 这个代表是recovery模式，该模式下不能自己加载驱动。
 
@@ -893,6 +895,15 @@ drwxr-xr-x  2 c    c    4096 3月  15 00:01 .git
 ```
 
 所以切换单板的操作：
+
+方法一：
+
+```、
+root@c:/home/c/linux/v2/device/rockchip# rm .BoardConfig.mk
+然后重新source envsetup.sh  #选择开发板，如rk3128  即可
+```
+
+方法二
 
 ```
 root@c:/home/c/linux/v2/device/rockchip# ln -sf rk3128/BoardConfig.mk .BoardConfig.mk
@@ -1565,7 +1576,6 @@ for option in ${OPTIONS:-allsave}; do
 			;;
 	esac
 done
-
 ```
 
 device/rockchip/common/mk-buildroot.sh
@@ -1597,7 +1607,6 @@ device/rockchip/common/mk-buildroot.sh
  24     exit 1
  25 fi
  26 echo "log saved on $TOP_DIR/br.log. pack buildroot image at: $TOP_DIR/buildroot/output/$RK_CFG_BUILDROOT/images/rootfs.$RK_ROOTFS_TYPE"
-~
 ```
 
 
@@ -1664,7 +1673,7 @@ device/rockchip/common/mk-buildroot.sh
 ├── CHANGES
 ├── Config.in 
 ├── Config.in.legacy
-├── configs:  放置开发板的一些配置参数.
+├── configs:  放置开发板的一些配置参数. 各种default
 ├── COPYING
 ├── DEVELOPERS
 ├── dl:       存放下载的源代码及应用软件的压缩包.如果有个软件包下载地址下载失败，会报错！！（不被git仓库管理）
@@ -1685,9 +1694,9 @@ device/rockchip/common/mk-buildroot.sh
 ├── system
 └── toolchain
 
-root@cw:/home/cw/3126c_i/buildroot# cat .gitignore 
-/output
-/dl
+root@cw:/home/cw/3126c_i/buildroot# cat .gitignore  这些不被git仓库所管理
+/output 编译输出目录
+/dl   各个软件压缩包的下载目录
 /download
 /.auto.deps
 /.config.cmd
@@ -1761,8 +1770,6 @@ Documentation:
 
 ```
 
-
-
 ### 6.2 rockchp buildroot
 
 Buildroot 编译输出结果保存在 `output` 目录，具体目录由配置文件决定，本例保存在 `buildroot/output/rockchip_rk3288` 目录，后续可以在该目录执行 `make` 编译根文件系统。采用全自动编译方式时，默认会生成 `buildroot/output/rockchip_rk3288_recovery` 目录，这是 `recovery` 的编译输出目录。
@@ -1773,12 +1780,14 @@ Buildroot 编译输出结果保存在 `output` 目录，具体目录由配置文
 
 ###  Buildroo的编译输出存放在output/.下面
 
+```shell
 cw@SYS3:~/sdk/3126i/buildroot/output/rockchip_rk3128$ du -h --max-depth=1
 13G   ./build
 830M  ./images
-211M  ./target
+211M  ./target  
 893M  ./host
 15G   .
+```
 
 - `build/` 包含所有的源文件，包括 Buildroot 所需主机工具和选择的包，这个目录包含所有 模块源码。 存放除交叉编译器之外的所有组件，每个组件自己有一个文件夹
 - `host/`   包含host所需要的各种安装包（为运行buildroot所需要的各组件，及交叉编译器）
@@ -1796,8 +1805,8 @@ cd buildroot/output/rockchip_rk3288/
 # 进入图形化配置界面，选择所需模块，保存退出
 make menuconfig
 
-# 保存到配置文件 'buildroot/configs/rockchip_rk3288_defconfig'
-make savedefconfig
+# 保存到配置文件 'buildroot/configs/rockchip_rk3288_defconfig' 
+make savedefconfig             建议再git diff 检查下是否修改到
 
 #编译 Buildroot 根文件系统
 make
@@ -2781,7 +2790,7 @@ kernel/
    make rockchip_rk3128H_defconfig
    make
 2. Create the ext4 image(rootfs.img)
-    ./mk-image.sh
+    ./mk-image.sh  (打包各个文件系统格式的镜像如ext2、ext3、jffs2、squash等等)
     完成编译后，执行 SDK 根目录下的 mkfirmware.sh 脚本生成固件，所有烧写所需的镜像将
     都会拷贝于 rockdev/目录。
     rockdev/
@@ -2805,10 +2814,10 @@ kernel/
 
 ```
 分区大小@分区起始地址
-0x00100000@0x0005a000(rootfs) @符号之前的数值是分区大小，@符号之后的数值是分区的起始位置，
+0x00100000@0x0005a000(rootfs) @符号之前的数值是分区大小（单位block 512byte），@符号之后的数值是分区的起始位置，
 ```
 
-介绍数字单位都是块（512字节）
+介绍数字单位都是块（512字节），对应的分区最好按4MB对齐`，大小也按4MB整数倍配置。
 
 ```
 计算公式：  数字*512字节/1024/1024
@@ -2851,22 +2860,114 @@ Parameter文件大小有限制，最大不能超过64KB。如图，烧录包括p
 
 ### 11.1 分区表举例rk3128/parameter-buildroot.txt
 
+注意了分区表的信息是根目录下mkfirmware.sh脚本解析的，他的原理是一行一行的读，判断这一行有没有字符串"CMDLINE: mtdparts=rk29xxnand:"，
+
+如果有就是分区信息，如果没有就会解析分区表失败。注意最后一行必须是空行保留，不然也会无法解析。
+
 ```
 cw@SYS3:~/sdk/312x_i/rockdev$ more /home/cw/sdk/312x_i/device/rockchip/
-FIRMWARE_VER: 8.1
-MACHINE_MODEL: RK3128
-MACHINE_ID: 007
-MANUFACTURER: RK3128
-MAGIC: 0x5041524B
-ATAG: 0x00200800
-MACHINE: 3128
+FIRMWARE_VER: 8.1      固件版本，打包 update.img 用到。升级工具据此识别固件版本
+MACHINE_MODEL: RK3128  可以自己修改，打包updata.img使用，不同的项目，用于升级工具显示。在recovery里面升级固件时
+MACHINE_ID: 007        机型，看项目， 产品开发ID，不同项目使用不同ID,识别机器的型号，而不是芯片型号，打包updata.img使用
+MANUFACTURER: RK3128   可以自己改，产商信息，用于升级工具显示
+MAGIC: 0x5041524B   不能改，魔数
+ATAG: 0x00200800    不能改
+MACHINE: 3128       不能改，内核识别用
 CHECK_MASK: 0x80
-PWR_HLD: 0,0,A,0,1
-TYPE: GPT
+PWR_HLD: 0,0,A,0,  控制 GPIO0 A0 输出高电平
+TYPE: GPT          创建的是GPT分区
 CMDLINE: mtdparts=rk29xxnand:0x00002000@0x00004000(uboot),0x00002000@0x00006000(trust),0x00002000@0x00008000(misc),0x00010000@0x0000a000(boot),0x00010000
 @0x0001a000(recovery),0x00010000@0x0002a000(backup),0x00020000@0x0003a000(oem),0x00100000@0x0005a000(rootfs),-@0x0015a000(userdata:grow)
 uuid:rootfs=614e0000-0000-4b53-8000-1d28000054a9
+
 ```
+
+```
+Platform: RK3399
+OS: Android 6.0
+Version: v2016.08
+
+parameter 分析
+常见问题
+system 分区改为 ext3 后parameter 中 mtd 分区如何定义
+系统固件变大backup 分区起始位置和大小变大系统异常
+Parameter 最大为 64KB。
+其中的参数由 Bootloader 解析。
+
+parameter 分析
+固件版本，打包 update.img 用到。升级工具据此识别固件版本
+FIRMWARE_VER: 6.0.1
+机型，打包 update.img 用到。用于升级工具显示。
+MACHINE_MODEL: RK3399
+产品ID，为数字或字母组合，打包 update.img 使用。
+MACHINE_ID: 007
+机型，打包 update.img 用到。用于升级工具显示。
+MANUFACTURER: RK3399
+无法修改
+MAGIC: 0x5041524B
+无法修改
+ATAG: 0x00200800
+无法修改，内核识别用
+MACHINE: 3399
+无法修改
+CHECK_MASK: 0x80
+
+PWR_HLD:0,0,C,7,1 //控制 GPIO0C7 输出高电平
+PWR_HLD:0,0,C,7,2 //控制 GPIO0C7 输出低电平
+PWR_HLD:0,0,A,0,3 //配置 PWR_HLD 为 GPIO0A0,在 Loader 需要锁定电源时,输出高电平锁定电源
+最后一位是电平判断，解释:
+1:= 解析 parameter 时,输出高电平
+2:= 解析 parameter 时,输出低电平
+3:= 在 Loader 需要控制电源时,输出高电平
+0:= 在 Loader 需要控制电源时,输出低电平
+这里是控制 GPIO0 A0 输出高电平
+PWR_HLD: 0,0,A,0,1
+
+内核地址，bootloader 将加载此地址，如果 kernel 编译地址改变，需要修改此值
+#KERNEL_IMG: 0x00280000
+
+#FDT_NAME: rk-kernel.dtb
+按键类型 0 普通按键，GPIO 定义 （三位），电平判断
+比如 0,4,C,5,0 代表 普通按键，GPIO4 C5, 低电平有效
+按键类型 1 AD按键，AD 定义 （三位），保留
+比如 1,1,0,20,0 代表 AD按键，ADC 通道，下限值为 00，上限值为 200 即 AD值在 0～200 之间的按键都认为是 RECOVER_KEY
+#RECOVER_KEY: 1,1,0,20,0
+
+#in section; per section 512(0x200) bytes
+CMDLINE:
+androidboot.baseband=N/A
+androidboot.selinux=disabled //安全强化 Linux 是否打开
+androidboot.hardware=rk30board //硬件平台
+androidboot.console=ttyFIQ0 //串口定义
+init=/init
+
+MTD分区 RK30xx、RK29xx 和 RK292x 都是用 rk29xxnand 做标识
+mtdparts=rk29xxnand:0x00002000@0x00002000(uboot),0x00002000@0x00004000(trust),0x00002000@0x00006000(misc),0x00008000@0x00008000(resource),0x00008000@0x00010000(kernel),0x00010000@0x00018000(boot),0x00010000@0x00028000(recovery),0x00038000@0x00038000(backup),0x00040000@0x00070000(cache),0x00200000@0x000B0000(system),0x00008000@0x002B0000(metadata),0x00002000@0x002B8000(baseparamer),-@0x002BA000(userdata)
+
+@符号前是分区的大小
+@符号后是分区的起始地址
+括号中是分区的名字
+单位都是 sector（512Bytes）
+比如 uboot 起始地址为 0x2000 sectors （4MB）的位置，大小为 0x2000 sectors（4M）
+另外 flash 最大的 block 是 4M（0x2000 sectors），所以每个分区需要 4MB 对齐，即每个分区必须为 4MB 的整数倍。
+
+,0x00038000@0x00038000(backup)
+backup 分区前的分区为固件区 uboot、trust、misc、resource、kernel、boot、recovery 。
+后续升级时不能修改分区大小
+backup 分区后的分区 cache、system、metadata、baseparamer、userdata
+是可以读写的，可以调整分区大小。但是修改分区大小后需要进入 recovery 系统格式化 cache
+
+常见问题
+1. system 分区改为 ext3 后，parameter 中 mtd 分区如何定义
+ext3 为可写文件系统，system 分区需要定义在 backup 后。
+
+2. 系统固件变大，backup 分区起始位置和大小变大，系统异常
+backup 之前的分区只可改小，不可变大，所以请预留足够空间。
+出现问题后，按住 recovery 进入 loader 升级模式，“修复模式升级固件” 或者 擦出 idb 功能低格 flash 后再升级。
+另外现在 backup 已经不再备份 system.img 了。
+```
+
+
 
 ### 11.2 分区表定义
 
@@ -2884,6 +2985,8 @@ uuid:rootfs=614e0000-0000-4b53-8000-1d28000054a9
 | CMDLINE：            | console=ttyFIQ0 androidboot.console=ttyFIQ0，串口定义。      |
 
 ![image-20200624151316516](RK_Linux_Compile.assets/image-20200624151316516.png)
+
+重点：
 
 ```
 
@@ -2909,7 +3012,7 @@ mtdparts=rk29xxnand:0x00002000@0x00002000(uboot),0x00002000@0x00004000(trust),0x
 括号里面的字符是分区的名字。所有数值的单位是sector，1个sector为512Bytes.上例中，boot分区起始位置为
 0x8000 sectors位置，大小为0x2000 sectors(4MB).
 3、为了性能，每个分区起始地址需要32KB（64 sectors）对齐，大小也需要32KB的整数倍。
-4、如果使用sparse格式的镜像，升级时会擦除数据，为了兼容性更好，对应的分区最好按4MB对齐，大小也按
+4、如果使用sparse格式的镜像，升级时会擦除数据，为了兼容性更好，`对应的分区最好按4MB对齐`，大小也按
 4MB整数倍配置。
 名称 Parameter定义地址 EMMC逻辑地址 NAND逻辑地址 大小
 GPT -- 0 0 32KB
@@ -2936,8 +3039,6 @@ TRUST 0x4000 0x6000 0x4000 4MB
 
 
 
-
-
 ## JFFS2 文件系统支持
 
 #### 简介
@@ -2945,8 +3046,6 @@ TRUST 0x4000 0x6000 0x4000 4MB
 JFFS2 的全名为 Journalling Flash FileSystem Version 2（闪存日志型文件系统第 2 版），其功能就是管理在 MTD 设备上实现的日志型文件系统。与其他的存储设备存储方案相比，JFFS2 并不准备提供让传统文件系统也可以使用此类设备的转换层。它只会直接在 MTD 设备上实现日志结构的文件系统。JFFS2 会在安装的时候，扫描 MTD 设备的日志内容，并在 RAM 中重新建立文件系统结构本身。
 
 #### 配置
-
-配置：
 
 ```
 CONFIG_JFFS2_FS=y
