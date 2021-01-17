@@ -2862,7 +2862,11 @@ Parameter文件大小有限制，最大不能超过64KB。如图，烧录包括p
 
 注意了分区表的信息是根目录下mkfirmware.sh脚本解析的，他的原理是一行一行的读，判断这一行有没有字符串"CMDLINE: mtdparts=rk29xxnand:"，
 
-如果有就是分区信息，如果没有就会解析分区表失败。注意最后一行必须是空行保留，不然也会无法解析。
+脚本解析字符串失败情况
+
+1.如果有就是分区信息，如果没有字符串"CMDLINE: mtdparts=rk29xxnand:"，就会解析分区表失败。
+
+2.注意最后一行必须是空行保留，不然解析分区表失败。
 
 ```
 cw@SYS3:~/sdk/312x_i/rockdev$ more /home/cw/sdk/312x_i/device/rockchip/
