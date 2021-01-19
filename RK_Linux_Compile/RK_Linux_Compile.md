@@ -2838,7 +2838,10 @@ TYPE: GPT          创建的是GPT分区
 CMDLINE: mtdparts=rk29xxnand:0x00002000@0x00004000(uboot),0x00002000@0x00006000(trust),0x00002000@0x00008000(misc),0x00010000@0x0000a000(boot),0x00010000
 @0x0001a000(recovery),0x00010000@0x0002a000(backup),0x00020000@0x0003a000(oem),0x00100000@0x0005a000(rootfs),-@0x0015a000(userdata:grow)
 uuid:rootfs=614e0000-0000-4b53-8000-1d28000054a9
+
 ```
+
+注意这里uuid这个是设置rootfs的UUID，对走MTD方案的spi nor是没有用的。
 
 ```
 Platform: RK3399
@@ -2925,6 +2928,12 @@ backup 之前的分区只可改小，不可变大，所以请预留足够空间�
 另外现在 backup 已经不再备份 system.img 了。
 ```
 
+
+
+
+
+
+
 ### 分区表定义
 
 | FIRMWARE_VER:8.1     | 固件版本，打包updata.img时会使用到，升级工具会根据这个识别固件版本。 |
@@ -2992,7 +3001,11 @@ TRUST 0x4000 0x6000 0x4000 4MB
 互错开存放的，不会覆盖。
 ```
 
+![nofind](RK_Linux_Compile.assets/nofind.png)
 
+
+
+烧错分区表, 会导致没有找到分区信息 Could not find security partition
 
 ## JFFS2 文件系统支持
 
@@ -3078,6 +3091,8 @@ lrwxrwxrwx 1 cw cw   11 Jun 24 09:32 rootfs.ext4 -> rootfs.ext2
 如果parameter文件配置错误，可能导致启动卡死，如下图，修改rootfs为0x1000000（8G大小），超过了合法的方位，于是开机的时候死机，这时候断电重启动ctrl+c输入rbrom重新进入maskrom，重新烧录合法的估计。
 
 ![image-20200624163709370](RK_Linux_Compile.assets/image-20200624163709370.png)
+
+
 
 ## DDR改128M
 
@@ -3235,6 +3250,9 @@ Press any key to quit:
 mv: cannot stat '/home/cw/sdk/312x_i/tools/linux/Linux_Pack_Firmware/rockdev/update.img': No such file or directory
 Make update image failed!
 ```
+
+
+
 
 ## 启动流程
 
