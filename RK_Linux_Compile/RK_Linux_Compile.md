@@ -2838,7 +2838,10 @@ TYPE: GPT          创建的是GPT分区
 CMDLINE: mtdparts=rk29xxnand:0x00002000@0x00004000(uboot),0x00002000@0x00006000(trust),0x00002000@0x00008000(misc),0x00010000@0x0000a000(boot),0x00010000
 @0x0001a000(recovery),0x00010000@0x0002a000(backup),0x00020000@0x0003a000(oem),0x00100000@0x0005a000(rootfs),-@0x0015a000(userdata:grow)
 uuid:rootfs=614e0000-0000-4b53-8000-1d28000054a9
+
 ```
+
+注意这里uuid这个是设置rootfs的UUID，对走MTD方案的spi nor是没有用的。
 
 ```
 Platform: RK3399
@@ -2925,6 +2928,12 @@ backup 之前的分区只可改小，不可变大，所以请预留足够空间�
 另外现在 backup 已经不再备份 system.img 了。
 ```
 
+
+
+
+
+
+
 ### 分区表定义
 
 | FIRMWARE_VER:8.1     | 固件版本，打包updata.img时会使用到，升级工具会根据这个识别固件版本。 |
@@ -2992,8 +3001,56 @@ TRUST 0x4000 0x6000 0x4000 4MB
 互错开存放的，不会覆盖。
 ```
 
+![nofind](RK_Linux_Compile.assets/nofind.png)
 
+<<<<<<< HEAD
 #### 报错！分区表大于实际编译输出
+=======
+
+
+烧错分区表, 会导致没有找到分区信息 Could not find security partition
+
+## JFFS2 文件系统支持
+
+#### 简介
+
+JFFS2 的全名为 Journalling Flash FileSystem Version 2（闪存日志型文件系统第 2 版），其功能就是管理在 MTD 设备上实现的日志型文件系统。与其他的存储设备存储方案相比，JFFS2 并不准备提供让传统文件系统也可以使用此类设备的转换层。它只会直接在 MTD 设备上实现日志结构的文件系统。JFFS2 会在安装的时候，扫描 MTD 设备的日志内容，并在 RAM 中重新建立文件系统结构本身。
+
+#### 配置
+
+```
+CONFIG_JFFS2_FS=y
+```
+
+#### 镜像制作
+
+```
+mkfs.jffs2 -r data/-o data.jffs2 -e 0x10000 --pad=0x400000 -s 0x1000 -n		// --pad 定为分区大小一致，erase size 设置为 64KB
+```
+
+```
+Options:
+ --pad [=SIZE]            Pad output to SIZE bytes with 0xFF. If SIZE is
+                          not specified, the output is padded to the end of
+                          the final erase block
+  -r, -d, --root=DIR      Build file system from directory DIR (default: cwd)
+  -s, --pagesize=SIZE     Use page size (max data node size) SIZE.
+                          Set according to target system's memory management
+                          page size (default: 4KiB)
+  -e, --eraseblock=SIZE   Use erase block size SIZE (default: 64KiB)
+  -n, --no-cleanmarkers   Don't add a cleanmarker to every eraseblock
+```
+
+```shell
+
+cw@SYS3:~/sdk/rk356x/device/rockchip/userdata$ ls
+squashfs.img  userdata_empty  userdata_normal  userdata_sl
+
+cw@SYS3:~/sdk/rk356x/device/rockchip/userdata$  mksquashfs userdata_normal/ squashfs.img -noappend -always-use-fragments
+```
+
+## 分区表和编译关系
+>>>>>>> origin/master
 
 编译时候遇到生成的rootfs大于parameter文件限制的情况
 
@@ -3041,6 +3098,7 @@ lrwxrwxrwx 1 cw cw   11 Jun 24 09:32 rootfs.ext4 -> rootfs.ext2
 
 
 
+<<<<<<< HEAD
 #### 报错！# Reset the board to bootrom #
 
 ```
@@ -3150,6 +3208,8 @@ squashfs.img  userdata_empty  userdata_normal  userdata_sl
 cw@SYS3:~/sdk/rk356x/device/rockchip/userdata$  mksquashfs userdata_normal/ squashfs.img -noappend -always-use-fragments
 ```
 
+=======
+>>>>>>> origin/master
 ## DDR改128M
 
 1. 将DDR初始化的固件存放于rkbin/bin/rk31/rk3128_ddr_128MB_v1.00.bin
@@ -3306,6 +3366,9 @@ Press any key to quit:
 mv: cannot stat '/home/cw/sdk/312x_i/tools/linux/Linux_Pack_Firmware/rockdev/update.img': No such file or directory
 Make update image failed!
 ```
+
+
+
 
 ## 启动流程
 
