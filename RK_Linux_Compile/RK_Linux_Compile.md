@@ -439,11 +439,11 @@ enum if_type {
 	IF_TYPE_HOST,
 	IF_TYPE_SYSTEMACE,
 	IF_TYPE_NVME,
-	IF_TYPE_RKNAND,
-	IF_TYPE_SPINAND,
-	IF_TYPE_SPINOR,
+	IF_TYPE_RKNAND, 
+	IF_TYPE_SPINAND,这个是spi nand flash
+	IF_TYPE_SPINOR, 这个是spi nor flash
 	IF_TYPE_RAMDISK,
-	IF_TYPE_MTD,
+	IF_TYPE_MTD, 
 	IF_TYPE_COUNT,			/* Number of interface types */
 };
 ```
@@ -2993,47 +2993,7 @@ TRUST 0x4000 0x6000 0x4000 4MB
 ```
 
 
-
-## JFFS2 文件系统支持
-
-#### 简介
-
-JFFS2 的全名为 Journalling Flash FileSystem Version 2（闪存日志型文件系统第 2 版），其功能就是管理在 MTD 设备上实现的日志型文件系统。与其他的存储设备存储方案相比，JFFS2 并不准备提供让传统文件系统也可以使用此类设备的转换层。它只会直接在 MTD 设备上实现日志结构的文件系统。JFFS2 会在安装的时候，扫描 MTD 设备的日志内容，并在 RAM 中重新建立文件系统结构本身。
-
-#### 配置
-
-```
-CONFIG_JFFS2_FS=y
-```
-
-#### 镜像制作
-
-```
-mkfs.jffs2 -r data/-o data.jffs2 -e 0x10000 --pad=0x400000 -s 0x1000 -n		// --pad 定为分区大小一致，erase size 设置为 64KB
-```
-
-```
-Options:
- --pad [=SIZE]            Pad output to SIZE bytes with 0xFF. If SIZE is
-                          not specified, the output is padded to the end of
-                          the final erase block
-  -r, -d, --root=DIR      Build file system from directory DIR (default: cwd)
-  -s, --pagesize=SIZE     Use page size (max data node size) SIZE.
-                          Set according to target system's memory management
-                          page size (default: 4KiB)
-  -e, --eraseblock=SIZE   Use erase block size SIZE (default: 64KiB)
-  -n, --no-cleanmarkers   Don't add a cleanmarker to every eraseblock
-```
-
-```shell
-
-cw@SYS3:~/sdk/rk356x/device/rockchip/userdata$ ls
-squashfs.img  userdata_empty  userdata_normal  userdata_sl
-
-cw@SYS3:~/sdk/rk356x/device/rockchip/userdata$  mksquashfs userdata_normal/ squashfs.img -noappend -always-use-fragments
-```
-
-## 分区表和编译关系
+#### 报错！分区表大于实际编译输出
 
 编译时候遇到生成的rootfs大于parameter文件限制的情况
 
@@ -3078,6 +3038,117 @@ lrwxrwxrwx 1 cw cw   11 Jun 24 09:32 rootfs.ext4 -> rootfs.ext2
 如果parameter文件配置错误，可能导致启动卡死，如下图，修改rootfs为0x1000000（8G大小），超过了合法的方位，于是开机的时候死机，这时候断电重启动ctrl+c输入rbrom重新进入maskrom，重新烧录合法的估计。
 
 ![image-20200624163709370](RK_Linux_Compile.assets/image-20200624163709370.png)
+
+
+
+#### 报错！# Reset the board to bootrom #
+
+```
+out
+U-Boot SPL board init
+U-Boot SPL 2017.09-g34ddf661ae-201225 #zzz (Dec 30 2020 - 14:54:25)
+arasan_sdhci_probe clk set rate fail!
+Trying to boot from MMC2
+Card did not respond to voltage select!
+mmc_init: -95, time 9
+spl: mmc init failed with error: -95
+Trying to boot from MMC1
+mmc_init: -110, time 4
+spl: mmc init failed with error: -110
+Trying to boot from MTD2
+Not fit magic
+Trying fit image at 0x5000 sector
+Not fit magic
+SPL: failed to boot from all boot devices
+### ERROR ### Please RESET the board ###
+# Reset the board to bootrom #
+```
+
+这个原因：uboot问题，或是你分区只更新了部分，应该全部重新烧录，或者擦除，重新烧录。
+
+## ROOTFS文件系统 Ubifs文件系统
+
+沉薇:
+我这边想制作自己的rootfs怎么办.就是xy说的那个rootfs文件系统少好多文件
+
+
+![](RK_Linux_Compile.assets/rootfs-squash.png)
+
+
+```
+挣钱顺:
+ubinize -o rootfs.img -p 0x40000 -m 4096 -s 4096 -v ubinize.cfg
+
+挣钱顺:
+buildroot/output/rockchip_rv1126_robot/images/rootfs.squashfs
+
+挣钱顺:
+$ cat ubinize.cfg 
+[rootfs]
+mode=ubi
+vol_id=0
+vol_type=static
+vol_name=rootfs
+vol_alignment=1
+vol_flags=autoresize
+image=livefs.squashfs-2
+
+挣钱顺:
+image=buildroot/output/rockchip_rv1126_robot/images/rootfs.squashfs
+
+挣钱顺:
+image=/data/rk/projs/rv1126/sdk/buildroot/output/rockchip_rv1126_robot/images/rootfs.squashfs
+
+挣钱顺:
+[rootfs]
+mode=ubi
+vol_id=0
+vol_type=static
+vol_name=rootfs
+vol_alignment=1
+vol_flags=autoresize
+image=/data/rk/projs/rv1126/sdk/buildroot/output/rockchip_rv1126_robot/images/rootfs.squashfs
+```
+
+
+## JFFS2 文件系统支持
+
+#### 简介
+
+JFFS2 的全名为 Journalling Flash FileSystem Version 2（闪存日志型文件系统第 2 版），其功能就是管理在 MTD 设备上实现的日志型文件系统。与其他的存储设备存储方案相比，JFFS2 并不准备提供让传统文件系统也可以使用此类设备的转换层。它只会直接在 MTD 设备上实现日志结构的文件系统。JFFS2 会在安装的时候，扫描 MTD 设备的日志内容，并在 RAM 中重新建立文件系统结构本身。
+
+#### 配置
+
+```
+CONFIG_JFFS2_FS=y
+```
+
+#### 镜像制作
+
+```
+mkfs.jffs2 -r data/-o data.jffs2 -e 0x10000 --pad=0x400000 -s 0x1000 -n		// --pad 定为分区大小一致，erase size 设置为 64KB
+```
+
+```
+Options:
+ --pad [=SIZE]            Pad output to SIZE bytes with 0xFF. If SIZE is
+                          not specified, the output is padded to the end of
+                          the final erase block
+  -r, -d, --root=DIR      Build file system from directory DIR (default: cwd)
+  -s, --pagesize=SIZE     Use page size (max data node size) SIZE.
+                          Set according to target system's memory management
+                          page size (default: 4KiB)
+  -e, --eraseblock=SIZE   Use erase block size SIZE (default: 64KiB)
+  -n, --no-cleanmarkers   Don't add a cleanmarker to every eraseblock
+```
+
+```shell
+
+cw@SYS3:~/sdk/rk356x/device/rockchip/userdata$ ls
+squashfs.img  userdata_empty  userdata_normal  userdata_sl
+
+cw@SYS3:~/sdk/rk356x/device/rockchip/userdata$  mksquashfs userdata_normal/ squashfs.img -noappend -always-use-fragments
+```
 
 ## DDR改128M
 
