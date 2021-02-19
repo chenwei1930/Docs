@@ -129,7 +129,7 @@ RK ISP2.0组件和管道介绍
 
 交流电照明灯发出的光会一定频率的抖动导致sensor图像出现行方向的水波纹，称之为filcker。目前主要的交流电频率有50HZ和60HZ两种。为了避免出现flicker，要求曝光时间大于base值时必须是base的整数倍。
 
--  工频干扰消除(AFC)水波纹
+- 工频干扰消除(AFC)水波纹
 
   CMOS是行暴光，也就是在每行暴光时间决定了画面的亮度，举例：一个50HZ的光源，电压曲线为正弦曲线，那能量曲线定性分析可以认为是取了绝对值的电压曲线。那就是能量做1/100秒的周期变化。那就要求暴光的时间必须是1/100秒的整数倍。如果没有把暴光时间调整到1/100秒的整数倍，就有可能会有每行的暴光值不一样，造成同一个image上有水波纹现象。CCD是整帧同时暴光，所以，工频干扰表现的就是图像有轻微的闪烁。产生的原理与CMOS sensor的原理相似。
 
@@ -343,7 +343,6 @@ iic读：
 ![771e9c18ea62191f6909a2d2e8799c7](camera_debug/771e9c18ea62191f6909a2d2e8799c7.jpg)
 
 ```shell
-
 #define SC031GS_7BIT_ADDRESS         (0x30)
 #define SC031GS_REG_ID_H_ADDRESS     (0x3107)
 #define SC031GS_REG_ID_L_ADDRESS     (0x3108)
@@ -542,45 +541,7 @@ VICAP的功能如下：
 
 ### 7.1 框图
 
-![
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-](resources/QQ截图20200923143044.png)
+![](resources/QQ截图20200923143044.png)
 
 ### 7.2 帧信号与行信号的触发模式
 
@@ -613,9 +574,9 @@ VICAP将使用以下帧数据覆盖存储在存储器中的帧前数据。
 
 
 -  Block Ping-Pong mode阻塞乒乓模式
-在此模式下，VICAP将以块为单位工作。块的行数取决于BLOCK_LINE_NUM的配置。依次接收块0和块1。什么时候block0 / 1完成后，将设置BLOCK_STATUS，用户应清除及时BLOCK_STATUS。当下一个块0/1开始接收时，如果BLOCK_STATUS_0 / 1未清除，当前帧的其余部分将被丢弃。
+   在此模式下，VICAP将以块为单位工作。块的行数取决于BLOCK_LINE_NUM的配置。依次接收块0和块1。什么时候block0 / 1完成后，将设置BLOCK_STATUS，用户应清除及时BLOCK_STATUS。当下一个块0/1开始接收时，如果BLOCK_STATUS_0 / 1未清除，当前帧的其余部分将被丢弃。
 
-- Storage存储
+-  Storage存储
 
 YUV模式和RAW模式之间的区别在于YUV模式或CCIR656中的区别模式，则数据将存储在Y数据缓冲区和UV数据缓冲区中，并且如果the only y mode模式是选择的UV数据不会被存储。
 
@@ -654,8 +615,6 @@ sensor驱动的media pixelcode运行起来，vicap是不会去改的，
 0x500:
 
 ![r2](resources/r2.png)
-
-
 
 ![r1](resources/r1.png)
 
@@ -740,3 +699,468 @@ Y5V5 Y6 Y7 V7 Y8
 映射出的像素点为：[Y0 U0 V5] [Y1 U0 V5] [Y2 U2 V7] [Y3 U2 V7]
 
 [Y5U0 V5] [Y6 U0 V5] [Y7U2 V7] [Y8 U2 V7]
+
+
+
+
+
+```
+[A.VICAP][000025.987876][  29C][vicap_0]:len of input fmts:20
+[A.VICAP][000025.990974][  29C][vicap_0]:input pixelcode:0x2001,mbus_code:0x2008
+[A.VICAP][000025.999993][  29C][vicap_0]:input pixelcode:0x2001,mbus_code:0x2009
+[A.VICAP][000026.006960][  28C][vicap_0]:input pixelcode:0x2001,mbus_code:0x2006
+[A.VICAP][000026.013927][  29C][vicap_0]:input pixelcode:0x2001,mbus_code:0x2007
+[A.VICAP][000026.020913][  29C][vicap_0]:input pixelcode:0x2001,mbus_code:0x3001
+[A.VICAP][000026.027885][  29C][vicap_0]:input pixelcode:0x2001,mbus_code:0x3013
+[A.VICAP][000026.034852][  27C][vicap_0]:input pixelcode:0x2001,mbus_code:0x3002
+[A.VICAP][000026.041818][  28C][vicap_0]:input pixelcode:0x2001,mbus_code:0x3014
+[A.VICAP][000026.048780][  28C][vicap_0]:input pixelcode:0x2001,mbus_code:0x3007
+[A.VICAP][000026.055749][  29C][vicap_0]:input pixelcode:0x2001,mbus_code:0x300e
+[A.VICAP][000026.062724][  28C][vicap_0]:input pixelcode:0x2001,mbus_code:0x300a
+[A.VICAP][000026.069693][  29C][vicap_0]:input pixelcode:0x2001,mbus_code:0x300f
+[A.VICAP][000026.076665][  28C][vicap_0]:input pixelcode:0x2001,mbus_code:0x3008
+[A.VICAP][000026.083640][  28C][vicap_0]:input pixelcode:0x2001,mbus_code:0x3010
+[A.VICAP][000026.090612][  28C][vicap_0]:input pixelcode:0x2001,mbus_code:0x3011
+[A.VICAP][000026.097581][  28C][vicap_0]:input pixelcode:0x2001,mbus_code:0x3012
+[A.VICAP][000026.104553][  29C][vicap_0]:input pixelcode:0x2001,mbus_code:0x100a
+[A.VICAP][000026.111528][  29C][vicap_0]:input pixelcode:0x2001,mbus_code:0x2001
+[A.VICAP][000026.118497][  28C][vicap_0]:the input format is:0x2001
+[A.VICAP][000026.121823][  29C][VICAP]:(rk_vicap_init) exit 
+```
+
+
+
+
+
+rk_vicap_init 初始化函数很重要，通过你配置的输入图像的像素格式 ，查表得知对应的 数据输入类型是yuv还是raw，
+
+
+
+```
+ret_err_t rk_vicap_init(struct rk_vicap_device *dev)
+{
+    uint8_t i;
+    uint32_t width, height, bpp, bpl, lines_per_block;
+    struct rk_vicap_dev *vicapdev = rk_get_vicap_dev(dev);
+    struct rk_camera_device *subdev = vicapdev->subdev;
+    struct rk_camera_mbus_framefmt *mbus_fmt;
+    const struct vicap_input_fmt *fmt;
+
+    MACRO_ASSERT(dev != RK_NULL);
+
+    rk_vicap_function_enter();
+
+    if (!subdev)
+    {
+        subdev = rk_vicap_ctrl_get_subdev(vicapdev);
+        if (!subdev)
+        {
+            VICAP_INFO(vicapdev, "Can't find vicap subdev, please check it!\n");
+            return RK_NULL;
+        }
+        else
+        {
+            vicapdev->subdev = subdev;
+            VICAP_INFO(vicapdev, "The %s subdev instance is:%s\n",
+                       RK_VICAP_SUBDEV_NAME,
+                       vicapdev->subdev->name);
+            rk_vicap_init_subdev(vicapdev);
+        }
+    }
+
+    mbus_fmt = &subdev->info.mbus_fmt;
+    fmt = RK_NULL;
+    VICAP_INFO(vicapdev, "len of input fmts:%d\n", ARRAY_SIZE(g_input_fmts));
+    for (i = 0; i < ARRAY_SIZE(g_input_fmts); i++)
+    {
+        VICAP_INFO(vicapdev, "input pixelcode:0x%x,mbus_code:0x%x\n",
+                   mbus_fmt->pixelcode, g_input_fmts[i].mbus_code);
+
+        if (mbus_fmt->pixelcode == g_input_fmts[i].mbus_code)
+        {
+            fmt = &g_input_fmts[i];
+            break;
+        }
+    }
+    if (!fmt)
+```
+
+
+
+Z:\cw\sdk\8_2206\src\bsp\RK2206\board\rk2206_iomux_base.c
+
+```
+__WEAK void  iomux_config_vicap(void)
+{
+    HAL_PINCTRL_SetIOMUX(GPIO_BANK0,
+                         GPIO_PIN_A0 |  // VICAP_D0
+                         GPIO_PIN_A1 |  // VICAP_D1
+                         GPIO_PIN_A2 |  // VICAP_HREF
+                         GPIO_PIN_A3 |  // VICAP_VSYNC
+                         GPIO_PIN_A4 |  // VICAP_CLKOUT
+                         GPIO_PIN_A5 |  // VICAP_CLKIN
+                         GPIO_PIN_A6 |  // VICAP_D2
+                         GPIO_PIN_A7,   // VICAP_D3
+                         PIN_CONFIG_MUX_FUNC2);
+    HAL_PINCTRL_SetIOMUX(GPIO_BANK0,
+                         GPIO_PIN_B0 |  // VICAP_D4
+                         GPIO_PIN_B1 |  // VICAP_D5
+                         GPIO_PIN_B2 |  // VICAP_D6
+                         GPIO_PIN_B3,   // VICAP_D7
+                         PIN_CONFIG_MUX_FUNC2);
+}
+```
+
+
+
+
+
+
+
+```c
+struct rk_vicap_dev
+{
+    struct rk_vicap_device parent; //vicap设备的操作动作结构体
+    char name[RK_VICAP_DEVICE_NAME_SIZE];//名字
+    struct VICAP_REG *vicap_reg; //vicap寄存器
+    struct CRU_REG *cru_reg; //CRU 在文本消息中用作首字母缩略词来表示 通讯寄存器单元。此
+    struct vicap_clock_info vicap_clk;
+    struct rk_camera_device *subdev;
+
+    struct vicap_videobuf_queue buf_queue;//缓存队列结构体，还有流busy标志位用于入队出队判断
+    /* used to config block0/frame0 yuv addr */
+    struct vicap_video_buf *buf_addr0;
+    /* used to config block1/frame1 yuv addr */
+    struct vicap_video_buf *buf_addr1;
+
+    struct vicap_input_info input; //输入配置缓存
+    struct vicap_output_info output;//输出配置，包括裁剪配置
+    struct vicap_block_info block_info;
+
+    int irq;                    // 中断号
+    NVIC_IRQHandler irqhandler; // 中断处理函数
+#if VICAP_WORK_QUEUE_ENABLE  这个没开
+    struct rt_workqueue *vicap_workqueue;
+    struct rk_vicap_work vicap_work;
+#endif
+    eVICAP_workMode work_mode; //工作模式一般是VICAP_WORKMODE_BLOCK_PINGPONG
+    rk_semaphore_t streamoff_sem;//rk_vicap_open时创建信号量，rk_vicap_ctrl_stream_off获得，rk_vicap_close删除信号量， rk_vicap_sample_block_irq 释放信号量
+    bool is_streamoff;
+
+};
+```
+
+
+
+
+
+```c
+struct vicap_videobuf_queue
+{
+    struct vicap_video_buf *bufs[VICAP_VIDEO_BUF_NUM_MAX];//指针数组
+    rk_mutex_t qmutex_lock;//互斥信号量
+    rk_semaphore_t qsem;//信号量
+    rk_mutex_t done_lock;//互斥信号量
+    rk_queue_list queued_list;
+    rk_queue_list done_list;
+    rk_queue_list actived_list;
+    uint8_t num_buffers; //
+    uint8_t min_buffers_needed;
+    uint8_t queued_count;
+    // count=0 rk_vicap_open
+    //rk_vicap_ctrl_qbuf 入队++
+    //rk_vicap_ctrl_dqbuf 出队—--
+        
+    uint8_t done_count;
+    uint8_t streaming: 1;
+    /* atomic_t owned_by_drv_count; */
+    uint8_t owned_by_drv_count;rk_vicap_release_buf;
+};
+```
+
+
+
+最经常报错的地方
+
+```
+static void rk_vicap_sample_block_irq(struct rk_vicap_dev *dev)
+{
+    uint32_t intstat;
+    struct vicap_video_buf *buf = RK_NULL;
+
+    intstat = HAL_VICAP_GetIrqStatus(dev->vicap_reg);
+
+    if (intstat & VICAP_INT_ERR_MASK)
+    {
+        VICAP_INFO(dev, "vicap was triggered err,intstat:0x%x\n", intstat);
+    }
+
+    if (intstat & VICAP_INT_OVERFLOW_MASK)
+    {
+        VICAP_INFO(dev, "vicap occurs overflow,intstat:0x%x\n", intstat);
+    }
+
+```
+
+
+
+## VICAP
+
+#### 描述
+
+vicap 通过DVP接口接收数据，并且通过AXI总线将数据存到系统内存里面。
+1、AHB从机配置寄存器
+2、AHB主机传输芯片内存
+3、传输输入图像数据为一个请求的格式
+4、可选择裁小图像
+5、DMA控制AXI主机
+
+656输出的是串行数据，行场同步信号嵌入在数据流中；
+601是并行数据，行场同步有单独输出;
+656只是数据传输接口而已，可以说是作为601的一个传输方式。
+
+帧低有效和高有效： 有效时候传递行信号
+行低有效和高有效:  有效时候传递一行里面的有效数据信号
+Y在先： 行有效的时候，一随着clk YUYVYUYV
+UV在先： 行有效的时候，一随着clk UYVY
+
+
+Block Ping-Pong mode阻塞乒乓模式
+
+block的行数由BLOCK_LINE_NUM配置。逐一接收从块0到块1，0和1块接收后BLOCK_STATUS 置1， 用户应及时清0。
+如果没有清0，当前帧的剩余部分就会被丢弃。
+
+#### 引脚初始化。 注册中断
+
+```shell
+Z:\cw\sdk\8_2206\src\driver\vicap\drv_vicap.c
+static void rk_vicap_hw_iomux(void)
+{
+#if defined(__RK_OS__)
+    iomux_config_vicap();
+#endif
+}
+static ret_err_t rk_vicap_register(struct rk_vicap_dev *dev, char *name)
+{
+    struct rk_vicap_device *vicap;
+
+    rk_vicap_function_enter();
+
+    MACRO_ASSERT(dev != RK_NULL);
+    MACRO_ASSERT(name != RK_NULL);
+
+    vicap = &dev->parent;
+    vicap->ops = &rk_vicap_ops;
+
+#if VICAP_WORK_QUEUE_ENABLE
+    dev->vicap_workqueue = rt_workqueue_create("vicap_wq",
+                                               VICAP_WORKQUEUE_STACK_SIZE,
+                                               VICAP_WORKQUEUE_PRIORITY);
+    if (!dev->vicap_workqueue)
+    {
+        VICAP_INFO(dev, "workqueue created failed!\n");
+        return RET_SYS_ERROR;
+    }
+#endif
+
+    HAL_NVIC_SetIRQHandler(dev->irq, dev->irqhandler);
+    HAL_NVIC_EnableIRQ(dev->irq);
+    rk_vicap_hw_iomux();
+
+    rk_vicap_function_exit();
+
+    return rk_vicap_controller_register(vicap, name, dev);
+}
+/**
+Z:\cw\sdk\8_2206\src\bsp\RK2206\board\rk2206_iomux_base.c
+__WEAK void  iomux_config_vicap(void)
+{
+    HAL_PINCTRL_SetIOMUX(GPIO_BANK0,
+                         GPIO_PIN_A0 |  // VICAP_D0
+                         GPIO_PIN_A1 |  // VICAP_D1
+                         GPIO_PIN_A2 |  // VICAP_HREF
+                         GPIO_PIN_A3 |  // VICAP_VSYNC
+                         GPIO_PIN_A4 |  // VICAP_CLKOUT
+                         GPIO_PIN_A5 |  // VICAP_CLKIN
+                         GPIO_PIN_A6 |  // VICAP_D2
+                         GPIO_PIN_A7,   // VICAP_D3
+                         PIN_CONFIG_MUX_FUNC2);
+    HAL_PINCTRL_SetIOMUX(GPIO_BANK0,
+                         GPIO_PIN_B0 |  // VICAP_D4
+                         GPIO_PIN_B1 |  // VICAP_D5
+                         GPIO_PIN_B2 |  // VICAP_D6
+                         GPIO_PIN_B3,   // VICAP_D7
+                         PIN_CONFIG_MUX_FUNC2);
+}
+```
+
+
+
+Z:\cw\sdk\8_2206\src\bsp\hal\lib\hal\src\hal_vicap.c
+
+实际寄存器配置还是这里
+
+
+
+#### 帧格式
+
+​        camera->info.mbus_fmt.pixelcode = MEDIA_BUS_FMT_Y8_1X8;//0x0c uyvy;0x08 vyuy;0x04 yvyu;0x00 yuyv
+
+设置像素驱动的时候，底层还是查表。由mbus_code 得输入数据的宽度，得图像宽度yuv、raw、jpeg
+
+
+
+
+
+
+
+
+
+初始化block0接收的行数
+
+```c
+static inline void rk_vicap_hw_init_block_line_num(struct rk_vicap_dev *dev,
+                                                   uint32_t num)
+{
+    MACRO_ASSERT(dev != RK_NULL);
+
+    HAL_VICAP_SetBlockLineNum(dev->vicap_reg, num);
+}
+```
+
+
+
+ 
+
+
+
+rk_vicap_init  初始化时候，查g_input_fmts  
+
+ pixelcode与表格里的mbus_code对应关系。找不到就报Warning: the input format is not found\n"
+
+
+
+- 输入图像参数数组（物理总线上的传输格式 rk_vicap_init 时候）
+
+```c
+static const struct vicap_input_fmt g_input_fmts[] =
+{
+    {
+        .mbus_code = MEDIA_BUS_FMT_YUYV8_2X8,
+        .data.yuv_input_order = VICAP_YUV_IN_ORDER_YUYV,
+        .fmt_type = VICAP_DEVICE_FORMAT_YUV,
+    },
+```
+
+
+
+- 输出图像参数数组（图像在内存里的格式 rk_vicap_ctrl_set_format时候）
+
+
+
+```c
+static const struct vicap_output_fmt g_output_fmts[] =
+{
+    {
+        .fourcc = V4L2_PIX_FMT_NV16,
+        .cplanes = 2,
+        .mplanes = 1,
+        .format = VICAP_OUTPUT_YUV_422 | VICAP_UV_STORED_ORDER_UVUV,
+        .bpp = { 8, 16 },
+    }, {
+        
+       
+FourCC，全称 Four Character Codes，它用 4 个字符（即 32bit）来命名图像格式。在 Linux
+Kernel 中，它是一个宏，定义如下：
+#define v4l2_fourcc(a,b,c,d) \
+(((__u32)(a)<<0)|((__u32)(b)<<8)|((__u32)(c)<<16)|((__u32)(d)<<24))
+```
+
+如下设置总线传输模式只有yuv、raw、jpeg三种
+
+
+
+rk_vicap_hw_set_output_format 设置输出函数，要么fmt->fourcc 如果是只y就设置only y
+
+fmt->format 确定了yuv420还是yuv422，以及UV的存储顺序
+
+图像内存里的格式有V4L2_PIX_FMT_Y16、V4L2_PIX_FMT_GREY 设置只采集only y
+
+或者是yuv420、或者yuv422、或者VICAP_UV_STORE_ORDER_VUVU、
+
+VICAP_UV_STORE_ORDER_UVUV
+
+```
+
+/**
+ * @brief  Set the format of input data.
+ * @param dev : The vicap device.
+ */
+static ret_err_t rk_vicap_hw_set_input_format(struct rk_vicap_dev *dev)
+{
+    ret_err_t ret = RET_SYS_EOK;
+    struct vicap_input_fmt *fmt;
+
+    /*set input format*/
+    fmt = &dev->input.input_fmt;
+
+    _rk_vicap_hw_set_path_sel_(dev);
+    if (fmt->fmt_type == VICAP_DEVICE_FORMAT_YUV)
+    {
+        _rk_vicap_hw_set_yuv_inorder_(dev);
+    }
+    else
+    {
+        _rk_vicap_hw_set_raw_width_(dev);
+        /* TODO: set raw end type */
+    }
+
+    _rk_vicap_hw_set_input_mode_(dev);
+
+    return ret;
+}
+
+/**
+ * @brief  Set the format of output data.
+ * @param dev : The vicap device.
+ */
+static ret_err_t rk_vicap_hw_set_output_format(struct rk_vicap_dev *dev)
+{
+    ret_err_t ret = RET_SYS_EOK;
+    const struct vicap_output_fmt *fmt;
+
+    MACRO_ASSERT(dev != RK_NULL);
+
+    fmt = dev->output.output_fmt;
+    if (fmt)
+    {
+        /* set receive only y */
+        if (fmt->fourcc == V4L2_PIX_FMT_Y16 || fmt->fourcc == V4L2_PIX_FMT_GREY)
+            HAL_VICAP_SetYmodeOnly(dev->vicap_reg, true);
+        else
+            HAL_VICAP_SetYmodeOnly(dev->vicap_reg, false);
+
+        if (fmt->format & VICAP_OUTPUT_422_420_MASK)
+            HAL_VICAP_SetOutFormat(dev->vicap_reg, VICAP_OUTPUT_IS_420);
+        else
+            HAL_VICAP_SetOutFormat(dev->vicap_reg, VICAP_OUTPUT_IS_422);
+
+        if (fmt->format & VICAP_UV_STORED_ORDER_MASK)
+            HAL_VICAP_SetUvStoreOrder(dev->vicap_reg, VICAP_UV_STORE_ORDER_VUVU);
+        else
+            HAL_VICAP_SetUvStoreOrder(dev->vicap_reg, VICAP_UV_STORE_ORDER_UVUV);
+    }
+    else
+    {
+        ret = RET_SYS_EEMPTY;
+        VICAP_INFO(dev, "Err: the output format is not found !\n");
+    }
+
+    return ret;
+}
+
+```
+
+
+
+- 
