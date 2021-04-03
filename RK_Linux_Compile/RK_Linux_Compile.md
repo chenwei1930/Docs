@@ -1708,7 +1708,7 @@ root@cw:/home/cw/3126c_i/buildroot# cat .gitignore  这些不被git仓库所管�
 
   通过make help可以看到buildroot下make的使用细节，包括对package、uclibc、busybox、linux以及文档生成等配置：
 
-```
+```shell
 Cleaning:
   clean                  - delete all files created by build------------------清理
   distclean              - delete all non-source files (including .config)
@@ -2303,7 +2303,6 @@ built by cw on SYS3 at 2020-10-28 14:02:31
 使用的rootfs.squashfs 
 
 ```shell
-
 root@cw:/home/cw/3126c_i/buildroot/output/rockchip_rk312x/images# ls
 rootfs.cpio  rootfs.cpio.gz  rootfs.ext2  rootfs.ext4  rootfs.squashfs  rootfs.tar
 root@cw:/home/cw/3126c_i/buildroot/output/rockchip_rk312x/images# file rootfs.squashfs 
@@ -2634,6 +2633,18 @@ cw@SYS3:~/sdk/3126i/buildroot/output/rockchip_rk3128/graphs$ ls -al
 ```
 
 ![image-20200316192054362](RK_Linux_Compile.assets/image-20200316192054362.png)
+
+###  make show-targets
+
+- 显示出本次配置所要编译所有的目标，这些目标可以单独作为模块，用 make <pkg-target> 命令进行单独编译。从这条命令的显示结果来看，mini2440_defconfig需要编译uclibc(微型C库)，busybox等目标，当然demo_app也是一个编译目标，是我在menocunfig时候加进去的，所以可以用make demo_app来编译
+
+```shell
+cw@SYS3:~/sdk/rv1109$ make show-targets
+umask 0022 && make -C /home/cw/sdk/rv1109/buildroot O=/home/cw/sdk/rv1109/buildroot/output/rockchip_rv1126_rv1109 show-targets
+CallFunIpc alsa-config alsa-lib alsa-plugins alsa-utils android-tools attr avahi bash bluez5_utils busybox camera_engine_rkaiq common_algorithm connman coreutils dbserver dbus dbus-cpp dbus-glib dhrystone dnsmasq dosfstools dropbear e2fsprogs eudev evtest exiv2 expat fcgiwrap ffmpeg freetype gesftpserver host-e2fsprogs host-fakeroot host-lzip host-makedevs host-mkpasswd host-ntfs-3g host-patchelf host-squashfs host-util-linux hostapd i2c-tools ifupdown-scripts iniparser initscripts input-event-daemon ipc-daemon ipcweb-backend iperf iptables iputils isp2-ipc iw json-c json-for-modern-cpp keyutils kmod libIPCProtocol libcgicc libcurl libdaemon libdrm libevent libfcgi libffi libgdbus libglib2 libgudev libical liblockfile libmad libnl libopenssl libpng libpthread-stubs librkdb libunwind libusb libv4l libzlib linux-rga linux-tools live555 lockfile-progs lrzsz mediaserver memtester minilogger mpp ncurses netserver nginx nginx-http-flv-live ntp openssl pcba_adb_test pcre pixman pm-utils procps-ng procrank_linux readline recovery rk_oem rkmedia rknpu rkscript rktoolkit rkwifibt rockchip_test rockface rockx rtc_demo skeleton skeleton-init-common skeleton-init-sysv sox sqlite startup_app_ipc storage_manager strace stress-ng stressapptest toolchain toolchain-external toolchain-external-custom tzdata upower usbmount util-linux wireless_tools wpa_supplicant zlib rootfs-cpio rootfs-ext2 rootfs-squashfs rootfs-tar
+```
+
+
 
 ###  RK SDK不支持的几个命令
 
