@@ -6,8 +6,6 @@ buildroot 是用来构建嵌入式软件系统。里面集成非常多的软件�
 
 buildroot里面构建项目，一定要遵守命名规则，否则会有各种报错。
 
-
-
 ## 软件包管理器
 
 先说软件包支持的命令有哪些。pkg-generic.mk文件，是makefile的语法，
@@ -99,26 +97,18 @@ buildroot/output/build/vsftpd-2.3.4这个目录下除了上面提到的两个文
 
 
 
-- 软件的构建过程（按它们执行的顺序）：make+
+- 软件的构建过程（按它们执行的顺序）：make
 
 ```
-make source   下载源码到dl目录下
-
-make depends 构建并安装软件包的所有依赖关系
-
-make extract   解压源代码到对应的目录下
-
-patch               如果有补丁就会打上补丁
-
+make source       下载源码到dl目录下
+make depends      构建并安装软件包的所有依赖关系
+make extract      解压源代码到对应的目录下
+patch             如果有补丁就会打上补丁
 configure         如果有配置就会运行配置
-
-build                运行编译命令
-
-install-staging  目标软件包：如果需要，在分段目录中运行软件包的安装
-
+build             运行编译命令
+install-staging   目标软件包：如果需要，在分段目录中运行软件包的安装
 install-target    目标软件包：如果需要，请在目标目录中运行软件包的安装
-
-install               目标包：运行2个以前的安装命令 进行软件的安装     主机包：在主机目录中运行包的安装
+install           目标包：运行2个以前的安装命令 进行软件的安装     主机包：在主机目录中运行包的安装
 ```
 
 
