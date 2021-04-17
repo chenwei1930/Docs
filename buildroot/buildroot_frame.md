@@ -315,7 +315,7 @@ cw@SYS3:~/sdk/rv1109/buildroot/package/rockchip/rtc_demo$ tree
 
 Config.in
 
-```
+```shell
 config BR2_PACKAGE_RTC_DEMO
 	bool "rtc_demo"
 ```
