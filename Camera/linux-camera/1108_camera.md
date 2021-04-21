@@ -422,21 +422,31 @@ kernel/drivers/media/platform/rk-isp11/
 对于 yuv, 调整 yuv 顺序
 .code = V4L2_MBUS_FMT_YUYV8_2X8
 
-#### 帧率不对
+
+
+举例raw格式，
+
+RGGB，BGGR，GRBG，GBRG  这四种试下，只要出现绿色就是正常的
+
+注意bayer绿色就是正常的，人眼对绿敏感
+
+![bayer](1108_camera.assets/bayer.png)
+
+### 帧率不对
 
 1.先实测 sensor 输出帧率，如果 sensor 实际输出帧率不对，需检查寄存器配置和
 mclk。
 2.系统负载过大，buffer 更替过慢或某个模块处理 buffer 过慢，可先关掉 dsp、显示、
 wifi、编码模块，看看。
 
-#### 图像有严重条纹
+### 图像有严重条纹
 
 1.IQ xml 分辨率没匹配上或 LSC 模块 LSC_SECT_SIZE_X/LSC_SECT_SIZE_Y
 值没设置好。
 2.所设置分辨率不在 dsp idc 畸变支持范围内，可先关掉此功能看看。
 3.其他原因。
 
-#### 图像轻微闪条纹
+### 图像轻微闪条纹
 
 1.检查电源干扰。
 2.其他原因。
