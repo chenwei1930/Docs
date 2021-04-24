@@ -1,0 +1,22 @@
+[user]
+	email = wei.chen@rock-chips.com
+	name = Wei Chen
+[color]
+	ui = true
+[alias]
+       branches = branch -a
+       remotes = remote -v
+       w = whatchanged -1
+       s = status
+       ll = log --pretty=oneline  -15
+       b  = branch -a -vv
+       lll = log --pretty=oneline  -30
+       llll = log --pretty=oneline  -45
+       d  = diff
+       d2 = diff HEAD^ HEAD
+       dn = diff --name-only 
+       c  = checkoui
+       tu =  log --graph --decorate --oneline --simplify-by-decoration --all
+	lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --pretty=oneline  -15
+	st = stash list --pretty=format:'%C(red)%h%C(reset) - %C(dim yellow)(%C(bold magenta)%gd%C(dim yellow))%C(reset) %<(70,trunc)%s %C(green)(%cr) %C(bold blue)<%an>%C(reset)'
+    commit--- = commit --amend --no-edit 
