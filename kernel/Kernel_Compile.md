@@ -6,7 +6,9 @@
 
 ## 编译4条命令
 
-编译
+确定使用的单板
+
+env 查看环境变量，得到xxxdefconifg 
 
 - make ARCH=arm xxxdefconifg 会生成.config (ARCH=arm 代表32位， ARCH=arm64或者不标就是64位机器)
 - make menuconfig  依据.config内容生成 新的.config    备份旧的  .config.old   
